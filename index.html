@@ -1,0 +1,2530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Math Mate: 200 practice questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #eef3f8;
+  --grid: rgba(43, 89, 255, 0.07);
+  --surface: #ffffff;
+  --ink: #12203a;
+  --muted: #55627a;
+  --line: #d5dde9;
+  --accent: #2b59ff;
+  --accent-ink: #ffffff;
+  --mark: #ffe45c;
+  --mark-ink: #2a2300;
+  --warn-bg: #fff1d6;
+  --warn-ink: #6b4300;
+  --blur-bg: #ffe0dc;
+  --blur-ink: #7a1d12;
+  --bar: #f9fbfd;
+  --panel: #eef3ff;
+  color-scheme: light;
+  --display: "Bricolage Grotesque", "Trebuchet MS", "Segoe UI", sans-serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1626;
+    --grid: rgba(120, 160, 255, 0.07);
+    --surface: #17223a;
+    --ink: #e8eefb;
+    --muted: #9fb0cf;
+    --line: #2a3a5c;
+    --accent: #7c9cff;
+    --accent-ink: #0b1224;
+    --mark: #f2d63b;
+    --mark-ink: #221c00;
+    --warn-bg: #3a2c0f;
+    --warn-ink: #ffd993;
+    --blur-bg: #3d1a17;
+    --blur-ink: #ffb4aa;
+    --bar: #121c31;
+  --panel: #1b2947;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1626;
+  --grid: rgba(120, 160, 255, 0.07);
+  --surface: #17223a;
+  --ink: #e8eefb;
+  --muted: #9fb0cf;
+  --line: #2a3a5c;
+  --accent: #7c9cff;
+  --accent-ink: #0b1224;
+  --mark: #f2d63b;
+  --mark-ink: #221c00;
+  --warn-bg: #3a2c0f;
+  --warn-ink: #ffd993;
+  --blur-bg: #3d1a17;
+  --blur-ink: #ffb4aa;
+  --bar: #121c31;
+  --panel: #1b2947;
+  color-scheme: dark;
+}
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 84px); }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.5;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  background: var(--bar);
+  z-index: 10;
+}
+.skip {
+  position: absolute; left: 8px; top: -60px;
+  background: var(--accent); color: var(--accent-ink);
+  padding: 8px 12px; border-radius: 6px; z-index: 30;
+}
+.skip:focus { top: 8px; }
+
+header.top {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px 24px 20px;
+}
+header.top h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+}
+header.top p { margin: 0; max-width: 60ch; color: var(--muted); }
+header.top p + p { margin-top: 6px; }
+
+.toolbar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 11;
+  background: var(--bar);
+  border-block: 1px solid var(--line);
+}
+.toolbar-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+}
+.field { display: flex; align-items: center; gap: 8px; }
+.field label { color: var(--muted); font-size: 0.9rem; }
+input[type="search"], select {
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 12px;
+  min-height: 42px;
+}
+input[type="search"] { width: min(320px, 70vw); }
+.check { display: flex; align-items: center; gap: 8px; min-height: 42px; cursor: pointer; }
+.check input { width: 20px; height: 20px; accent-color: var(--accent); }
+.count { margin-left: auto; color: var(--muted); font-size: 0.9rem; }
+.mobile-only { display: none; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 24px 80px;
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 32px;
+}
+nav.rail {
+  position: sticky;
+  top: calc(env(safe-area-inset-top, 0px) + 84px);
+  align-self: start;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+nav.rail h2 {
+  font-family: var(--display);
+  font-size: 1rem;
+  margin: 0 0 8px;
+}
+nav.rail ul { list-style: none; margin: 0; padding: 0; }
+nav.rail a {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+nav.rail a span { color: var(--muted); }
+nav.rail a:hover { background: var(--surface); }
+
+section.page { margin-bottom: 36px; }
+section.page > h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.35rem;
+  margin: 0 0 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+section.page > h2 small {
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+article.q {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  overflow: hidden;
+}
+article.q .num {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.9rem;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  padding: 16px 0 0 18px;
+  border-right: 2px solid var(--accent);
+  line-height: 1.1;
+}
+article.q .body { padding: 16px 18px 16px 18px; }
+article.q .text { margin: 0 0 12px; font-size: 1.08rem; max-width: 70ch; }
+ol.opts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px;
+}
+ol.opts li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+ol.opts .letter {
+  font-weight: 700;
+  color: var(--muted);
+  min-width: 1.2em;
+}
+article.q.show ol.opts li.correct {
+  background: var(--mark);
+  color: var(--mark-ink);
+  border-color: transparent;
+  font-weight: 700;
+}
+article.q.show ol.opts li.correct .letter { color: var(--mark-ink); }
+.noopts {
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
+button.ans {
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: transparent;
+  border: 1.5px solid var(--accent);
+  border-radius: 8px;
+  padding: 6px 14px;
+  min-height: 38px;
+  cursor: pointer;
+}
+button.ans:hover { background: var(--accent); color: var(--accent-ink); }
+.flag {
+  font-size: 0.88rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+.flag.check-flag { background: var(--warn-bg); color: var(--warn-ink); }
+.flag.blur-flag { background: var(--blur-bg); color: var(--blur-ink); }
+
+.empty {
+  background: var(--surface);
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  color: var(--muted);
+}
+.solution {
+  margin-top: 14px;
+  background: var(--panel);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 14px 18px 16px;
+}
+.solution h3 {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  margin: 0 0 10px;
+}
+.solution .sec { margin-bottom: 12px; }
+.solution h4 {
+  font-family: var(--display);
+  font-size: 0.98rem;
+  margin: 0 0 4px;
+  color: var(--accent);
+}
+.solution .sec p { margin: 0; max-width: 70ch; }
+.solution ol.steps { margin: 0; padding-left: 1.5em; }
+.solution ol.steps li {
+  margin-bottom: 10px;
+  max-width: 70ch;
+  padding-left: 4px;
+  line-height: 1.65;
+}
+.solution ol.steps li::marker { font-weight: 700; color: var(--accent); }
+.solution .final {
+  display: inline-block;
+  margin: 8px 0 0;
+  padding: 8px 14px;
+  background: var(--mark);
+  color: var(--mark-ink);
+  border-radius: 8px;
+  font-weight: 700;
+}
+.solution .snote { margin: 12px 0 0; font-size: 0.92rem; color: var(--muted); max-width: 70ch; }
+[hidden] { display: none !important; }
+
+@media (max-width: 860px) {
+  .shell { grid-template-columns: minmax(0, 1fr); padding: 16px 14px 60px; }
+  nav.rail { display: none; }
+  .mobile-only { display: flex; }
+  header.top { padding: 28px 16px 14px; }
+  .toolbar-inner { padding: 10px 14px; }
+  .count { margin-left: 0; width: 100%; }
+  article.q { grid-template-columns: 56px minmax(0, 1fr); }
+  article.q .num { font-size: 1.4rem; padding-left: 12px; }
+  article.q .body { padding: 14px 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#questions">Skip to questions</a>
+
+<header class="top">
+  <h1>Math Mate: 200 practice questions</h1>
+  <p>Questions 1 to 200 from the Math Mate workbook, pages 38 to 53. Each question has four options.</p>
+  <p>Tap <b>Solve</b> on any question to see the full working: what is given, what to find, the rule, every calculation, and a check.</p>
+  <p>Questions marked “Check” need to be confirmed against the book. Questions marked “Blurry” could not be read reliably from the photo.</p>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="field">
+      <label for="search">Search</label>
+      <input id="search" type="search" placeholder="Word or question number" autocomplete="off">
+    </div>
+    <div class="field mobile-only">
+      <label for="jump">Go to page</label>
+      <select id="jump"></select>
+    </div>
+    <label class="check"><input id="flagged" type="checkbox"> Show flagged only</label>
+    <div class="count" id="count" aria-live="polite"></div>
+  </div>
+</div>
+
+<div class="shell">
+  <nav class="rail" aria-label="Book pages">
+    <h2>Book pages</h2>
+    <ul id="rail"></ul>
+  </nav>
+  <main id="questions"></main>
+</div>
+
+<script>
+var S = {};
+/* S[n] = [letter, given, find, idea, [working steps], check, note, answerText] */
+S[1]=["b",
+"Number = 30500. Percentage = 11%.",
+"11% of 30500 (the amount that is “11% off”).",
+"“Per cent” means “out of 100”, so 11% means 11 out of every 100. To find a percentage of a number, first find 1%, then multiply.",
+["Find 1% of 30500. Divide by 100:<br>30500 ÷ 100 = 305 (dividing by 100 just removes two zeros).",
+"Find 11%. Multiply 1% by 11. Split 11 into 10 + 1:<br>10 × 305 = 3050<br>1 × 305 = 305",
+"Add the two parts:<br>3050 + 305 = 3355."],
+"10% of 30500 = 3050 and 1% = 305, so 11% = 3050 + 305 = 3355. ✓"];
+S[2]=["d",
+"Four statements, a) to d).",
+"The statement that is false.",
+"BODMAS tells us the order: Brackets, Orders (powers), Division and Multiplication, then Addition and Subtraction. So we multiply before we add or subtract.",
+["a) 3 + 5 × 4<br>5 × 4 = 20, then 3 + 20 = 23. The statement says 23. True ✓",
+"b) 20 − 5 × 4<br>5 × 4 = 20, then 20 − 20 = 0. The statement says 0. True ✓",
+"c) 12 − 5 × 2<br>5 × 2 = 10, then 12 − 10 = 2. The statement says 2. True ✓",
+"d) 3 + 6 × 4<br>6 × 4 = 24, then 3 + 24 = 27. The statement says 37, but the real value is 27. False ✗"],
+"Three statements are true, only d) is wrong. So the false statement is d)."];
+S[3]=["b",
+"The sum 2010 + (+2010) + (−2010) − (+2010) − (−2010).",
+"The value of the sum.",
+"Sign rules: adding a positive stays plus: +(+) = +. Adding a negative becomes minus: +(−) = −. Subtracting a positive becomes minus: −(+) = −. Subtracting a negative becomes plus: −(−) = +.",
+["Remove the brackets using the sign rules:<br>+(+2010) = +2010<br>+(−2010) = −2010<br>−(+2010) = −2010<br>−(−2010) = +2010",
+"Rewrite the sum:<br>2010 + 2010 − 2010 − 2010 + 2010",
+"Add all the plus numbers: 2010 + 2010 + 2010 = 6030.",
+"Add all the minus numbers: 2010 + 2010 = 4020.",
+"Subtract: 6030 − 4020 = 2010."],
+"Go left to right instead: 2010 + 2010 = 4020; 4020 − 2010 = 2010; 2010 − 2010 = 0; 0 + 2010 = 2010. ✓"];
+S[4]=["c",
+"When the tank is one quarter empty, it holds 480 ml.",
+"How much water the tank holds when it is one quarter full.",
+"A tank is part empty and part full, and the two parts make the whole tank (4/4). So “one quarter empty” means three quarters full.",
+["¼ empty means ¾ full. So ¾ of the tank = 480 ml.",
+"¾ means 3 equal parts. 3 parts = 480 ml.<br>1 part = 480 ÷ 3 = 160 ml (check: 3 × 160 = 480).",
+"One quarter full is 1 part, so it holds 160 ml.",
+"(For interest: the whole tank = 4 parts = 4 × 160 = 640 ml.)"],
+"¼ of 640 = 640 ÷ 4 = 160 ml. ✓"];
+S[5]=["c",
+"Length of stick = 92 cm. It is cut into 40 equal pieces.",
+"The length of one piece in mm.",
+"For equal pieces, divide the total length by the number of pieces. Also 1 cm = 10 mm.",
+["Divide 92 by 40:<br>40 × 2 = 80, and 92 − 80 = 12 is left over.<br>12 ÷ 40 = 0.3.<br>So 92 ÷ 40 = 2.3 cm.",
+"Change cm into mm. Multiply by 10:<br>2.3 × 10 = 23 mm."],
+"40 pieces × 23 mm = 920 mm = 92 cm. ✓",
+"The book prints “How many is each piece?”. It means “How long is each piece?”."];
+S[6]=["d",
+"Radius r = 14 cm.",
+"The circumference of the circle.",
+"Circumference = 2 × π × r. We use π = 22/7 because the radius 14 is a multiple of 7.",
+["Write the formula: C = 2 × π × r.",
+"Put in the numbers: C = 2 × 22/7 × 14.",
+"Divide 14 by 7 first: 14 ÷ 7 = 2. So C = 2 × 22 × 2.",
+"2 × 22 = 44, and 44 × 2 = 88.<br>So C = 88 cm."],
+"Diameter = 28 cm. C = π × d = 22/7 × 28 = 22 × 4 = 88. ✓"];
+S[7]=["b",
+"Four identical rectangles are placed edge to edge to make a square of area 100 sq m.",
+"The perimeter of one rectangle.",
+"Area of a square = side × side. Perimeter of a rectangle = 2 × (length + width).",
+["Find the side of the square: side × side = 100. Since 10 × 10 = 100, the side = 10 m.",
+"Four identical rectangles side by side make this square. So each rectangle is as long as the square’s side and a quarter as wide:<br>length = 10 m<br>width = 10 ÷ 4 = 2.5 m",
+"Perimeter = 2 × (length + width) = 2 × (10 + 2.5)<br>= 2 × 12.5 = 25."],
+"Four rectangles of 10 × 2.5 have area 4 × 25 = 100 sq m. ✓",
+"The working is in metres, but the options say cm. The number 25 matches option (b)."];
+S[8]=["c",
+"The angles of a triangle are in the ratio 3 : 4 : 5.",
+"The difference between the largest and the smallest angle.",
+"The three angles of a triangle add up to 180°. A ratio splits the total into equal parts.",
+["Total number of parts = 3 + 4 + 5 = 12.",
+"One part = 180° ÷ 12 = 15°.",
+"Smallest angle = 3 × 15° = 45°.<br>Middle angle = 4 × 15° = 60°.<br>Largest angle = 5 × 15° = 75°.",
+"Difference = 75° − 45° = 30°."],
+"45° + 60° + 75° = 180°. ✓"];
+S[9]=["c",
+"20 people. Each person shakes hands once with every other person.",
+"The total number of handshakes.",
+"Each person shakes hands with (20 − 1) other people. A handshake between two people is counted twice if we count for both, so we divide by 2.",
+["Each person shakes hands with 19 others.",
+"If we count for all 20 people: 20 × 19 = 380.",
+"But the handshake of Ravi with Mina is also the handshake of Mina with Ravi. Every handshake was counted twice.",
+"So the real number is 380 ÷ 2 = 190."],
+"Formula n(n − 1) ÷ 2 = 20 × 19 ÷ 2 = 190. ✓"];
+S[10]=["a",
+"The word SCHOOL has 6 letters: S, C, H, O, O, L. The letter O comes twice.",
+"The number of different ways to arrange the letters.",
+"6 different letters can be arranged in 6 × 5 × 4 × 3 × 2 × 1 ways. If a letter repeats, we divide by the ways the repeated letters can swap (2 × 1 for two O’s).",
+["If all 6 letters were different:<br>6 × 5 = 30<br>30 × 4 = 120<br>120 × 3 = 360<br>360 × 2 = 720<br>720 × 1 = 720",
+"The two O’s are identical. Swapping them does not make a new word, so every word has been counted 2 times.",
+"Divide by 2: 720 ÷ 2 = 360."],
+"6! ÷ 2! = 720 ÷ 2 = 360. ✓"];
+S[11]=["b",
+"Product of two numbers = −15. Sum of the two numbers = 2.",
+"The largest possible number.",
+"If the product is negative, one number is positive and one is negative. Find factor pairs of 15, then try the signs.",
+["The factor pairs of 15 are: 1 × 15 and 3 × 5.",
+"Try 1 and −15: sum = 1 + (−15) = −14. Not 2.",
+"Try 15 and −1: sum = 15 + (−1) = 14. Not 2.",
+"Try 3 and −5: sum = −2. Not 2.",
+"Try 5 and −3: product = 5 × (−3) = −15 ✓ and sum = 5 + (−3) = 2 ✓.",
+"The two numbers are 5 and −3. The larger one is 5."],
+"5 × (−3) = −15 and 5 + (−3) = 2. ✓"];
+S[12]=["a",
+"Half of the number + a quarter of the number = 60.",
+"The number.",
+"Write the unknown number as x and make an equation. Add fractions with the same bottom number.",
+["Let the number be x. Half = x/2 and a quarter = x/4.",
+"x/2 + x/4 = 60.",
+"Make the bottoms the same: x/2 = 2x/4. So 2x/4 + x/4 = 3x/4.",
+"3x/4 = 60. Three quarters is 60.<br>One quarter = 60 ÷ 3 = 20.<br>The whole = 4 × 20 = 80.",
+"So x = 80."],
+"Half of 80 = 40. A quarter of 80 = 20. 40 + 20 = 60. ✓"];
+S[13]=["a",
+"1 orange + 1 mango = 14 grapes. 2 mangoes = 10 grapes.",
+"The weight of one orange in grapes.",
+"Use letters: O for orange, M for mango, G for grape. Find M first, then O.",
+["From 2 mangoes = 10 grapes:<br>1 mango = 10 ÷ 2 = 5 grapes. So M = 5 G.",
+"From O + M = 14 G, put M = 5 G:<br>O + 5 G = 14 G",
+"O = 14 G − 5 G = 9 G."],
+"1 orange + 1 mango = 9 + 5 = 14 grapes ✓. 2 mangoes = 10 grapes ✓."];
+S[14]=["d",
+"Two lengths: 1.5 km and 105 cm.",
+"The ratio 1.5 km : 105 cm.",
+"A ratio compares two amounts in the same unit. So first change km into cm.",
+["1 km = 1000 m. 1 m = 100 cm. So 1 km = 1000 × 100 = 100000 cm.",
+"1.5 km = 1.5 × 100000 = 150000 cm.",
+"The ratio is 150000 : 105.",
+"Divide both numbers by 15 (the biggest number that goes into both):<br>150000 ÷ 15 = 10000<br>105 ÷ 15 = 7",
+"The ratio is 10000 : 7."],
+"10000 × 15 = 150000 and 7 × 15 = 105. ✓"];
+S[15]=["a",
+"A square of edge 12 m is cut into 3 equal rectangles.",
+"The total perimeter of the 3 rectangles.",
+"Perimeter of a rectangle = 2 × (length + width). Total = perimeter of one × 3.",
+["Cut one side of the square into 3 equal parts:<br>12 ÷ 3 = 4.<br>Each rectangle is 12 long and 4 wide.",
+"Perimeter of one rectangle = 2 × (12 + 4) = 2 × 16 = 32.",
+"There are 3 rectangles, so the total perimeter = 3 × 32 = 96."],
+"Each rectangle’s area = 12 × 4 = 48. 3 × 48 = 144 = 12 × 12, the square’s area. ✓",
+"The question mixes units (m in the question, cm in the options). The number 96 matches option (a)."];
+S[16]=["c",
+"Cashier’s earnings = 2⅗ times the assistant’s earnings. Cashier earns Rs. 9490.",
+"The assistant’s earnings.",
+"Turn the mixed number into an improper fraction. If A = fraction × B, then B = A ÷ fraction.",
+["2⅗ = (2 × 5 + 3)/5 = 13/5.",
+"Cashier = 13/5 × assistant, so assistant = 9490 ÷ 13/5.",
+"Dividing by a fraction = multiplying by its upside-down:<br>9490 × 5/13",
+"Divide 9490 by 13 first: 13 × 700 = 9100, 9490 − 9100 = 390, 13 × 30 = 390. So 9490 ÷ 13 = 730.",
+"730 × 5 = 3650."],
+"3650 × 13/5 = 730 × 13 = 9490. ✓",
+"The fraction in the photo was hard to read. I read it as 2⅗, which gives a whole-number answer that matches an option."];
+S[17]=["c",
+"Four lists of numbers multiplied together.",
+"The one that is a prime factorisation.",
+"A prime number has only two factors: 1 and itself (2, 3, 5, 7, 11, 13, 17, 19 …). A prime factorisation uses only prime numbers.",
+["a) 5 × 3 × 2 × 15: 15 = 3 × 5 is not prime. ✗",
+"b) 5 × 6 × 5 × 2: 6 = 2 × 3 is not prime. ✗",
+"c) 7 × 11 × 5 × 19: 7, 11, 5 and 19 are all prime. ✓",
+"d) 3 × 2 × 9 × 13: 9 = 3 × 3 is not prime. ✗"],
+"Only c) has no composite number in it."];
+S[18]=["d",
+"A number is “the largest number less than 100 that is divisible by 15”, decreased by 5.",
+"Which option is a factor of this number.",
+"A factor of a number divides it exactly with no remainder.",
+["Multiples of 15: 15, 30, 45, 60, 75, 90, 105 …<br>The largest below 100 is 90.",
+"Decrease by 5: 90 − 5 = 85.",
+"Factors of 85: 85 ÷ 5 = 17, so 85 = 5 × 17. The factors are 1, 5, 17 and 85.",
+"Test the options: 15 (no), 13 (13 × 6 = 78, 13 × 7 = 91, no), 19 (19 × 4 = 76, 19 × 5 = 95, no), 17 (17 × 5 = 85, yes)."],
+"85 ÷ 17 = 5 exactly. ✓"];
+S[19]=["a",
+"Four fractions.",
+"The fraction that is in standard (simplest) form.",
+"A fraction is in standard form when its top and bottom have no common factor other than 1.",
+["b) 333/999: divide top and bottom by 333 → 1/3. It can be reduced. ✗",
+"c) 573/1146: 1146 = 2 × 573, so it equals 1/2. ✗",
+"d) 56/343: divide both by 7 → 8/49. ✗",
+"a) 119/257: 119 = 7 × 17. Does 7 go into 257? 7 × 36 = 252, remainder 5, no. Does 17 go into 257? 17 × 15 = 255, remainder 2, no. So there is no common factor. ✓"],
+"Only 119/257 cannot be made simpler."];
+S[20]=["b",
+"The numbers 1 to 100.",
+"How many numbers contain the digit 4.",
+"Count in groups: numbers whose last digit is 4, and numbers whose tens digit is 4.",
+["Last digit 4: 4, 14, 24, 34, 44, 54, 64, 74, 84, 94. That is 10 numbers.",
+"Tens digit 4: 40, 41, 42, 43, 44, 45, 46, 47, 48, 49. That is 10 numbers.",
+"The number 44 is in both lists, so there are 10 + 10 − 1 = 19 different numbers.",
+"If we count every 4 that is written (44 has two 4’s), we get 10 + 10 = 20. That is option (b)."],
+"Total number of 4’s written from 1 to 100 = 10 + 10 = 20.",
+"There is no option for 19. The book most likely wants 20, counting every 4 that is written."];
+S[21]=["b",
+"The fractions −1/5, −1/9, −3/7, −5/11.",
+"The one closest to zero on the number line.",
+"The distance from zero does not depend on the minus sign. The smallest fraction (ignoring the sign) is the closest to zero. Changing to decimals makes it easy to compare.",
+["1/5 = 1 ÷ 5 = 0.2",
+"1/9 = 1 ÷ 9 = 0.111…",
+"3/7 = 3 ÷ 7 = 0.428…",
+"5/11 = 5 ÷ 11 = 0.454…",
+"The smallest is 0.111…, which is 1/9. So −1/9 is nearest to zero."],
+"With the same top number 1, the bigger bottom number gives the smaller fraction: 1/9 < 1/5. ✓"];
+S[22]=["c",
+"The percentage 0.01%.",
+"Write it as a fraction.",
+"X% means X/100. So 0.01% = 0.01/100.",
+["0.01% = 0.01 ÷ 100.",
+"0.01 = 1/100.",
+"So 0.01% = 1/100 ÷ 100 = 1/(100 × 100) = 1/10000."],
+"1/10000 = 0.0001 = 0.01%. ✓"];
+S[23]=["b",
+"A book has 900 pages. The boy finished 35%.",
+"The number of pages left.",
+"Pages left = total − pages finished. Pages finished = 35% of 900.",
+["1% of 900 = 900 ÷ 100 = 9.",
+"35% of 900 = 35 × 9. Split 35 into 30 + 5:<br>30 × 9 = 270<br>5 × 9 = 45<br>270 + 45 = 315 pages finished.",
+"Pages left = 900 − 315 = 585."],
+"315 + 585 = 900. ✓"];
+S[24]=["b",
+"17% of an unknown quantity = Rs. 5100.",
+"The unknown quantity.",
+"First find 1%, then multiply by 100 to find the whole (100%).",
+["17% = 5100.",
+"1% = 5100 ÷ 17. Since 17 × 300 = 5100, 1% = 300.",
+"100% = 300 × 100 = 30000."],
+"17% of 30000 = 17 × 300 = 5100. ✓"];
+S[25]=["d",
+"Lines that pass through one point.",
+"The name for more than two lines passing through one point.",
+"Know the names: collinear (points on one line), intersecting (two lines that cross), parallel (never meet), concurrent (three or more lines meeting at the same point).",
+["a) Collinear lines: this word is used for points on one line, not for lines through a point. ✗",
+"b) Intersecting lines: two lines that cross each other. ✗",
+"c) Parallel lines: lines that never meet. ✗",
+"d) Concurrent lines: three or more lines all passing through the same point. ✓"],
+"Think of the spokes of a bicycle wheel, all meeting at the centre. They are concurrent."];
+S[26]=["a",
+"The digits 7, 5, 8, 3, each used once to make 4-digit numbers.",
+"Place value of 5 in the greatest number minus place value of 5 in the smallest number.",
+"Greatest number: put the biggest digit first. Smallest number: put the smallest digit first. Place values go ones, tens, hundreds, thousands.",
+["Greatest number: 8, 7, 5, 3 → 8753.",
+"Smallest number: 3, 5, 7, 8 → 3578.",
+"In 8753: 8 is in thousands, 7 in hundreds, 5 in tens, 3 in ones. The 5 is in the tens place, so its place value is 5 × 10 = 50.",
+"In 3578: 3 is in thousands, 5 in hundreds. The place value of 5 is 5 × 100 = 500.",
+"Difference = 500 − 50 = 450."],
+"500 − 50 = 450. ✓"];
+S[27]=["c",
+"Two candidates. The winner got 62% of the votes. He won by 144 votes.",
+"The total number of votes.",
+"The two percentages add up to 100%. The margin is the difference of the two percentages.",
+["Loser’s share = 100% − 62% = 38%.",
+"Margin = 62% − 38% = 24% of the total votes.",
+"24% = 144 votes. So 1% = 144 ÷ 24 = 6 votes.",
+"100% = 6 × 100 = 600 votes."],
+"62% of 600 = 372 and 38% of 600 = 228. 372 − 228 = 144. ✓"];
+S[28]=["d",
+"A two-digit number whose digits add up to 6. Adding 18 turns the digits around.",
+"The number.",
+"List all two-digit numbers whose digits add up to 6, then test each by adding 18.",
+["Numbers with digit sum 6: 15, 24, 33, 42, 51 (and 60).",
+"15 + 18 = 33. Digits of 15 reversed is 51, not 33. ✗",
+"24 + 18 = 42. Reverse of 24 is 42. ✓",
+"33 + 18 = 51. Reverse of 33 is 33. ✗",
+"42 + 18 = 60. Reverse of 42 is 24. ✗",
+"51 + 18 = 69. Reverse of 51 is 15. ✗"],
+"24: digits 2 + 4 = 6 ✓, and 24 + 18 = 42, the digits turned around ✓."];
+S[29]=["b",
+"Going speed = 65 kmph. Coming back speed = 70 kmph. The distance is the same both ways.",
+"The average speed for the whole journey.",
+"Average speed = total distance ÷ total time. For equal distances there is a shortcut: 2 × a × b ÷ (a + b).",
+["Put in the numbers: 2 × 65 × 70 ÷ (65 + 70).",
+"Top: 2 × 65 = 130, and 130 × 70 = 9100.<br>Bottom: 65 + 70 = 135.",
+"Divide 9100 ÷ 135:<br>135 × 60 = 8100, and 9100 − 8100 = 1000.<br>135 × 7 = 945, and 1000 − 945 = 55.<br>So 67 and 55 is left over. 55 ÷ 135 ≈ 0.4.",
+"Average speed ≈ 67.4 kmph."],
+"The answer lies between 65 and 70 and is a little nearer to 65 than the plain middle 67.5. 67.4 fits. ✓"];
+S[30]=["a",
+"A’s income is 20% more than B’s income.",
+"By what percent B’s income is less than A’s.",
+"Pick an easy number for B. “Less than” is always compared with the bigger value, A.",
+["Let B’s income = 100.",
+"A earns 20% more: A = 100 + 20% of 100 = 100 + 20 = 120.",
+"B is less than A by 120 − 100 = 20.",
+"Compare with A: 20/120 × 100.<br>20/120 = 1/6.<br>1/6 × 100 = 100/6 = 16⅔."],
+"16⅔% of 120 = 20, and 120 − 20 = 100. ✓"];
+S[31]=["b",
+"30 boys with average age 12. 60 girls with average age 10.",
+"The average age of all the students.",
+"Average = total of all ages ÷ number of students.",
+["Total age of boys = 30 × 12 = 360.",
+"Total age of girls = 60 × 10 = 600.",
+"Total age of all = 360 + 600 = 960.",
+"Number of students = 30 + 60 = 90.",
+"Average = 960 ÷ 90 = 96 ÷ 9 = 10 and 6 left over, so 10 6/9 = 10⅔."],
+"90 × 10⅔ = 900 + 60 = 960. ✓"];
+S[32]=["c",
+"A boy scores 25% and fails by 60 marks. A girl scores 50% and passes by 40 marks more than the minimum.",
+"The maximum marks.",
+"Both children are judged against the same pass mark. Let the maximum marks be M.",
+["Pass mark = 25% of M + 60 (the boy needs 60 more).",
+"The girl’s marks = pass mark + 40, so 50% of M = pass mark + 40.",
+"Replace the pass mark:<br>50% of M = 25% of M + 60 + 40<br>50% of M = 25% of M + 100",
+"Take away 25% of M from both sides:<br>25% of M = 100.",
+"A quarter of M is 100, so M = 4 × 100 = 400."],
+"Pass mark = 25% of 400 + 60 = 100 + 60 = 160. Girl: 50% of 400 = 200 = 160 + 40. ✓"];
+S[33]=["b",
+"A bag has an equal number of Rs.1, Rs.2 and Rs.5 coins. The total value is Rs. 6400.",
+"The number of Rs. 2 coins.",
+"Take one coin of each kind as a set, and find how many sets there are.",
+["One set = Rs. 1 + Rs. 2 + Rs. 5 = Rs. 8.",
+"Number of sets = 6400 ÷ 8 = 800.<br>(8 × 800 = 6400)",
+"Each set has one Rs. 2 coin, so there are 800 Rs. 2 coins."],
+"800 × 1 + 800 × 2 + 800 × 5 = 800 + 1600 + 4000 = 6400. ✓"];
+S[34]=["d",
+"The series 18, 24, 21, 27, ?, 30, 27.",
+"The missing number.",
+"When a series jumps up and down, two patterns may be mixed. Look at every second number.",
+["Take the 1st, 3rd, 5th, 7th numbers: 18, 21, ?, 27.<br>18 → 21 is +3. So ? → 27 is also +3 steps: 18, 21, 24, 27.",
+"Take the 2nd, 4th, 6th numbers: 24, 27, 30.<br>24 → 27 is +3, 27 → 30 is +3. ✓ The pattern fits.",
+"So the missing number is 24."],
+"Odd places: 18, 21, 24, 27 (+3 each). Even places: 24, 27, 30 (+3 each). ✓"];
+S[35]=["b",
+"He starts at home: 10 km south, turn right 5 km, turn right 10 km, turn left 10 km.",
+"The straight distance back home.",
+"Draw a map with North at the top. Turning right while facing south points you west. Turning right while facing west points you north. Turning left while facing north points you west.",
+["Start at home H. Walk 10 km south.",
+"Face south and turn right: you now face west. Walk 5 km west.",
+"Face west and turn right: you now face north. Walk 10 km north. You are back in line with home, 5 km to the west of it.",
+"Face north and turn left: you now face west. Walk 10 km west. Now you are 5 + 10 = 15 km west of home.",
+"The straight way back is 15 km."],
+"All the southward and northward walking cancel (10 south, 10 north). Only the west walking is left: 5 + 10 = 15 km. ✓"];
+S[36]=["b",
+"Brother’s birthday: after 18th April but before 22nd April. Father’s idea: after 20th but before 25th.",
+"The date that fits both.",
+"“After 18th” means starting from the 19th. “Before 22nd” means ending on the 21st.",
+["Brother’s list: 19th, 20th, 21st.",
+"Father’s list: 21st, 22nd, 23rd, 24th.",
+"The date in both lists is 21st."],
+"21st is after 18th and before 22nd ✓. It is after 20th and before 25th ✓."];
+S[37]=["c",
+"The word IMPORTANCE.",
+"The fifth letter from the right when the letters are in alphabetical order.",
+"Write all the letters, put them in A to Z order, and count from the right.",
+["The letters are: I, M, P, O, R, T, A, N, C, E. That is 10 letters.",
+"In alphabetical order: A, C, E, I, M, N, O, P, R, T.",
+"Count from the right: T is 1st, R is 2nd, P is 3rd, O is 4th, N is 5th.",
+"The fifth letter from the right is N."],
+"Counting from the left, N is the 6th letter. 10 − 6 + 1 = 5 from the right. ✓",
+"Option (c) was scribbled over in the photo. I read it as N, which is the correct letter."];
+S[38]=["d",
+"A drum is ¾ full. After drawing out 15 liters it is 7/12 full.",
+"The capacity (total volume) of the drum.",
+"The drop in the fraction is the part that 15 liters represents. Then find the whole.",
+["Make the denominators the same: ¾ = 9/12.",
+"Fraction drawn out = 9/12 − 7/12 = 2/12 = 1/6.",
+"1/6 of the drum = 15 liters.",
+"The whole drum = 6 × 15 = 90 liters."],
+"¾ of 90 = 67.5. 7/12 of 90 = 52.5. 67.5 − 52.5 = 15. ✓"];
+S[39]=["b",
+"Total money = Rs. 75000. Maintenance 30%, goods 25%, savings 15%. The rest is for education.",
+"The money spent on education.",
+"All percentages are taken from the total money. Percentages of one whole add up to 100%.",
+["Percentage used = 30% + 25% + 15% = 70%.",
+"Percentage for education = 100% − 70% = 30%.",
+"1% of 75000 = 750.",
+"30% of 75000 = 30 × 750 = 22500."],
+"Maintenance 22500 + goods 18750 + savings 11250 + education 22500 = 75000. ✓",
+"This page was tilted and blurry in the photo, so the wording was hard to read. I solved it as: all percentages are of the total money."];
+S[40]=["b",
+"A diver dives 100 m below sea level, goes down 20 m more, then comes up 35 m.",
+"How far below sea level he is at the end.",
+"Draw a vertical line with sea level as 0. Going down adds to the depth. Coming up reduces it.",
+["Start: 100 m below sea level.",
+"Goes down 20 m more: 100 + 20 = 120 m below.",
+"Comes up 35 m: 120 − 35 = 85 m below.",
+"So he is 85 m below sea level."],
+"100 + 20 − 35 = 85. ✓",
+"If the book means the deepest point he reached, that would be 120 m (option a). The question seems to ask where he ends up, so I chose 85 m."];
+S[41]=["a",
+"Five girls on a bench: Swetha is left of Richa and right of Priya. Misha is right of Richa. Reeta is between Richa and Misha.",
+"The girl who is second from the left.",
+"Draw five boxes in a row from left to right and fill them one clue at a time.",
+["Clue 1: Priya is left of Swetha, and Swetha is left of Richa. So the order is: Priya, Swetha, Richa.",
+"Clue 2: Misha is right of Richa, and Reeta sits between Richa and Misha. So the order is: Richa, Reeta, Misha.",
+"Join them: Priya, Swetha, Richa, Reeta, Misha.",
+"Positions from the left: 1st Priya, 2nd Swetha, 3rd Richa, 4th Reeta, 5th Misha."],
+"Swetha is right of Priya and left of Richa ✓. Reeta is between Richa and Misha ✓."];
+S[42]=["c",
+"A rectangle with length : breadth = 16 : 9. Its perimeter is 750 cm.",
+"The area.",
+"Perimeter = 2 × (length + breadth). Area = length × breadth.",
+["Let length = 16k and breadth = 9k, where k is a number.",
+"Perimeter = 2 × (16k + 9k) = 2 × 25k = 50k.<br>50k = 750, so k = 750 ÷ 50 = 15.",
+"Length = 16 × 15 = 240 cm.<br>Breadth = 9 × 15 = 135 cm.",
+"Area = 240 × 135.<br>240 × 100 = 24000<br>240 × 30 = 7200<br>240 × 5 = 1200<br>24000 + 7200 + 1200 = 32400 sq cm."],
+"Perimeter check: 2 × (240 + 135) = 2 × 375 = 750. ✓"];
+S[43]=["b",
+"A piece of wood is 49.5 m long. It is broken into equal pieces of 5.5 cm.",
+"The number of pieces.",
+"Both lengths must be in the same unit. Number of pieces = total length ÷ length of one piece.",
+["Change metres to cm: 49.5 m = 49.5 × 100 = 4950 cm.",
+"Number of pieces = 4950 ÷ 5.5.",
+"Multiply both numbers by 10 to remove the decimal: 49500 ÷ 55.",
+"55 × 900 = 49500. So the answer is 900."],
+"900 × 5.5 = 900 × 5 + 900 × 0.5 = 4500 + 450 = 4950. ✓"];
+S[44]=["a",
+"10% of A = 12% of B.",
+"15% of A is what percent of B.",
+"Pick an easy number for B, find A, then compare.",
+["Let B = 100.",
+"12% of B = 12. So 10% of A = 12.",
+"1% of A = 12 ÷ 10 = 1.2. So A = 1.2 × 100 = 120.",
+"15% of A = 15% of 120 = 15 × 1.2 = 18.",
+"B = 100, so 18 is 18/100 = 18% of B."],
+"10% of 120 = 12 ✓ and 12% of 100 = 12 ✓."];
+S[45]=["b",
+"1 kg and 10 grams.",
+"What percent of 1 kg is 10 grams.",
+"Percentage = part ÷ whole × 100. The units must be the same.",
+["1 kg = 1000 g.",
+"Part = 10 g, whole = 1000 g. Fraction = 10/1000.",
+"Percentage = 10/1000 × 100 = 1000/1000 = 1."],
+"1% of 1000 g = 10 g. ✓"];
+S[46]=["b",
+"20 books at Rs. 10 each, 45 pens at Rs. 5 each, 15 pencils at Rs. 3 each.",
+"The average price of all the goods.",
+"Average price = total cost ÷ total number of items.",
+["Cost of books = 20 × 10 = 200.",
+"Cost of pens = 45 × 5 = 225.",
+"Cost of pencils = 15 × 3 = 45.",
+"Total cost = 200 + 225 + 45 = 470.",
+"Number of items = 20 + 45 + 15 = 80.",
+"Average = 470 ÷ 80 = 47 ÷ 8 = 5.875. This is closest to Rs. 5.8 among the options."],
+"80 × 5.875 = 470. ✓",
+"The number of pens was blurry in the photo (I read 45). The exact answer is 5.875, so option (b) is the closest."];
+S[47]=["b",
+"The expression 2a²b⁴ − 5a³b² + 3a²b⁵.",
+"The degree of the expression.",
+"The degree of a term is the sum of the powers of its letters. The degree of the expression is the highest degree among its terms.",
+["Term 1: 2a²b⁴ has degree 2 + 4 = 6.",
+"Term 2: 5a³b² has degree 3 + 2 = 5.",
+"Term 3: 3a²b⁵ has degree 2 + 5 = 7.",
+"The highest is 7."],
+"The degree of the expression is 7."];
+S[48]=["d",
+"x = −2 and y = −1. The expression is (xy)³ − 2x²y.",
+"The value of the expression.",
+"Put the numbers in the brackets. A negative times a negative is positive. Subtracting a negative is the same as adding.",
+["xy = (−2) × (−1) = 2.",
+"(xy)³ = 2 × 2 × 2 = 8.",
+"x² = (−2) × (−2) = 4.<br>2x²y = 2 × 4 × (−1) = −8.",
+"Expression = 8 − (−8) = 8 + 8 = 16."],
+"Both parts are worked out separately: 8 and −8. 8 − (−8) = 16. ✓",
+"This question was blurry in the photo. I read it as (xy)³ − 2x²y."];
+S[49]=["d",
+"Two numbers are in the ratio 5 : 6. After subtracting 8 from each, the ratio is 4 : 5.",
+"The larger number.",
+"Write the numbers as 5x and 6x. Make an equation using the new ratio and cross multiply.",
+["The numbers are 5x and 6x.",
+"After subtracting 8: (5x − 8) : (6x − 8) = 4 : 5.<br>As fractions: (5x − 8)/(6x − 8) = 4/5.",
+"Cross multiply: 5 × (5x − 8) = 4 × (6x − 8).<br>25x − 40 = 24x − 32.",
+"Take 24x from both sides: x − 40 = −32.<br>Add 40 to both sides: x = 8.",
+"The numbers are 5 × 8 = 40 and 6 × 8 = 48. The larger is 48."],
+"(40 − 8) : (48 − 8) = 32 : 40 = 4 : 5 (divide by 8). ✓"];
+S[50]=["b",
+"16 men can do a work in 30 days.",
+"The days 20 men need to do the same work.",
+"Work done = men × days (called man-days). The total work stays the same, so more men need fewer days.",
+["Total work = 16 × 30 = 480 man-days.",
+"With 20 men: days = 480 ÷ 20 = 24."],
+"20 men × 24 days = 480 man-days. ✓ More men, fewer days (24 is less than 30). ✓"];
+S[51]=["b",
+"An equilateral triangle (3 equal sides, 3 equal angles).",
+"Its (smallest) angle of rotation.",
+"The angle of rotation is the smallest turn after which the shape looks exactly the same. A full turn is 360°. Angle of rotation = 360° ÷ (number of times it looks the same in one turn).",
+["An equilateral triangle looks the same 3 times in one full turn (3 matching corners).",
+"Angle of rotation = 360° ÷ 3 = 120°."],
+"Turning the triangle by 120° three times gives 360°, a full turn. ✓"];
+S[52]=["a",
+"2⅗ multiplied by an unknown number gives 1 6/7.",
+"The unknown number.",
+"Change mixed numbers to improper fractions. Unknown = (answer) ÷ (given number).",
+["2⅗ = (2 × 5 + 3)/5 = 13/5.",
+"1 6/7 = (1 × 7 + 6)/7 = 13/7.",
+"Unknown number = 13/7 ÷ 13/5.",
+"Dividing by a fraction = multiply by its upside-down: 13/7 × 5/13.",
+"The 13 on top and the 13 on the bottom cancel: = 5/7."],
+"13/5 × 5/7 = 13/7 = 1 6/7. ✓",
+"The fractions were hard to read in the photo. I read the question as 2⅗ and 1 6/7. The answer 5/7 should be option (a)."];
+S[53]=["b",
+"Salary increased by 25% becomes Rs. 32000.",
+"The original salary.",
+"Increasing by 25% means the new salary is 125% of the old one. Find 1%, then 100%.",
+["New salary = 100% + 25% = 125% of the original.",
+"125% = 32000, so 1% = 32000 ÷ 125.<br>125 × 256 = 32000 (125 × 200 = 25000 and 125 × 56 = 7000). So 1% = 256.",
+"Original salary = 100% = 256 × 100 = 25600."],
+"25% of 25600 = 6400. 25600 + 6400 = 32000. ✓"];
+S[54]=["d",
+"4/7 of 91 + 20% of 120 = x + 20.",
+"The value of x.",
+"“Of” means multiply. Work out each part, add them, then solve for x.",
+["4/7 of 91: 91 ÷ 7 = 13, then 13 × 4 = 52.",
+"20% of 120: 120 ÷ 5 = 24 (because 20% = 1/5).",
+"Left side = 52 + 24 = 76.",
+"76 = x + 20, so x = 76 − 20 = 56."],
+"4/7 of 91 + 20% of 120 = 76, and 56 + 20 = 76. ✓"];
+S[55]=["b",
+"Two squares with sides 6 cm and 8 cm.",
+"The ratio of their perimeters.",
+"Perimeter of a square = 4 × side.",
+["First square: 4 × 6 = 24 cm.",
+"Second square: 4 × 8 = 32 cm.",
+"Ratio = 24 : 32.",
+"Divide both by 8: 24 ÷ 8 = 3 and 32 ÷ 8 = 4. Ratio = 3 : 4."],
+"The sides are in the ratio 6 : 8 = 3 : 4, and the perimeters are in the same ratio. ✓"];
+S[56]=["b",
+"A pentagon (5 sides, 5 corners).",
+"The number of diagonals.",
+"A diagonal joins two corners that are not next to each other. Formula: n(n − 3) ÷ 2.",
+["From each corner we can draw diagonals to the corners that are not neighbours. There are 5 − 3 = 2 such corners (take away the corner itself and its 2 neighbours).",
+"All 5 corners give 5 × 2 = 10.",
+"Each diagonal was counted from both ends, so divide by 2: 10 ÷ 2 = 5."],
+"Formula: 5 × (5 − 3) ÷ 2 = 5 × 2 ÷ 2 = 5. ✓ (Draw a star inside a pentagon: it has 5 lines.)"];
+S[57]=["d",
+"Four shapes: rectangle, trapezium, kite, parallelogram.",
+"The one that has rotational symmetry but no line symmetry.",
+"Line symmetry: a fold line makes both halves match. Rotational symmetry: the shape looks the same after turning less than a full turn.",
+["Rectangle: has line symmetry (fold the middle) and rotational symmetry. ✗",
+"Trapezium: has no rotational symmetry. ✗",
+"Kite: has line symmetry (along one diagonal) and no rotational symmetry. ✗",
+"Parallelogram: after a half turn (180°) it looks the same, so it has rotational symmetry. No fold line makes two matching halves, so no line symmetry. ✓"],
+"Only the parallelogram has the first property without the second."];
+S[58]=["c",
+"A car travels at 80 kmph and takes 10 hours. The same distance must be covered in 4 hours.",
+"How much the speed must be increased.",
+"Distance = speed × time. Speed = distance ÷ time.",
+["Distance = 80 × 10 = 800 km.",
+"Speed needed for 4 hours = 800 ÷ 4 = 200 kmph.",
+"Increase in speed = 200 − 80 = 120 kmph."],
+"80 + 120 = 200 kmph, and 200 × 4 = 800 km. ✓",
+"The question asks “how much should the speed be increased?”, so the increase is 120 (option c). If your book means the new speed, that is 200 (option a)."];
+S[59]=["a",
+"A lent Rs. 4500 to B for 2 years and Rs. 5000 to C for 3 years at the same rate of simple interest. Total interest = Rs. 1200.",
+"The rate of interest.",
+"Simple interest = P × R × T ÷ 100, where P is the money, R the rate % per year and T the time in years.",
+["Interest from B = 4500 × R × 2 ÷ 100.<br>4500 × 2 = 9000 and 9000 ÷ 100 = 90. So interest from B = 90R.",
+"Interest from C = 5000 × R × 3 ÷ 100.<br>5000 × 3 = 15000 and 15000 ÷ 100 = 150. So interest from C = 150R.",
+"Total = 90R + 150R = 240R = 1200.",
+"R = 1200 ÷ 240 = 5."],
+"At 5%: B gives 4500 × 5 × 2 ÷ 100 = 450. C gives 5000 × 5 × 3 ÷ 100 = 750. 450 + 750 = 1200. ✓"];
+S[60]=["d",
+"The average of 7 numbers is 8. After adding one more number the average is 9.",
+"The added number.",
+"Total = average × number of numbers.",
+["Total of 7 numbers = 7 × 8 = 56.",
+"Total of 8 numbers = 8 × 9 = 72.",
+"Added number = 72 − 56 = 16."],
+"(56 + 16) ÷ 8 = 72 ÷ 8 = 9. ✓"];
+S[61]=["a",
+"All non-negative integers up to 100: 0, 1, 2, …, 100.",
+"Their average.",
+"Average = sum ÷ how many numbers. For numbers in a row, the average is the middle of the first and last.",
+["How many numbers? From 0 to 100 there are 101 numbers.",
+"Sum = 0 + 1 + 2 + … + 100. Pair the ends: 0 + 100 = 100, 1 + 99 = 100, and so on. There are 50 such pairs and 50 is left alone in the middle.<br>Sum = 50 × 100 + 50 = 5050.",
+"Average = 5050 ÷ 101 = 50."],
+"Shortcut: (0 + 100) ÷ 2 = 50. ✓"];
+S[62]=["d",
+"Cost price of 100 books = selling price of 60 books.",
+"The gain or loss percent.",
+"Gain % = gain ÷ cost price × 100. Pick an easy cost price for one book.",
+["Let the cost of 1 book = Rs. 1. Then the cost of 100 books = Rs. 100.",
+"This is the selling price of 60 books. So selling price of 1 book = 100 ÷ 60 = 5/3 rupees.",
+"Selling price (5/3) is more than cost (1), so there is a gain.<br>Gain on 1 book = 5/3 − 1 = 5/3 − 3/3 = 2/3 rupee.",
+"Gain % = (2/3) ÷ 1 × 100 = 200/3 = 66⅔%."],
+"Sell 60 books for Rs. 100: cost of those 60 is Rs. 60. Gain = 40. 40/60 × 100 = 66⅔%. ✓"];
+S[63]=["a",
+"Salaries of P and Q are in the ratio 3 : 4. Each spends 75% of the salary and saves the rest.",
+"The ratio of their savings.",
+"Saving % = 100% − spending %. Savings = saving % of salary.",
+["Saving % = 100% − 75% = 25% = 1/4.",
+"Let P’s salary = 3x and Q’s salary = 4x.",
+"P saves 1/4 of 3x = 3x/4. Q saves 1/4 of 4x = x.",
+"Ratio = 3x/4 : x. Multiply both by 4: 3x : 4x = 3 : 4."],
+"Since both save the same percent, the savings are in the same ratio as the salaries. ✓"];
+S[64]=["b",
+"The average age of a father and a son is 28 years. Their ages are in the ratio 5 : 2.",
+"The ratio of their ages after 8 years.",
+"Average of 2 numbers = sum ÷ 2, so sum = average × 2.",
+["Sum of ages = 2 × 28 = 56.",
+"Total parts = 5 + 2 = 7. One part = 56 ÷ 7 = 8 years.",
+"Father = 5 × 8 = 40 years. Son = 2 × 8 = 16 years.",
+"After 8 years: father = 48, son = 24.",
+"Ratio = 48 : 24. Divide both by 24: 2 : 1."],
+"40 + 16 = 56 ✓ and the ratio 40 : 16 = 5 : 2 ✓."];
+S[65]=["d",
+"a : b = 3 : 4 and b : c = 6 : 7.",
+"a : b : c.",
+"To join two ratios, make the common term (b) equal in both. Use the LCM of the two b values.",
+["b is 4 in the first ratio and 6 in the second. The LCM of 4 and 6 is 12.",
+"Make b = 12 in a : b: multiply by 3.<br>3 : 4 = 9 : 12.",
+"Make b = 12 in b : c: multiply by 2.<br>6 : 7 = 12 : 14.",
+"Now b = 12 in both, so a : b : c = 9 : 12 : 14."],
+"9 : 12 = 3 : 4 ✓ (divide by 3) and 12 : 14 = 6 : 7 ✓ (divide by 2)."];
+S[66]=["c",
+"Two numbers are in the ratio 4 : 5. The difference of their squares is 81.",
+"The smaller number.",
+"Write the numbers as 4x and 5x. Square means a number times itself.",
+["The numbers are 4x and 5x.",
+"(5x)² = 25x² and (4x)² = 16x².",
+"Difference = 25x² − 16x² = 9x² = 81.",
+"x² = 81 ÷ 9 = 9. Since 3 × 3 = 9, x = 3.",
+"Smaller number = 4 × 3 = 12."],
+"12² = 144 and 15² = 225. 225 − 144 = 81. ✓"];
+S[67]=["a",
+"The expression 8<sup>0.4</sup> × 4<sup>1.6</sup> × 2<sup>1.6</sup>.",
+"Its value.",
+"Write every number as a power of 2. (a<sup>m</sup>)<sup>n</sup> = a<sup>m × n</sup>. When multiplying powers of the same number, add the powers.",
+["8 = 2 × 2 × 2 = 2³ and 4 = 2 × 2 = 2².",
+"8<sup>0.4</sup> = (2³)<sup>0.4</sup> = 2<sup>3 × 0.4</sup> = 2<sup>1.2</sup>.",
+"4<sup>1.6</sup> = (2²)<sup>1.6</sup> = 2<sup>2 × 1.6</sup> = 2<sup>3.2</sup>.",
+"The expression = 2<sup>1.2</sup> × 2<sup>3.2</sup> × 2<sup>1.6</sup> = 2<sup>1.2 + 3.2 + 1.6</sup> = 2<sup>6</sup>.",
+"2<sup>6</sup> = 2 × 2 × 2 × 2 × 2 × 2 = 64."],
+"1.2 + 3.2 = 4.4, and 4.4 + 1.6 = 6. 2<sup>6</sup> = 64. ✓"];
+S[68]=["c",
+"A number exceeds its two-fifths by 75.",
+"The number.",
+"Write an equation: number − 2/5 of the number = 75.",
+["Let the number be x.",
+"x − (2/5)x = 75.",
+"x = 5/5 x, so 5/5 x − 2/5 x = 3/5 x. So (3/5)x = 75.",
+"Three fifths is 75. One fifth = 75 ÷ 3 = 25. Five fifths (the whole) = 5 × 25 = 125."],
+"2/5 of 125 = 50. 125 − 50 = 75. ✓"];
+S[69]=["b",
+"A number leaves remainder 2 when divided by 6, 9, 12, 15 and 18.",
+"The least such number.",
+"First find the LCM of the divisors (the smallest number all of them divide exactly). Then add the remainder 2.",
+["Prime factors:<br>6 = 2 × 3<br>9 = 3 × 3<br>12 = 2 × 2 × 3<br>15 = 3 × 5<br>18 = 2 × 3 × 3",
+"For the LCM take the highest number of times each prime appears: 2 twice, 3 twice, 5 once.<br>LCM = 2 × 2 × 3 × 3 × 5 = 4 × 9 × 5 = 36 × 5 = 180.",
+"The number leaves remainder 2 each time, so add 2: 180 + 2 = 182."],
+"182 ÷ 6 = 30 R 2. 182 ÷ 9 = 20 R 2. 182 ÷ 12 = 15 R 2. 182 ÷ 15 = 12 R 2. 182 ÷ 18 = 10 R 2. ✓"];
+S[70]=["c",
+"The expression (24 − 16) × 8 − 64 ÷ (10 − 2) + 4.",
+"Its value.",
+"BODMAS: Brackets first. Then Division and Multiplication (left to right). Then Addition and Subtraction (left to right).",
+["Brackets: 24 − 16 = 8 and 10 − 2 = 8.<br>The expression becomes 8 × 8 − 64 ÷ 8 + 4.",
+"Multiplication and division: 8 × 8 = 64 and 64 ÷ 8 = 8.<br>The expression becomes 64 − 8 + 4.",
+"Left to right: 64 − 8 = 56.",
+"Then 56 + 4 = 60."],
+"Done in the right order, so the answer is 60."];
+S[71]=["c",
+"The time is 8:15.",
+"The angle between the hands of the clock.",
+"A full circle is 360°. The minute hand moves 6° every minute (360 ÷ 60). The hour hand moves 30° every hour, which is 0.5° every minute.",
+["Minute hand at 15 minutes: 15 × 6 = 90° from 12.",
+"Hour hand at 8:00 is 8 × 30 = 240° from 12.",
+"In 15 more minutes the hour hand moves 15 × 0.5 = 7.5°. So the hour hand is at 240 + 7.5 = 247.5°.",
+"Angle between = 247.5° − 90° = 157.5° = 157½°."],
+"157½° is less than 180°, so it is the smaller angle between the hands. ✓"];
+S[72]=["a",
+"The fractions 36/51 and 3 9/17.",
+"The HCF of the two fractions.",
+"HCF of fractions = HCF of the tops ÷ LCM of the bottoms (when written as improper fractions).",
+["Change 3 9/17 to an improper fraction: (3 × 17 + 9)/17 = 60/17.",
+"Tops: 36 and 60. HCF: 36 = 2 × 2 × 3 × 3 and 60 = 2 × 2 × 3 × 5. Common factors 2 × 2 × 3 = 12. So HCF = 12.",
+"Bottoms: 51 and 17. 51 = 3 × 17, so the LCM is 51.",
+"HCF of the fractions = 12/51."],
+"36/51 = 12/51 × 3 ✓ and 60/17 = 180/51 = 12/51 × 15 ✓. Both are whole multiples of 12/51.",
+"The numbers were slightly hard to read in the photo. The answer matches option (a)."];
+S[73]=["a",
+"Selling price = Rs. 32000. Profit = 33⅓%.",
+"The cost price.",
+"33⅓% = 1/3. Selling price = cost price + profit.",
+["Profit = 1/3 of the cost price.",
+"Selling price = cost price + 1/3 of cost price = 4/3 of cost price.",
+"4/3 of CP = 32000. One third of CP = 32000 ÷ 4 = 8000.",
+"CP = 3 × 8000 = 24000."],
+"Profit = 1/3 of 24000 = 8000. 24000 + 8000 = 32000. ✓"];
+S[74]=["c",
+"480 people. 3/5 are women. 5/8 of the women are married.",
+"The number of married women.",
+"“Of” means multiply. Find the women first, then the married women.",
+["Women = 3/5 of 480. 480 ÷ 5 = 96, then 96 × 3 = 288.",
+"Married women = 5/8 of 288. 288 ÷ 8 = 36, then 36 × 5 = 180."],
+"180 married women out of 288 women is 180/288 = 5/8. ✓"];
+S[75]=["a",
+"There are 40 legs in total in the room.",
+"How many people and dogs can there be.",
+"A person has 2 legs. A dog has 4 legs. Test each option.",
+["a) 4 people + 8 dogs: 4 × 2 = 8 and 8 × 4 = 32. 8 + 32 = 40 ✓",
+"b) 3 people + 8 dogs: 6 + 32 = 38 ✗",
+"c) 4 people + 7 dogs: 8 + 28 = 36 ✗",
+"d) 4 people + 9 dogs: 8 + 36 = 44 ✗"],
+"Only option (a) gives exactly 40 legs."];
+S[76]=["c",
+"The greatest negative integer and the smallest whole number.",
+"Their sum.",
+"Integers: …, −3, −2, −1, 0, 1, 2 … Whole numbers: 0, 1, 2, 3 … (no negatives).",
+["Negative integers: −1, −2, −3 … The greatest (closest to zero) is −1.",
+"Whole numbers start at 0. The smallest is 0.",
+"Sum = −1 + 0 = −1."],
+"−1 + 0 = −1. ✓"];
+S[77]=["a",
+"The series 7, 28, 63, 124, 215, 342, 511.",
+"The odd one out.",
+"Look for a pattern. Numbers like 7, 63, 124, 215, 342, 511 look like “a cube minus 1”.",
+["Cubes: 2³ = 8, 3³ = 27, 4³ = 64, 5³ = 125, 6³ = 216, 7³ = 343, 8³ = 512.",
+"Cube minus 1: 7, 26, 63, 124, 215, 342, 511.",
+"Compare with the given series: 7, 28, 63, 124, 215, 342, 511.",
+"Every number matches except 28. It should have been 26."],
+"All the other numbers match n³ − 1, so 28 is the odd one. ✓"];
+S[78]=["b",
+"The total number of handshakes is 465. Everyone shakes hands with everyone else once.",
+"The number of people.",
+"For n people, handshakes = n × (n − 1) ÷ 2.",
+["n × (n − 1) ÷ 2 = 465.",
+"Multiply both sides by 2: n × (n − 1) = 930.",
+"We need two numbers next to each other that multiply to 930. Near the square root of 930 (a bit more than 30): try 30 × 31 = 930. ✓",
+"So n = 31."],
+"31 × 30 ÷ 2 = 930 ÷ 2 = 465. ✓"];
+S[79]=["d",
+"The 2nd day of a month is a Friday.",
+"The last day of the next month that has 31 days.",
+"To find a weekday after some days, divide the number of days by 7 and look at the remainder.",
+["If the 2nd is a Friday, the 1st is a Thursday.",
+"Suppose the first month has 31 days. The next month starts 31 days later: 31 ÷ 7 = 4 R 3, so Thursday + 3 = Sunday. If that month has 31 days, its last day is 30 days after its first: 30 ÷ 7 = 4 R 2, so Sunday + 2 = Tuesday.",
+"Suppose the first month has 30 days. The next month starts 30 days after Thursday: 30 ÷ 7 = 4 R 2, Thursday + 2 = Saturday. Its last day (30 days later) is Saturday + 2 = Monday.",
+"We get Tuesday in one case and Monday in another. The answer depends on which month it is, and the question does not say."],
+"Different possible months give different answers, so the data is inadequate."];
+S[80]=["d",
+"The number 778 divided by a half.",
+"The value.",
+"Dividing by a fraction means multiplying by its upside-down. ½ upside-down is 2/1 = 2.",
+["778 ÷ ½ = 778 × 2.",
+"700 × 2 = 1400, 70 × 2 = 140, 8 × 2 = 16.<br>1400 + 140 + 16 = 1556."],
+"How many halves are in 778? Each whole has 2 halves, so 778 × 2 = 1556. ✓ (389 would be 778 divided by 2, which is different.)"];
+S[81]=["c",
+"The term “concurrent lines”.",
+"What concurrent lines pass through.",
+"Know the meaning: concurrent lines are three or more lines that all meet at one point.",
+["“Con” means together and “current” comes from running. Concurrent lines run together through a common point.",
+"Think of the spokes of a bicycle wheel. All the spokes meet at the centre.",
+"So concurrent lines pass through one point."],
+"The correct choice is (c) one point."];
+S[82]=["d",
+"The solid shape called a tetrahedron.",
+"Its other name.",
+"“Tetra” means four. A tetrahedron has four faces.",
+["A tetrahedron has 4 faces, and each face is a triangle.",
+"A pyramid with a triangular base has 3 triangular sides + 1 triangular base = 4 triangles.",
+"So a tetrahedron is a triangular pyramid."],
+"Prisms have two parallel matching faces, a tetrahedron does not, so it is not a prism. A square pyramid has a square base. ✓"];
+S[83]=["b",
+"A 3-digit number between 200 and 500. All digits are odd. The digits add up to 5.",
+"The number.",
+"Odd digits are 1, 3, 5, 7, 9. Use each clue to narrow the choices.",
+["Between 200 and 500: the hundreds digit is 2, 3 or 4. It must be odd, so it is 3.",
+"The three digits add up to 5. So the other two digits add up to 5 − 3 = 2.",
+"Both must be odd. The only odd digits adding up to 2 are 1 and 1.",
+"The number is 311."],
+"3 + 1 + 1 = 5 ✓. All digits (3, 1, 1) are odd ✓. 200 < 311 < 500 ✓."];
+S[84]=["d",
+"The successor of the greatest 4-digit number, divided by the smallest 5-digit number.",
+"The result.",
+"The successor of a number is the number after it (add 1).",
+["The greatest 4-digit number is 9999.",
+"Its successor is 9999 + 1 = 10000.",
+"The smallest 5-digit number is 10000.",
+"10000 ÷ 10000 = 1."],
+"Any number divided by itself is 1. ✓"];
+S[85]=["b",
+"The number 979.",
+"Its Roman numeral.",
+"Roman numerals: I = 1, V = 5, X = 10, L = 50, C = 100, D = 500, M = 1000. If a smaller numeral comes before a bigger one, subtract it.",
+["Split 979 into hundreds, tens and ones: 900 + 70 + 9.",
+"900 = 1000 − 100 = CM.",
+"70 = 50 + 10 + 10 = LXX.",
+"9 = 10 − 1 = IX.",
+"Join them: CM + LXX + IX = CMLXXIX."],
+"CM = 900, LXX = 70, IX = 9. 900 + 70 + 9 = 979. ✓"];
+S[86]=["b",
+"The whole numbers 0, 1, 2, 3 …",
+"The whole number that has no predecessor.",
+"The predecessor of a number is the one just before it (subtract 1).",
+["Predecessor of 10 is 9, of 9 is 8, of 1 is 0.",
+"The predecessor of 0 would be 0 − 1 = −1.",
+"But −1 is not a whole number. So 0 has no predecessor among whole numbers."],
+"0 is the first whole number. ✓"];
+S[87]=["a",
+"Two numbers are in the ratio 2 : 3. Their LCM is 48.",
+"The sum of the two numbers.",
+"Write the numbers as 2x and 3x. Since 2 and 3 have no common factor, the LCM of 2x and 3x is 6x.",
+["Let the numbers be 2x and 3x.",
+"LCM = 2 × 3 × x = 6x.",
+"6x = 48, so x = 48 ÷ 6 = 8.",
+"The numbers are 2 × 8 = 16 and 3 × 8 = 24.",
+"Sum = 16 + 24 = 40."],
+"LCM of 16 and 24: 16 = 2 × 2 × 2 × 2, 24 = 2 × 2 × 2 × 3, LCM = 2 × 2 × 2 × 2 × 3 = 48. ✓"];
+S[88]=["d",
+"Two integers have a difference of 6 and a sum of −18.",
+"The integers.",
+"Call them x (bigger) and y (smaller). Then x − y = 6 and x + y = −18. Adding the two equations removes y.",
+["x − y = 6 …(1)<br>x + y = −18 …(2)",
+"Add (1) and (2): 2x = 6 + (−18) = −12.",
+"x = −12 ÷ 2 = −6.",
+"Put x = −6 in (2): −6 + y = −18, so y = −18 + 6 = −12.",
+"The integers are −6 and −12."],
+"−6 − (−12) = −6 + 12 = 6 ✓. −6 + (−12) = −18 ✓."];
+S[89]=["a",
+"A man bought 30 litres of juice. He gave 7⅔ litres to his friend and 5⅖ litres to his family.",
+"The juice left.",
+"Left = total − (given to friend + given to family). To add mixed numbers, add the whole parts and the fraction parts separately.",
+["Whole parts: 7 + 5 = 12.",
+"Fraction parts: 2/3 + 2/5. The common bottom number is 15.<br>2/3 = 10/15 and 2/5 = 6/15.<br>10/15 + 6/15 = 16/15 = 1 1/15.",
+"Total given = 12 + 1 1/15 = 13 1/15 litres.",
+"Left = 30 − 13 1/15.<br>30 = 29 15/15, so 29 15/15 − 13 1/15 = 16 14/15 litres."],
+"16 14/15 + 13 1/15 = 29 + 15/15 + 1 = 30. ✓"];
+S[90]=["b",
+"Two numbers are in the ratio 1 : 2. After adding 7 to both, the ratio is 3 : 5.",
+"The greater number.",
+"Write the numbers as x and 2x, then use cross multiplication.",
+["The numbers are x and 2x.",
+"(x + 7)/(2x + 7) = 3/5.",
+"Cross multiply: 5 × (x + 7) = 3 × (2x + 7).<br>5x + 35 = 6x + 21.",
+"Take 5x from both sides: 35 = x + 21.<br>x = 35 − 21 = 14.",
+"The numbers are 14 and 28. The greater is 28."],
+"(14 + 7) : (28 + 7) = 21 : 35 = 3 : 5 (divide by 7). ✓"];
+S[91]=["c",
+"A regular pentagon of side 7 m. A boy walks at 5 m per minute.",
+"The time to go once around.",
+"Going around a shape is its perimeter. Time = distance ÷ speed.",
+["A regular pentagon has 5 equal sides.",
+"Perimeter = 5 × 7 = 35 m.",
+"Time = 35 ÷ 5 = 7 minutes."],
+"5 m/min × 7 min = 35 m. ✓"];
+S[92]=["d",
+"Four figures.",
+"The one for which we cannot find the perimeter.",
+"Perimeter is the length of the boundary all the way around a closed figure.",
+["A rectangle is closed. We add its 4 sides. ✓",
+"A scalene triangle is closed. We add its 3 sides. ✓",
+"A trapezium is closed. We add its 4 sides. ✓",
+"An open 3-sided figure has a gap. It is not closed, so it has no complete boundary. ✗"],
+"So the figure whose perimeter we cannot find is the open 3-sided figure."];
+S[93]=["b",
+"The first 10 prime numbers.",
+"Their average.",
+"A prime number has exactly two factors, 1 and itself. 1 is not prime. Average = sum ÷ how many.",
+["The first 10 primes: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29.",
+"Add them step by step:<br>2 + 3 = 5<br>5 + 5 = 10<br>10 + 7 = 17<br>17 + 11 = 28<br>28 + 13 = 41<br>41 + 17 = 58<br>58 + 19 = 77<br>77 + 23 = 100<br>100 + 29 = 129",
+"Average = 129 ÷ 10 = 12.9."],
+"10 × 12.9 = 129. ✓"];
+S[94]=["b",
+"The sum of two numbers is 12 and their product is 35.",
+"The sum of their reciprocals.",
+"The reciprocal of a number x is 1/x. 1/x + 1/y = (y + x)/(x × y).",
+["Let the numbers be x and y. x + y = 12 and x × y = 35.",
+"1/x + 1/y = (y + x)/(x × y) (put over a common bottom number).",
+"= (x + y)/(x × y) = 12/35."],
+"The numbers are 5 and 7. 1/5 + 1/7 = 7/35 + 5/35 = 12/35. ✓",
+"Option (d) was hard to read in the photo. The answer 12/35 matches option (b)."];
+S[95]=["d",
+"The number 7 raised to the power 159.",
+"Its units (last) digit.",
+"Powers of a number have last digits that repeat in a pattern. Find the pattern, then see where power 159 falls.",
+["7¹ = 7 → last digit 7.<br>7² = 49 → last digit 9.<br>7³ = 343 → last digit 3.<br>7⁴ = 2401 → last digit 1.<br>7⁵ ends in 7 again, and the pattern 7, 9, 3, 1 repeats every 4 powers.",
+"Divide 159 by 4: 4 × 39 = 156, remainder 3.",
+"A remainder of 3 means the 3rd number of the pattern 7, 9, 3, 1, which is 3."],
+"7<sup>156</sup> ends in 1 (39 full patterns), so 7<sup>159</sup> ends like 7<sup>3</sup>, that is 3. ✓",
+"The power was blurry in the photo. I read the number as 7 to the power 159."];
+S[96]=["d",
+"A student multiplied by 3/5 instead of 5/3.",
+"The percentage error.",
+"Percentage error = (correct − wrong) ÷ correct × 100.",
+["Correct multiplier = 5/3. Wrong multiplier = 3/5.",
+"Correct − wrong = 5/3 − 3/5. The common bottom number is 15.<br>5/3 = 25/15 and 3/5 = 9/15.<br>25/15 − 9/15 = 16/15.",
+"Divide by the correct value: (16/15) ÷ (5/3) = 16/15 × 3/5 = 48/75 = 16/25.",
+"16/25 × 100 = 64%."],
+"Try the number 15: correct = 15 × 5/3 = 25, wrong = 15 × 3/5 = 9. Error = 16 out of 25 = 64%. ✓"];
+S[97]=["c",
+"The numbers 1 to 70.",
+"The percentage of numbers that have 1 or 9 in the units digit.",
+"Percentage = part ÷ whole × 100.",
+["Numbers ending in 1: 1, 11, 21, 31, 41, 51, 61. That is 7 numbers.",
+"Numbers ending in 9: 9, 19, 29, 39, 49, 59, 69. That is 7 numbers.",
+"Total = 7 + 7 = 14 numbers out of 70.",
+"14/70 = 1/5. 1/5 × 100 = 20%."],
+"20% of 70 = 14. ✓"];
+S[98]=["a",
+"In a 200 m race, P takes 36 seconds and Q takes 45 seconds.",
+"By how many metres P beats Q.",
+"When P reaches the finish, find how far Q has run in the same 36 seconds.",
+["Q runs 200 m in 45 seconds. In 1 second Q runs 200 ÷ 45 m.",
+"In 36 seconds Q runs 200 × 36 ÷ 45.<br>36 ÷ 45 = 4/5.<br>200 × 4/5 = 160 m.",
+"When P finishes (200 m), Q has run only 160 m.",
+"P beats Q by 200 − 160 = 40 m."],
+"Q covers 160 m in 36 s. 160 ÷ 36 = 4.44 m/s, and 200 ÷ 45 = 4.44 m/s. ✓"];
+S[99]=["d",
+"A boy does a piece of work in 15 days. A girl does it in 20 days. They work together for 4 days.",
+"The fraction of the work left.",
+"If a person does the work in n days, he does 1/n of the work in one day. Add the work of both in one day.",
+["Boy’s work in 1 day = 1/15. Girl’s work in 1 day = 1/20.",
+"Together in 1 day = 1/15 + 1/20. The common bottom number is 60.<br>1/15 = 4/60 and 1/20 = 3/60.<br>4/60 + 3/60 = 7/60.",
+"In 4 days: 4 × 7/60 = 28/60 = 7/15.",
+"Work left = 1 − 7/15 = 15/15 − 7/15 = 8/15."],
+"7/15 done + 8/15 left = 15/15 = the whole work. ✓"];
+S[100]=["c",
+"Pipe X fills a tank in 5 hrs. Pipe Y fills it in 6 hrs. Pipe Z empties it in 12 hrs. All three are open.",
+"The time taken by all three together.",
+"Filling pipes add work. Emptying pipes take work away. Time = 1 ÷ (work done in one hour).",
+["In 1 hour: X fills 1/5, Y fills 1/6, Z empties 1/12.",
+"Net in 1 hour = 1/5 + 1/6 − 1/12. The common bottom number is 60.<br>1/5 = 12/60, 1/6 = 10/60, 1/12 = 5/60.<br>12/60 + 10/60 − 5/60 = 17/60.",
+"The answer is positive, so the tank is filling up, 17/60 of it every hour.",
+"Time = 60/17 hours. 17 × 3 = 51, and 60 − 51 = 9, so 60/17 = 3 and 9/17 hours."],
+"In 3 9/17 hours, 17/60 × 60/17 = 1 whole tank. ✓",
+"The question says “empty”, but with these numbers the tank fills (the net flow is positive). The time for the full tank is 3 9/17 hrs, which is option (c)."];
+S[101]=["a",
+"In the first 10 overs the run rate was 3.2. The target is 282 runs in 50 overs (10 + 40).",
+"The run rate needed in the remaining 40 overs.",
+"Run rate = runs ÷ overs. Runs scored = run rate × overs.",
+["Runs in the first 10 overs = 10 × 3.2 = 32.",
+"Runs still needed = 282 − 32 = 250.",
+"Overs left = 40.",
+"Required run rate = 250 ÷ 40 = 25 ÷ 4 = 6.25."],
+"40 × 6.25 = 250 and 250 + 32 = 282. ✓"];
+S[102]=["d",
+"The time is 10:25.",
+"The reflex angle between the hands of the clock.",
+"The minute hand moves 6° per minute. The hour hand moves 30° per hour = 0.5° per minute. A reflex angle is the bigger angle (more than 180°). Reflex = 360° − smaller angle.",
+["Minute hand at 25 minutes: 25 × 6 = 150°.",
+"Hour hand at 10:00 is 10 × 30 = 300°. In 25 minutes it moves 25 × 0.5 = 12.5°. So it is at 312.5°.",
+"Smaller angle between them = 312.5° − 150° = 162.5°.",
+"Reflex angle = 360° − 162.5° = 197.5° = 197½°."],
+"162.5° + 197.5° = 360°. ✓",
+"The options were hard to read in the photo. 197½° is the value we get, and it is option (d)."];
+S[103]=["c",
+"Speed of boat in still water = 13 kmph. Speed of stream = 4 kmph. Distance downstream = 68 km.",
+"The time taken.",
+"Downstream the stream pushes the boat forward, so add the speeds. Time = distance ÷ speed.",
+["Downstream speed = 13 + 4 = 17 kmph.",
+"Time = 68 ÷ 17.<br>17 × 4 = 68, so time = 4 hours."],
+"17 kmph × 4 hours = 68 km. ✓"];
+S[104]=["b",
+"A person crosses a street 600 m long in 5 minutes.",
+"The speed in kmph (km per hour).",
+"Speed = distance ÷ time. 1000 m = 1 km and 60 minutes = 1 hour.",
+["Speed in metres per minute = 600 ÷ 5 = 120 m/min.",
+"In 1 hour (60 minutes): 120 × 60 = 7200 m.",
+"Change to km: 7200 ÷ 1000 = 7.2 km.",
+"So the speed is 7.2 km per hour."],
+"7.2 km/h × 5/60 h = 0.6 km = 600 m. ✓"];
+S[105]=["b",
+"Two adjacent sides of a rectangle are in the ratio 13 : 11. The smallest side is 5.5 cm.",
+"The perimeter of the rectangle.",
+"Perimeter = 2 × (length + width).",
+["The sides are 13 parts and 11 parts. The smallest side is 11 parts = 5.5 cm.",
+"1 part = 5.5 ÷ 11 = 0.5 cm.",
+"Longer side = 13 × 0.5 = 6.5 cm.",
+"Perimeter = 2 × (6.5 + 5.5) = 2 × 12 = 24 cm."],
+"6.5 : 5.5 = 13 : 11 (multiply both by 2). ✓"];
+S[106]=["a",
+"The area of one circle is 100 times the area of another circle.",
+"The ratio of their diameters.",
+"Area of a circle = π × r × r. Diameter = 2 × radius, so diameters are in the same ratio as the radii.",
+["Let the radii be R (big circle) and r (small circle).",
+"π × R × R = 100 × π × r × r. Cancel π: R × R = 100 × r × r.",
+"What number times itself is 100? 10 × 10 = 100. So R = 10 × r.",
+"R : r = 10 : 1. The diameters are 2R and 2r, with the same ratio 10 : 1."],
+"If r = 1, R = 10. Areas = π and 100π. 100π is 100 times π. ✓"];
+S[107]=["d",
+"The ages of M and N are in the ratio 5 : 3. After 6 years the ratio is 7 : 5.",
+"The sum of their present ages.",
+"Write the ages as 5x and 3x. After 6 years each age increases by 6.",
+["Present ages: M = 5x, N = 3x.",
+"After 6 years: (5x + 6) : (3x + 6) = 7 : 5.",
+"Cross multiply: 5 × (5x + 6) = 7 × (3x + 6).<br>25x + 30 = 21x + 42.",
+"25x − 21x = 42 − 30, so 4x = 12 and x = 3.",
+"M = 15 and N = 9. Sum = 15 + 9 = 24 years."],
+"After 6 years: 21 and 15. 21 : 15 = 7 : 5. ✓"];
+S[108]=["b",
+"The equation 2(m + 2) + 3m = 20 − (2m − 5).",
+"The value of m.",
+"Open the brackets. Collect m terms on one side and numbers on the other.",
+["Left side: 2(m + 2) = 2m + 4. So left = 2m + 4 + 3m = 5m + 4.",
+"Right side: 20 − (2m − 5) = 20 − 2m + 5 = 25 − 2m.<br>(The minus sign outside changes the signs inside.)",
+"5m + 4 = 25 − 2m.",
+"Add 2m to both sides: 7m + 4 = 25.<br>Subtract 4: 7m = 21.<br>Divide by 7: m = 3."],
+"Left: 2 × 5 + 9 = 19. Right: 20 − (6 − 5) = 19. ✓"];
+S[109]=["c",
+"Two dice are thrown together.",
+"The probability that the sum is 9.",
+"Probability = favourable outcomes ÷ total outcomes.",
+["Total outcomes = 6 × 6 = 36.",
+"Pairs with sum 9: (3, 6), (4, 5), (5, 4), (6, 3). That is 4 outcomes.",
+"Probability = 4/36 = 1/9."],
+"4 ÷ 4 = 1 and 36 ÷ 4 = 9. ✓"];
+S[110]=["a",
+"An isosceles triangle. The vertex angle is twice a base angle.",
+"All three angles.",
+"The three angles of a triangle add up to 180°. The two base angles are equal.",
+["Let each base angle be x. The vertex angle = 2x.",
+"x + x + 2x = 180°, so 4x = 180°.",
+"x = 180 ÷ 4 = 45°.",
+"The angles are 45°, 45° and 2 × 45° = 90°."],
+"45 + 45 + 90 = 180. ✓"];
+S[111]=["c",
+"The word MATHEMATICS.",
+"The probability of getting a vowel (picking a letter at random).",
+"Probability = favourable ÷ total. The vowels are A, E, I, O, U.",
+["Letters of MATHEMATICS: M, A, T, H, E, M, A, T, I, C, S. Count = 11.",
+"Vowels: A, E, A, I. Count = 4.",
+"Probability = 4/11."],
+"Consonants: M, T, H, M, T, C, S = 7. 4 + 7 = 11. ✓"];
+S[112]=["d",
+"A regular polygon has each side 7.5 cm. Its perimeter is 67.5 cm.",
+"The number of sides.",
+"Perimeter = number of sides × length of one side.",
+["Number of sides = perimeter ÷ side = 67.5 ÷ 7.5.",
+"Multiply both by 10: 675 ÷ 75.",
+"75 × 9 = 675. So the polygon has 9 sides."],
+"9 × 7.5 = 67.5. ✓"];
+S[113]=["b",
+"The sum 1½ + 3¾ + 5⅝.",
+"The smallest fraction to add to make a whole number.",
+"Add the whole numbers and the fractions separately. Then see how much more is needed to reach the next whole number.",
+["Whole parts: 1 + 3 + 5 = 9.",
+"Fractions: ½ + ¾ + ⅝. The common bottom number is 8.<br>½ = 4/8, ¾ = 6/8, ⅝ = 5/8.<br>4/8 + 6/8 + 5/8 = 15/8 = 1 7/8.",
+"Total = 9 + 1 7/8 = 10 7/8.",
+"The next whole number is 11. 11 − 10 7/8 = 1/8."],
+"10 7/8 + 1/8 = 11. ✓"];
+S[114]=["a",
+"Hens and cows in a field. 50 heads and 142 feet.",
+"The number of cows.",
+"Each animal has 1 head. A hen has 2 feet and a cow has 4 feet.",
+["Number of animals = number of heads = 50.",
+"Pretend all 50 are hens: feet = 50 × 2 = 100.",
+"Actual feet = 142. Extra feet = 142 − 100 = 42.",
+"Changing a hen into a cow adds 4 − 2 = 2 feet. Number of cows = 42 ÷ 2 = 21."],
+"21 cows → 84 feet. 29 hens → 58 feet. 84 + 58 = 142 ✓. 21 + 29 = 50 ✓."];
+S[115]=["c",
+"A full container weighs 28 kg. When ¼ full of water it weighs 19 kg.",
+"The weight when 2/3 is full of water.",
+"Weight = empty container + water. Find the water’s weight first.",
+["Going from ¼ full to full adds ¾ of the water: 28 − 19 = 9 kg.",
+"¾ of the water = 9 kg. ¼ = 9 ÷ 3 = 3 kg. Full water = 4 × 3 = 12 kg.",
+"Empty container = 28 − 12 = 16 kg.",
+"2/3 full of water = 2/3 × 12 = 8 kg.",
+"Total weight = 16 + 8 = 24 kg."],
+"¼ full: 16 + 3 = 19 ✓. Full: 16 + 12 = 28 ✓."];
+S[116]=["c",
+"Triangle PQR is congruent to triangle XYZ.",
+"The statement that is wrong.",
+"Congruent triangles match exactly. The corners match in the order written: P ↔ X, Q ↔ Y, R ↔ Z. Matching sides and angles are equal.",
+["Matching sides: PQ = XY, QR = YZ, PR = XZ.",
+"Matching angles: ∠P = ∠X, ∠Q = ∠Y, ∠R = ∠Z.",
+"a) ∠PQR = ∠XYZ: Q ↔ Y. Right ✓",
+"b) PR = XZ: right ✓",
+"c) PQ = ZY: PQ matches XY, not ZY. Wrong ✗",
+"d) ∠RPQ = ∠ZXY: the angle at P equals the angle at X. Right ✓"],
+"Only statement c) does not follow the matching order."];
+S[117]=["d",
+"Four sets of side lengths (in cm).",
+"The set that cannot make a triangle.",
+"The triangle rule: the two shorter sides added together must be longer than the longest side.",
+["a) 5, 6, 7: 5 + 6 = 11, which is more than 7. A triangle is possible.",
+"b) 8, 11, 14: 8 + 11 = 19, which is more than 14. Possible.",
+"c) 15, 14, 7: 14 + 7 = 21, which is more than 15. Possible.",
+"d) 9, 5, 4: 5 + 4 = 9, which is not more than 9. The two short sides would lie flat along the long side, so no triangle."],
+"Only set d) breaks the rule.",
+"This page was too blurry in the photo. I solved the question as I could read it, so please compare it with your book."];
+S[118]=["",
+"A car wheel turns 10000 times to travel 22 km.",
+"The diameter of the wheel.",
+"One turn of the wheel covers a distance equal to its circumference. Circumference = π × diameter.",
+["Change km into cm: 22 km = 22 × 1000 m = 22000 m = 22000 × 100 cm = 2200000 cm.",
+"Distance in one turn = 2200000 ÷ 10000 = 220 cm. This is the circumference.",
+"π × d = 220, with π = 22/7: (22/7) × d = 220.",
+"d = 220 ÷ 22/7 = 220 × 7/22 = 10 × 7 = 70 cm."],
+"π × 70 = 22/7 × 70 = 220 cm. 10000 × 220 = 2200000 cm = 22 km. ✓",
+"This page was too blurry in the photo. I could read the question but not the options. The diameter is 70 cm.","70 cm"];
+S[119]=["",
+"A rhombus has area 35 cm² and altitude (height) 7 cm.",
+"The perimeter.",
+"Area of a rhombus = side × altitude. All four sides are equal. Perimeter = 4 × side.",
+["35 = side × 7.",
+"Side = 35 ÷ 7 = 5 cm.",
+"Perimeter = 4 × 5 = 20 cm."],
+"5 × 7 = 35 ✓.",
+"This page was too blurry in the photo. I could read the question but not the options. The perimeter is 20 cm.","20 cm"];
+S[120]=["a",
+"The difference between the circumference and the radius of a circle is 37 cm.",
+"The area of the circle.",
+"Circumference = 2πr. Area = πr². Use π = 22/7.",
+["2πr − r = 37.",
+"With π = 22/7: 2 × 22/7 × r − r = 44r/7 − 7r/7 = 37r/7.",
+"37r/7 = 37. Divide both sides by 37: r/7 = 1, so r = 7 cm.",
+"Area = π × r × r = 22/7 × 7 × 7 = 22 × 7 = 154 sq cm."],
+"Circumference = 2 × 22/7 × 7 = 44. 44 − 7 = 37. ✓",
+"This page was too blurry in the photo. I solved the question as I could read it, so please compare it with your book."];
+S[121]=["d",
+"The first five multiples of 10.",
+"Their mean (average).",
+"Mean = sum ÷ number of values.",
+["The multiples: 10, 20, 30, 40, 50.",
+"Sum = 10 + 20 + 30 + 40 + 50 = 150.",
+"Mean = 150 ÷ 5 = 30."],
+"30 is the middle number of the five, as expected. ✓",
+"This page was too blurry in the photo. I solved the question as I could read it, so please compare it with your book."];
+S[122]=["",
+"A bag has 12 red, 10 blue, 21 green and 7 white balls.",
+"The probability of taking out a blue ball.",
+"Probability = favourable ÷ total.",
+["Total balls = 12 + 10 + 21 + 7 = 50.",
+"Blue balls = 10.",
+"Probability = 10/50. Divide top and bottom by 10: 1/5."],
+"10/50 = 0.2 = 1/5. ✓",
+"This page was too blurry in the photo. I could read the question but not the options. The probability is 1/5.","1/5"];
+S[123]=["a",
+"The mean of 5 observations is 89. One observation was wrongly taken as 64 instead of 46.",
+"The correct mean.",
+"Sum = mean × number of observations. Fix the wrong value in the sum.",
+["Wrong sum = 5 × 89 = 445.",
+"Remove the wrong value and add the correct one: 445 − 64 + 46.<br>445 − 64 = 381, and 381 + 46 = 427.",
+"Correct mean = 427 ÷ 5 = 85.4."],
+"5 × 85.4 = 427. ✓",
+"This page was too blurry in the photo. I solved the question as I could read it, so please compare it with your book."];
+S[124]=["b",
+"The data 28, 40, 24, 32, 22, 22, 28, 25, 36, 22, 22.",
+"The median.",
+"The median is the middle value after arranging the data in order. If there are n values (n odd), the median is the ((n + 1) ÷ 2)th value.",
+["Count the values: 11.",
+"Arrange from smallest to biggest: 22, 22, 22, 22, 24, 25, 28, 28, 32, 36, 40.",
+"Middle position = (11 + 1) ÷ 2 = 6th.",
+"The 6th value: 22 (1st), 22 (2nd), 22 (3rd), 22 (4th), 24 (5th), 25 (6th). The median is 25."],
+"5 values are below 25 and 5 values are above 25. ✓",
+"This page was too blurry in the photo. I read the data as 28, 40, 24, 32, 22, 22, 28, 25, 36, 22, 22. Please compare it with your book."];
+S[125]=["d",
+"The square of a natural number subtracted from its cube is 48.",
+"The number.",
+"Square = n × n and cube = n × n × n. We need n³ − n² = 48. Test the options.",
+["Try 4: 4³ = 64, 4² = 16. 64 − 16 = 48. ✓",
+"Check another option, 5: 5³ = 125, 5² = 25. 125 − 25 = 100. ✗",
+"Check 6: 216 − 36 = 180. ✗ Check 8: 512 − 64 = 448. ✗"],
+"4 is the only option that works.",
+"This page was too blurry in the photo. I solved the question as I could read it, so please compare it with your book."];
+S[126]=["b",
+"We need A so that 90 × A is a perfect cube.",
+"The least value of A.",
+"A perfect cube has every prime factor appearing a multiple of 3 times (3, 6, 9 times …). Break 90 into prime factors and top up each prime.",
+["90 = 2 × 45 = 2 × 3 × 15 = 2 × 3 × 3 × 5.<br>So 2 appears 1 time, 3 appears 2 times, 5 appears 1 time.",
+"For a cube each prime needs to appear 3 times.<br>We need 2 more 2’s, 1 more 3, and 2 more 5’s.",
+"A = 2 × 2 × 3 × 5 × 5 = 4 × 3 × 25 = 12 × 25 = 300."],
+"90 × 300 = 27000 = 30 × 30 × 30. ✓",
+"This page was too blurry in the photo. I solved the question as I could read it, so please compare it with your book."];
+S[127]=["d",
+"A car goes from A to B at 63 km/h and returns at 42 km/h.",
+"The average speed for the whole journey.",
+"For the same distance both ways, average speed = 2 × a × b ÷ (a + b).",
+["Put in the numbers: 2 × 63 × 42 ÷ (63 + 42).",
+"Top: 63 × 42 = 63 × 40 + 63 × 2 = 2520 + 126 = 2646. Then 2 × 2646 = 5292.<br>Bottom: 63 + 42 = 105.",
+"5292 ÷ 105:<br>105 × 50 = 5250, and 5292 − 5250 = 42.<br>42 ÷ 105 = 0.4.<br>So the answer is 50.4 km/h."],
+"The answer is between 42 and 63, and closer to the smaller speed than the plain middle (52.5). 50.4 fits. ✓",
+"This page was too blurry in the photo. I solved the question as I could read it, so please compare it with your book."];
+S[128]=["b",
+"Three years ago the average age of a family of 5 was 17 years. A baby was born, and the average today is still 17.",
+"The baby’s age today.",
+"Total age = average × number of people.",
+["Total age 3 years ago = 5 × 17 = 85.",
+"Today each of the 5 members is 3 years older: 5 × 3 = 15 more years. Total now = 85 + 15 = 100.",
+"With the baby there are 6 members and the average is 17. Total = 6 × 17 = 102.",
+"Baby’s age = 102 − 100 = 2 years."],
+"(100 + 2) ÷ 6 = 102 ÷ 6 = 17. ✓",
+"This page was too blurry in the photo. I solved the question as I could read it, so please compare it with your book."];
+S[129]=["d",
+"A : C = 2 : 1 and A : B = 3 : 2. Total profit = Rs. 1,57,300.",
+"B’s share of the profit.",
+"Profit is shared in the ratio of investments. Make A the same number in both ratios to join them.",
+["A is 2 in the first ratio and 3 in the second. The LCM is 6.",
+"A : C = 2 : 1 = 6 : 3 (multiply by 3).<br>A : B = 3 : 2 = 6 : 4 (multiply by 2).",
+"So A : B : C = 6 : 4 : 3. Total parts = 6 + 4 + 3 = 13.",
+"One part = 157300 ÷ 13 = 12100 (13 × 12100 = 157300).",
+"B’s share = 4 × 12100 = 48400."],
+"A = 72600, B = 48400, C = 36300. Total = 157300. ✓"];
+S[130]=["a",
+"A bag has Rs.1 coins, 50 paisa coins and 25 paisa coins, 175 coins in all. Each kind has the same total value.",
+"The total amount in the bag.",
+"A cheaper coin must be more in number to give the same value. Compare how many coins of each kind make the same value.",
+["Rs. 1 = 100 paisa. Same value in each kind: 1 coin of Rs.1 = 2 coins of 50 paisa = 4 coins of 25 paisa.",
+"So the numbers of coins are in the ratio 1 : 2 : 4.",
+"Total parts = 1 + 2 + 4 = 7. One part = 175 ÷ 7 = 25.",
+"Rs. 1 coins = 25 (value Rs. 25). 50 paisa coins = 50 (value 50 × 0.50 = Rs. 25). 25 paisa coins = 100 (value 100 × 0.25 = Rs. 25).",
+"Total = 25 + 25 + 25 = Rs. 75."],
+"25 + 50 + 100 = 175 coins ✓. Each kind is worth Rs. 25 ✓."];
+S[131]=["b",
+"20% of A = 50% of B.",
+"B is what percent of A.",
+"Pick an easy number and compare.",
+["Let A = 100. Then 20% of A = 20.",
+"50% of B = 20, so B = 20 × 2 = 40 (50% is half, so B is double 20).",
+"B as a percent of A = 40/100 × 100 = 40%."],
+"20% of 100 = 20 and 50% of 40 = 20. ✓"];
+S[132]=["a",
+"125% of x is 100.",
+"x.",
+"125% = 125/100 = 5/4.",
+["(5/4) of x = 100.",
+"x = 100 ÷ 5/4 = 100 × 4/5 (multiply by the upside-down).",
+"100 ÷ 5 = 20 and 20 × 4 = 80."],
+"125% of 80 = 80 + 25% of 80 = 80 + 20 = 100. ✓"];
+S[133]=["d",
+"A shopkeeper buys cashew nuts at Rs. 250 per kg and sells at Rs. 10 per 50 grams.",
+"The profit or loss percent.",
+"Compare cost and selling price for the same weight (1 kg). Loss % = loss ÷ cost × 100.",
+["1 kg = 1000 g. Number of 50 g lots = 1000 ÷ 50 = 20.",
+"Selling price per kg = 20 × 10 = Rs. 200.",
+"Cost price per kg = Rs. 250. He sells for less, so there is a loss.<br>Loss = 250 − 200 = Rs. 50.",
+"Loss % = 50/250 × 100 = 1/5 × 100 = 20%."],
+"20% of 250 = 50, and 250 − 50 = 200. ✓"];
+S[134]=["c",
+"A man sells 320 mangoes for the cost price of 400 mangoes.",
+"His gain percent.",
+"Gain % = gain ÷ cost price × 100. Take the cost of one mango as Re. 1.",
+["Cost price of 400 mangoes = Rs. 400.",
+"He sells 320 mangoes for Rs. 400. Selling price of 1 mango = 400 ÷ 320 = 1.25.",
+"Gain on 1 mango = 1.25 − 1 = Rs. 0.25.",
+"Gain % = 0.25/1 × 100 = 25%."],
+"320 mangoes cost Rs. 320 and sell for Rs. 400. Gain = 80. 80/320 × 100 = 25%. ✓"];
+S[135]=["c",
+"At simple interest a sum triples in 15 years.",
+"The time to become 5 times itself.",
+"Becoming 3 times means the interest is 2 times the sum. Simple interest grows by the same amount each year.",
+["Triples: total = 3 × sum. Interest = 3 − 1 = 2 times the sum, earned in 15 years.",
+"Interest each year = 2/15 of the sum.",
+"5 times itself means interest = 5 − 1 = 4 times the sum.",
+"Time = 4 ÷ (2/15) = 4 × 15/2 = 30 years."],
+"Each 15 years adds 2 sums. In 30 years, 4 sums are added, so the total is 1 + 4 = 5 times. ✓"];
+S[136]=["a",
+"Rs. 8000 at 3% per year earns the same interest as Rs. 6000 does in 5 years at 4%.",
+"The time for Rs. 8000.",
+"Simple interest = P × R × T ÷ 100.",
+["Interest on Rs. 6000: 6000 × 4 × 5 ÷ 100.<br>6000 ÷ 100 = 60, 60 × 4 = 240, 240 × 5 = 1200.",
+"Interest on Rs. 8000 in one year at 3%: 8000 × 3 ÷ 100 = 80 × 3 = 240.",
+"Time = 1200 ÷ 240 = 5 years."],
+"8000 × 3 × 5 ÷ 100 = 1200. ✓"];
+S[137]=["a",
+"Two co-prime numbers have product 117.",
+"Their LCM.",
+"Co-prime numbers have HCF = 1. HCF × LCM = product of the two numbers.",
+["Co-prime means the only common factor is 1, so HCF = 1.",
+"HCF × LCM = 117.",
+"1 × LCM = 117, so LCM = 117."],
+"Example: 9 and 13 are co-prime, 9 × 13 = 117, and the LCM of 9 and 13 is 117. ✓"];
+S[138]=["b",
+"A time of 1 hour 45 minutes.",
+"What percent of a day this is.",
+"Percentage = part ÷ whole × 100, with both in minutes.",
+["1 hour 45 minutes = 60 + 45 = 105 minutes.",
+"One day = 24 × 60 = 1440 minutes.",
+"Percentage = 105/1440 × 100 = 10500/1440.",
+"10500 ÷ 1440: 1440 × 7 = 10080, 10500 − 10080 = 420. 420/1440 = 0.2917. So 7.2917%, about 7.292%."],
+"7.292% of 1440 = 105 minutes. ✓"];
+S[139]=["c",
+"11 players have an average of 23 runs. The first player scored 113.",
+"The average of the remaining 10 players.",
+"Total = average × number of players.",
+["Total runs of all 11 = 11 × 23 = 253.",
+"Remove the first player’s 113: 253 − 113 = 140.",
+"Average of the other 10 = 140 ÷ 10 = 14."],
+"10 × 14 = 140 and 140 + 113 = 253 = 11 × 23. ✓"];
+S[140]=["c",
+"100 students in sections A, B, C. The average of all 100 is 84. Average of B and C together is 87.5. Average of A is 70.",
+"The number of students in section A.",
+"Total marks = average × number of students. Let A have a students.",
+["Total marks of all 100 = 100 × 84 = 8400.",
+"A has a students with total marks 70a. B and C together have (100 − a) students with total marks 87.5 × (100 − a).",
+"70a + 87.5 × (100 − a) = 8400.<br>70a + 8750 − 87.5a = 8400.<br>8750 − 17.5a = 8400.",
+"17.5a = 8750 − 8400 = 350.",
+"a = 350 ÷ 17.5 = 20."],
+"A: 20 × 70 = 1400. B and C: 80 × 87.5 = 7000. 1400 + 7000 = 8400. ✓"];
+S[141]=["c",
+"The ratio 2 : 5.",
+"The number to add to each term to make the ratio 5 : 6.",
+"Let the number be x. Add x to both terms, then cross multiply.",
+["(2 + x)/(5 + x) = 5/6.",
+"Cross multiply: 6 × (2 + x) = 5 × (5 + x).<br>12 + 6x = 25 + 5x.",
+"Take 5x from both sides: 12 + x = 25.",
+"x = 25 − 12 = 13."],
+"(2 + 13) : (5 + 13) = 15 : 18 = 5 : 6 (divide by 3). ✓"];
+S[142]=["a",
+"Harsha is 40 years old and Ritu is 60 years old.",
+"How many years ago their ages were in the ratio 3 : 5.",
+"x years ago, each age was less by x.",
+["Let it be x years ago. Harsha = 40 − x and Ritu = 60 − x.",
+"(40 − x)/(60 − x) = 3/5.",
+"Cross multiply: 5 × (40 − x) = 3 × (60 − x).<br>200 − 5x = 180 − 3x.",
+"Add 5x to both sides: 200 = 180 + 2x.<br>2x = 20, so x = 10."],
+"10 years ago: 30 and 50. 30 : 50 = 3 : 5. ✓"];
+S[143]=["b",
+"30% of a village’s population is literate. Total population = 6600.",
+"The number of illiterate people.",
+"Illiterate % = 100% − literate %.",
+["Illiterate = 100% − 30% = 70%.",
+"1% of 6600 = 66.",
+"70% of 6600 = 70 × 66 = 4620."],
+"Literate = 30% of 6600 = 1980. 1980 + 4620 = 6600. ✓"];
+S[144]=["d",
+"The price of rice falls by 25%. For Rs. 600 the person can buy 10 kg more.",
+"The reduced price per kg.",
+"Quantity bought = money ÷ price. Let the old price be p.",
+["Old price = p per kg. New price = 75% of p = 0.75p.",
+"Old quantity = 600/p kg. New quantity = 600/(0.75p) = 800/p kg.",
+"Extra = 800/p − 600/p = 200/p = 10.",
+"p = 200 ÷ 10 = 20. New price = 0.75 × 20 = 15."],
+"Old: 600 ÷ 20 = 30 kg. New: 600 ÷ 15 = 40 kg. 40 − 30 = 10 kg more. ✓"];
+S[145]=["c",
+"Selling at Rs. 524 gives a profit. Selling at Rs. 452 gives a loss of the same amount.",
+"The cost price.",
+"Profit = SP − CP. Loss = CP − SP. They are equal, so CP is exactly in the middle of the two selling prices.",
+["Profit = 524 − CP and loss = CP − 452.",
+"524 − CP = CP − 452.",
+"524 + 452 = 2 × CP, so 976 = 2 × CP.",
+"CP = 976 ÷ 2 = 488."],
+"Profit = 524 − 488 = 36. Loss = 488 − 452 = 36. ✓"];
+S[146]=["a",
+"A jewel passes through three sellers and its price rises by 80% in all. The first and second sellers make 20% and 25% profit.",
+"The profit percent of the third seller.",
+"Take an easy starting price of 100. Apply each profit one after the other.",
+["Start price = 100.",
+"After the first seller (20% profit): 100 + 20 = 120.",
+"After the second seller (25% profit): 25% of 120 = 30, so 120 + 30 = 150.",
+"After all three, the price is 80% more than the start: 100 + 80 = 180.",
+"The third seller bought at 150 and sold at 180. Profit = 30. Profit % = 30/150 × 100 = 20%."],
+"150 × 1.20 = 180. ✓"];
+S[147]=["d",
+"Rs. 800 becomes Rs. 920 in 3 years at simple interest. The rate is then increased by 5%.",
+"The new amount.",
+"Simple interest = P × R × T ÷ 100. Amount = P + interest.",
+["Interest = 920 − 800 = Rs. 120.",
+"Rate = 120 × 100 ÷ (800 × 3) = 12000 ÷ 2400 = 5%.",
+"New rate = 5% + 5% = 10%.",
+"New interest = 800 × 10 × 3 ÷ 100 = 800 × 30 ÷ 100 = 240.",
+"New amount = 800 + 240 = Rs. 1040."],
+"At 5%: 800 × 5 × 3 ÷ 100 = 120 ✓. At 10%: 240 ✓."];
+S[148]=["c",
+"A sum is invested at 10% simple interest. After 4 years the amount (sum + interest) is Rs. 770.",
+"The sum invested.",
+"Amount = P + P × R × T ÷ 100 = P × (1 + R × T ÷ 100).",
+["Interest on P in 4 years = P × 10 × 4 ÷ 100 = 0.4P.",
+"Amount = P + 0.4P = 1.4P = 770.",
+"P = 770 ÷ 1.4 = 7700 ÷ 14. 14 × 550 = 7700, so P = 550."],
+"Interest = 550 × 10 × 4 ÷ 100 = 220. 550 + 220 = 770. ✓"];
+S[149]=["c",
+"Two numbers are in the ratio 2 : 3. Their LCM is 54.",
+"The sum of the two numbers.",
+"Write the numbers as 2x and 3x. Their LCM is 6x.",
+["Numbers: 2x and 3x. LCM = 6x.",
+"6x = 54, so x = 54 ÷ 6 = 9.",
+"The numbers are 2 × 9 = 18 and 3 × 9 = 27.",
+"Sum = 18 + 27 = 45."],
+"LCM of 18 and 27: 18 = 2 × 3 × 3 and 27 = 3 × 3 × 3. LCM = 2 × 3 × 3 × 3 = 54. ✓"];
+S[150]=["a",
+"Two numbers are in the ratio 4 : 5. Their HCF is 16.",
+"The sum of the two numbers.",
+"If the numbers are 4x and 5x, then x is their HCF.",
+["Numbers = 4x and 5x. Their HCF = x = 16.",
+"First number = 4 × 16 = 64. Second number = 5 × 16 = 80.",
+"Sum = 64 + 80 = 144."],
+"HCF of 64 and 80: 64 = 16 × 4 and 80 = 16 × 5, and 4 and 5 have no common factor. HCF = 16. ✓"];
+S[151]=["c",
+"The number 1000. We add a number so the total divides exactly by 37.",
+"The least number to add.",
+"Divide 1000 by 37 and look at the remainder. The number to add is (divisor − remainder).",
+["Divide 1000 by 37:<br>37 × 20 = 740, and 1000 − 740 = 260.<br>37 × 7 = 259, and 260 − 259 = 1.<br>So 37 × 27 = 999 and the remainder is 1.",
+"The next multiple of 37 is 37 × 28 = 999 + 37 = 1036.",
+"Number to add = 1036 − 1000 = 36. (Or: 37 − 1 = 36.)"],
+"1000 + 36 = 1036 = 37 × 28. ✓"];
+S[152]=["b",
+"HCF = 6 and LCM = 5040. One number is 210.",
+"The other number.",
+"For two numbers: HCF × LCM = first number × second number.",
+["HCF × LCM = 6 × 5040 = 30240.",
+"210 × other = 30240.",
+"Other = 30240 ÷ 210 = 3024 ÷ 21.<br>21 × 100 = 2100, 3024 − 2100 = 924.<br>21 × 44 = 924.<br>So 100 + 44 = 144."],
+"210 × 144 = 21000 + 8400 + 840 = 30240. ✓"];
+S[153]=["c",
+"Successive discounts of 20%, 10% and 15%.",
+"The single discount that is equal to them.",
+"After a discount of d% we pay (100 − d)% of the price. For successive discounts, multiply what we pay each time.",
+["After 20% off we pay 80% = 0.8. After 10% off we pay 90% = 0.9. After 15% off we pay 85% = 0.85.",
+"0.8 × 0.9 = 0.72.<br>0.72 × 0.85 = 0.72 × 0.8 + 0.72 × 0.05 = 0.576 + 0.036 = 0.612.",
+"We pay 61.2% of the price.",
+"Single discount = 100% − 61.2% = 38.8%."],
+"Take price Rs. 100: 100 → 80 → 72 → 61.2. Discount = 38.8. ✓"];
+S[154]=["a",
+"The expression 9¾ ÷ [2⅙ + {4⅓ − (2½ + ¾)}].",
+"Its value.",
+"BODMAS: work out the innermost bracket (), then the curly bracket { }, then the square bracket [ ], and last the division.",
+["Round bracket: 2½ + ¾ = 2 2/4 + 3/4 = 2 5/4 = 3¼ = 13/4.",
+"Curly bracket: 4⅓ − 13/4 = 13/3 − 13/4. The common bottom number is 12.<br>13/3 = 52/12 and 13/4 = 39/12.<br>52/12 − 39/12 = 13/12.",
+"Square bracket: 2⅙ + 13/12 = 13/6 + 13/12 = 26/12 + 13/12 = 39/12 = 13/4.",
+"9¾ = 39/4. Divide: 39/4 ÷ 13/4 = 39/4 × 4/13.<br>The 4’s cancel, and 39 ÷ 13 = 3. So the value is 3."],
+"3 × 13/4 = 39/4 = 9¾. ✓"];
+S[155]=["c",
+"An alloy has 32% copper, 24% nickel and the rest zinc. Total 12 kg.",
+"The weight of zinc.",
+"The percentages add up to 100%. Find the zinc percent, then take that percent of 12 kg.",
+["Zinc % = 100% − 32% − 24% = 44%.",
+"1% of 12 kg = 0.12 kg.",
+"44% of 12 kg = 44 × 0.12 = 5.28 kg.<br>(40 × 0.12 = 4.8 and 4 × 0.12 = 0.48. 4.8 + 0.48 = 5.28.)"],
+"Copper 3.84 kg + nickel 2.88 kg + zinc 5.28 kg = 12 kg. ✓"];
+S[156]=["c",
+"The number 45789.",
+"Which single-digit numbers divide it exactly.",
+"Test for 3: digit sum divisible by 3. Test for 9: digit sum divisible by 9. For 7, divide and see the remainder.",
+["Digit sum = 4 + 5 + 7 + 8 + 9 = 33.",
+"33 ÷ 3 = 11 exactly, so 45789 is divisible by 3.",
+"33 ÷ 9 = 3 R 6, so 45789 is not divisible by 9.",
+"Test 7: 7 × 6000 = 42000, 45789 − 42000 = 3789. 7 × 500 = 3500, 3789 − 3500 = 289. 7 × 41 = 287, 289 − 287 = 2. The remainder is 2, so it is not divisible by 7."],
+"45789 is odd (not divisible by 2, 4, 6, 8) and does not end in 0 or 5. So it is divisible only by 3. ✓"];
+S[157]=["d",
+"54% passed in science. 42% failed in maths. 32% failed in both.",
+"The percentage that passed in both subjects.",
+"Use 100% for all candidates. Pass in at least one subject = 100% − fail in both. Then: both = science + maths − at least one.",
+["Passed maths = 100% − 42% = 58%.",
+"Passed at least one subject = 100% − 32% = 68%.",
+"Passed in both = (passed science) + (passed maths) − (passed at least one) = 54% + 58% − 68%.",
+"54 + 58 = 112, and 112 − 68 = 44. So 44%."],
+"Only science: 54 − 44 = 10. Only maths: 58 − 44 = 14. Both: 44. 10 + 14 + 44 = 68 ✓."];
+S[158]=["d",
+"A’s income is 24% more than B’s income.",
+"By what percent B’s income is less than A’s.",
+"Take B = 100. “Less than A” is always found by comparing the difference with A.",
+["Let B = 100. Then A = 100 + 24 = 124.",
+"B is less than A by 124 − 100 = 24.",
+"Percent less = 24/124 × 100 = 2400/124.",
+"Divide the top and bottom by 4: 600/31 %."],
+"600/31 = 19.35, and 19.35% of 124 = 24. ✓"];
+S[159]=["c",
+"15 men do a piece of work in 14 days.",
+"The number of men needed to finish it in 30 days.",
+"Total work = men × days. More days means fewer men.",
+["Total work = 15 × 14 = 210 man-days.",
+"Men needed = 210 ÷ 30 = 7."],
+"7 men × 30 days = 210 man-days. ✓"];
+S[160]=["c",
+"The ages of A and B are in the ratio 3 : 4. The sum of their ages is 28 years.",
+"The age of B.",
+"Divide the total in the ratio.",
+["Total parts = 3 + 4 = 7.",
+"One part = 28 ÷ 7 = 4 years.",
+"B’s age = 4 parts = 4 × 4 = 16 years."],
+"A = 12 and B = 16. 12 + 16 = 28 ✓ and 12 : 16 = 3 : 4 ✓."];
+S[161]=["a",
+"25% of a number is 40.",
+"60% of the same number.",
+"First find the number, then take 60% of it.",
+["25% = one quarter. A quarter of the number is 40, so the number = 4 × 40 = 160.",
+"1% of 160 = 1.6.",
+"60% of 160 = 60 × 1.6 = 96."],
+"25% of 160 = 40 ✓. 60% of 160 = 96 ✓."];
+S[162]=["d",
+"A train moves at 72 km/h and crosses a pole in 15 seconds.",
+"The length of the train.",
+"To cross a pole, the train travels its own length. Length = speed × time. Speed must be in m/s: multiply km/h by 5/18.",
+["Speed = 72 × 5/18 = 4 × 5 = 20 m/s (72 ÷ 18 = 4).",
+"Length = speed × time = 20 × 15 = 300 metres."],
+"20 m/s × 15 s = 300 m. ✓"];
+S[163]=["a",
+"Four students have an average of 85. A fifth student scores 90.",
+"The new average of the five students.",
+"Total = average × number of students.",
+["Total of four students = 4 × 85 = 340.",
+"Total with the fifth student = 340 + 90 = 430.",
+"New average = 430 ÷ 5 = 86."],
+"5 × 86 = 430. ✓"];
+S[164]=["b",
+"A sum of money doubles in 8 years at simple interest.",
+"The annual rate of interest.",
+"Simple interest = P × R × T ÷ 100. If the money doubles, the interest earned equals the original sum.",
+["Let the sum be P = 100. It doubles to 200, so the interest = 200 − 100 = 100 in 8 years.",
+"Interest in 1 year = 100 ÷ 8 = 12.5.",
+"Rate = 12.5 on 100 = 12.5% per year."],
+"100 × 12.5 × 8 ÷ 100 = 100. ✓"];
+S[165]=["a",
+"A man walks 4 km north, turns left and walks 3 km.",
+"His distance from the starting point.",
+"Turning left from north means walking west. The two walks meet at a right angle. Use Pythagoras: hypotenuse² = side₁² + side₂².",
+["Draw a map: start point S, go 4 km up (north), then 3 km to the left (west).",
+"The straight line back to S is the hypotenuse of a right-angled triangle with sides 4 and 3.",
+"Distance² = 4² + 3² = 16 + 9 = 25.",
+"Distance = √25 = 5 km."],
+"5² = 25 = 16 + 9. ✓ (This is the famous 3-4-5 triangle.)"];
+S[166]=["b",
+"A scooter is bought for Rs. 50,000 and sold at a 10% loss.",
+"The selling price.",
+"Loss = loss % of the cost price. Selling price = cost price − loss.",
+["Loss = 10% of 50000 = 50000 ÷ 10 = 5000.",
+"Selling price = 50000 − 5000 = 45000."],
+"45000 is 90% of 50000. ✓"];
+S[167]=["c",
+"A class has 150 students. 40% are girls.",
+"The number of boys.",
+"Girls % + boys % = 100%.",
+["Girls = 40% of 150 = 150 × 40 ÷ 100 = 60.",
+"Boys = 150 − 60 = 90."],
+"Boys are 60% of 150 = 90. ✓"];
+S[168]=["b",
+"Pipe A fills a tank in 6 hours. Pipe B fills it in 12 hours.",
+"The time taken working together.",
+"If a pipe fills the tank in n hours, it fills 1/n of the tank in one hour. Add the parts.",
+["A fills 1/6 in one hour. B fills 1/12 in one hour.",
+"Together in 1 hour = 1/6 + 1/12 = 2/12 + 1/12 = 3/12 = 1/4.",
+"1/4 of the tank is filled each hour, so the whole tank takes 4 hours."],
+"A fills 4/6 and B fills 4/12 in 4 hours. 2/3 + 1/3 = 1. ✓"];
+S[169]=["b",
+"We want a square number divisible by 3, 4 and 5.",
+"The smallest such square number.",
+"A number divisible by 3, 4 and 5 is divisible by their LCM. A square number has every prime appearing an even number of times.",
+["LCM of 3, 4, 5 = 60. Prime factors: 60 = 2 × 2 × 3 × 5.",
+"For a square, each prime must come in pairs. 2 is already paired (2 × 2). 3 and 5 are single.",
+"Multiply by one more 3 and one more 5: 2 × 2 × 3 × 3 × 5 × 5 = 900.",
+"900 = 30 × 30, a perfect square."],
+"900 ÷ 3 = 300, 900 ÷ 4 = 225, 900 ÷ 5 = 180. All exact. ✓ Smaller options (60) are not squares."];
+S[170]=["c",
+"A clock shows 4:30. The minute hand points South-West.",
+"The direction of the hour hand.",
+"On a normal clock the minute hand pointing at 6 points South. Here it points South-West instead, so the whole clock is turned. Find the turn and apply it to the hour hand.",
+["At 4:30 the minute hand is at 6. Normally 6 is South. Here it is South-West, so the clock is turned 45° clockwise (South → South-West).",
+"The hour hand at 4:30 is halfway between 4 and 5: 4½ × 30° = 135° from 12. Normally 135° is South-East.",
+"Turn it by the same 45° clockwise: South-East → South."],
+"The hour hand was 45° from the minute hand on the normal dial (135° vs 180°). On the turned dial, the minute hand is at SW, so the hour hand, 45° before it, is at S. ✓",
+"The question is hard to read in the photo, but this is the usual solution."];
+S[171]=["c",
+"A bag has 3 red and 5 blue balls. One ball is drawn at random.",
+"The probability that it is red.",
+"Probability = favourable outcomes ÷ total outcomes.",
+["Total balls = 3 + 5 = 8.",
+"Red balls = 3.",
+"Probability = 3/8."],
+"P(red) + P(blue) = 3/8 + 5/8 = 1. ✓",
+"The options were hard to read in the photo. 3/8 is the correct value; please compare it with your book."];
+S[172]=["d",
+"The fraction 7/8.",
+"Write it as a percentage.",
+"To change a fraction to a percentage, multiply by 100.",
+["7/8 × 100 = 700/8.",
+"700 ÷ 8: 8 × 80 = 640, 700 − 640 = 60. 8 × 7 = 56, 60 − 56 = 4. So 87 and 4/8 = 87.5."],
+"87.5% of 8 = 7. ✓"];
+S[173]=["c",
+"A man drives at 40 km/h for 2 hours and then at 60 km/h for 3 hours.",
+"The average speed.",
+"Average speed = total distance ÷ total time.",
+["Distance in the first part = 40 × 2 = 80 km.",
+"Distance in the second part = 60 × 3 = 180 km.",
+"Total distance = 80 + 180 = 260 km. Total time = 2 + 3 = 5 hours.",
+"Average speed = 260 ÷ 5 = 52 km/h."],
+"52 × 5 = 260. ✓ The average is between 40 and 60. ✓"];
+S[174]=["b",
+"A painting is listed at Rs. 16,000. Successive discounts of 10% and 5%.",
+"The final selling price.",
+"After a discount of d% we pay (100 − d)% of the price. The second discount is taken on the reduced price.",
+["After 10% off: pay 90% of 16000 = 16000 × 0.9 = 14400.",
+"After 5% off on 14400: 5% of 14400 = 720.<br>14400 − 720 = 13680."],
+"16000 × 0.9 × 0.95 = 13680. ✓"];
+S[175]=["c",
+"A rhombus has area 240 cm². One diagonal is 16 cm.",
+"The other diagonal.",
+"Area of a rhombus = ½ × d₁ × d₂.",
+["240 = ½ × 16 × d₂.",
+"½ × 16 = 8. So 240 = 8 × d₂.",
+"d₂ = 240 ÷ 8 = 30 cm."],
+"½ × 16 × 30 = 8 × 30 = 240. ✓"];
+S[176]=["b",
+"A regular hexagon (6 sides, 6 corners).",
+"The number of diagonals.",
+"A diagonal joins two corners that are not neighbours. Formula: n(n − 3) ÷ 2.",
+["From each corner, diagonals go to the corners that are not itself and not its 2 neighbours: 6 − 3 = 3 corners.",
+"All 6 corners give 6 × 3 = 18.",
+"Each diagonal was counted from both ends, so divide by 2: 18 ÷ 2 = 9."],
+"Formula: 6 × (6 − 3) ÷ 2 = 6 × 3 ÷ 2 = 9. ✓"];
+S[177]=["c",
+"Three angles of a quadrilateral are 75°, 90° and 115°.",
+"The fourth angle.",
+"The four angles of a quadrilateral add up to 360°.",
+["Sum of the three angles = 75 + 90 + 115.<br>75 + 90 = 165, and 165 + 115 = 280°.",
+"Fourth angle = 360° − 280° = 80°."],
+"75 + 90 + 115 + 80 = 360. ✓"];
+S[178]=["a",
+"We subtract (3a − 4b + 5c) from (7a − b + 2c).",
+"The result.",
+"“Subtract A from B” means B − A. When we remove a bracket that has a minus sign in front, every sign inside flips.",
+["Write: (7a − b + 2c) − (3a − 4b + 5c).",
+"Remove the second bracket and flip its signs: 7a − b + 2c − 3a + 4b − 5c.",
+"Group the like terms:<br>a terms: 7a − 3a = 4a<br>b terms: −b + 4b = 3b<br>c terms: 2c − 5c = −3c",
+"Answer: 4a + 3b − 3c."],
+"Add back: (4a + 3b − 3c) + (3a − 4b + 5c) = 7a − b + 2c. ✓"];
+S[179]=["a",
+"The denominator is 4 more than the numerator. If 1 is added to both, the fraction becomes 1/2.",
+"The original fraction.",
+"Call the numerator n. Then the denominator is n + 4. Cross multiply the new fraction.",
+["Original fraction = n/(n + 4).",
+"After adding 1 to both: (n + 1)/(n + 5) = 1/2.",
+"Cross multiply: 2 × (n + 1) = 1 × (n + 5).<br>2n + 2 = n + 5.",
+"Take n from both sides: n + 2 = 5, so n = 3.",
+"Denominator = 3 + 4 = 7. The fraction is 3/7."],
+"(3 + 1)/(7 + 1) = 4/8 = 1/2. ✓"];
+S[180]=["b",
+"8 identical textbooks cost Rs. 1,200.",
+"The cost of 18 such textbooks.",
+"Find the cost of one, then multiply (unitary method).",
+["Cost of 1 textbook = 1200 ÷ 8 = 150.",
+"Cost of 18 textbooks = 18 × 150.<br>10 × 150 = 1500 and 8 × 150 = 1200.<br>1500 + 1200 = 2700."],
+"18 books is more than double 8 books. 2 × 1200 = 2400, a bit more is 2700. ✓"];
+S[181]=["c",
+"Rs. 3,900 is divided among X, Y and Z in the ratio 6 : 4 : 3.",
+"Y’s share.",
+"Add the parts of the ratio, find one part, then multiply.",
+["Total parts = 6 + 4 + 3 = 13.",
+"One part = 3900 ÷ 13 = 300 (13 × 300 = 3900).",
+"Y has 4 parts = 4 × 300 = Rs. 1,200."],
+"X = 1800, Y = 1200, Z = 900. 1800 + 1200 + 900 = 3900. ✓"];
+S[182]=["b",
+"Food is enough for 120 students for 20 days. 30 new students join.",
+"How long the food will last.",
+"Total food is measured in “student-days” = students × days. More students means fewer days.",
+["Food = 120 × 20 = 2400 student-days.",
+"Students now = 120 + 30 = 150.",
+"Days = 2400 ÷ 150 = 240 ÷ 15 = 16."],
+"150 students × 16 days = 2400. ✓ (Fewer than 20 days, as expected.)"];
+S[183]=["b",
+"Two numbers are in the ratio 3 : 5. After subtracting 9 from each, the ratio is 12 : 23.",
+"The smaller number.",
+"Write the numbers as 3x and 5x. Make an equation from the new ratio and cross multiply.",
+["The numbers are 3x and 5x.",
+"(3x − 9)/(5x − 9) = 12/23.",
+"Cross multiply: 23 × (3x − 9) = 12 × (5x − 9).<br>69x − 207 = 60x − 108.",
+"Take 60x from both sides: 9x − 207 = −108.<br>Add 207: 9x = 99, so x = 11.",
+"The numbers are 3 × 11 = 33 and 5 × 11 = 55. The smaller is 33."],
+"(33 − 9) : (55 − 9) = 24 : 46 = 12 : 23 (divide by 2). ✓"];
+S[184]=["b",
+"The population is 20,000 and grows 10% every year.",
+"The population after 2 years.",
+"Growing by 10% means multiplying by 1.1 (100% + 10% = 110%).",
+["After 1 year: 20000 + 10% of 20000 = 20000 + 2000 = 22000.",
+"After 2 years: 22000 + 10% of 22000 = 22000 + 2200 = 24200."],
+"20000 × 1.1 × 1.1 = 20000 × 1.21 = 24200. ✓"];
+S[185]=["a",
+"40% of the students are girls and 60% are boys. 70% of the boys and 80% of the girls pass.",
+"The total percentage of students who pass.",
+"Pretend there are 100 students, so percentages become actual numbers.",
+["Girls = 40 and boys = 60.",
+"Boys who pass = 70% of 60 = 0.7 × 60 = 42.",
+"Girls who pass = 80% of 40 = 0.8 × 40 = 32.",
+"Total passing = 42 + 32 = 74 out of 100 = 74%."],
+"0.6 × 70 + 0.4 × 80 = 42 + 32 = 74. ✓"];
+S[186]=["c",
+"A student multiplied a number by 3/5 instead of 5/3.",
+"The percentage error.",
+"Percentage error = (correct − wrong) ÷ correct × 100.",
+["Correct multiplier = 5/3. Wrong multiplier = 3/5.",
+"Difference = 5/3 − 3/5. Common bottom number 15: 25/15 − 9/15 = 16/15.",
+"Divide by the correct value: (16/15) ÷ (5/3) = 16/15 × 3/5 = 48/75 = 16/25.",
+"16/25 × 100 = 64%."],
+"Try the number 15: correct 15 × 5/3 = 25, wrong 15 × 3/5 = 9. Error 16 out of 25 = 64%. ✓"];
+S[187]=["b",
+"The cost price of 15 items equals the selling price of 12 items.",
+"The profit percent.",
+"Profit % = profit ÷ cost price × 100. Take the cost of 1 item as Re. 1.",
+["Cost of 15 items = Rs. 15. This is the selling price of 12 items.",
+"Selling price of 1 item = 15 ÷ 12 = 1.25.",
+"Profit on 1 item = 1.25 − 1 = 0.25.",
+"Profit % = 0.25/1 × 100 = 25%."],
+"12 items cost Rs. 12 and sell for Rs. 15. Profit 3. 3/12 × 100 = 25%. ✓"];
+S[188]=["a",
+"A right-angled triangle has base 6 cm and hypotenuse 10 cm.",
+"The area.",
+"Pythagoras: hypotenuse² = base² + height². Area = ½ × base × height.",
+["10² = 6² + height², so 100 = 36 + height².",
+"height² = 100 − 36 = 64. Since 8 × 8 = 64, height = 8 cm.",
+"Area = ½ × 6 × 8 = 3 × 8 = 24 sq cm."],
+"6² + 8² = 36 + 64 = 100 = 10². ✓"];
+S[189]=["c",
+"A fair six-sided die is rolled once.",
+"The probability of getting a prime number.",
+"A prime number has exactly two factors: 1 and itself. 1 is not prime.",
+["Possible outcomes: 1, 2, 3, 4, 5, 6. Total = 6.",
+"Primes: 2, 3, 5. (1 is not prime; 4 = 2 × 2 and 6 = 2 × 3 are not prime.) Favourable = 3.",
+"Probability = 3/6 = 1/2."],
+"3 primes and 3 non-primes among 6 numbers, so half. ✓"];
+S[190]=["c",
+"The mean of five numbers is 20. After adding a sixth number, the mean is 22.",
+"The sixth number.",
+"Total = mean × how many numbers.",
+["Total of five numbers = 5 × 20 = 100.",
+"Total of six numbers = 6 × 22 = 132.",
+"Sixth number = 132 − 100 = 32."],
+"(100 + 32) ÷ 6 = 132 ÷ 6 = 22. ✓"];
+S[191]=["d",
+"A bag has 4 red, 3 blue and 5 green marbles.",
+"The probability that a marble drawn is NOT blue.",
+"Probability = favourable ÷ total. NOT blue means red or green.",
+["Total marbles = 4 + 3 + 5 = 12.",
+"Not blue = 4 + 5 = 9 (or 12 − 3 = 9).",
+"Probability = 9/12. Divide the top and bottom by 3: 3/4."],
+"P(blue) = 3/12 = 1/4. P(not blue) = 1 − 1/4 = 3/4. ✓"];
+S[192]=["a",
+"The data set 4, 7, 4, 8, 9, 7, 4, 10, 7, 4.",
+"The mode.",
+"The mode is the value that appears most often.",
+["Count each value:<br>4 appears 4 times.<br>7 appears 3 times.<br>8, 9 and 10 appear 1 time each.",
+"4 appears the most, so the mode is 4."],
+"4 + 3 + 1 + 1 + 1 = 10 values, the same as in the list. ✓"];
+S[193]=["b",
+"A : B = 2 : 3 and B : C = 4 : 5.",
+"The compound ratio A : C.",
+"Make B the same number in both ratios, then A : C can be read off. (Shortcut: multiply the tops and the bottoms.)",
+["B is 3 in the first ratio and 4 in the second. The LCM of 3 and 4 is 12.",
+"A : B = 2 : 3 = 8 : 12 (multiply by 4). B : C = 4 : 5 = 12 : 15 (multiply by 3).",
+"So A : B : C = 8 : 12 : 15.",
+"A : C = 8 : 15."],
+"Shortcut: (2 × 4) : (3 × 5) = 8 : 15. ✓"];
+S[194]=["a",
+"A train covers 360 km in 4 hours.",
+"Its speed in metres per second.",
+"Speed = distance ÷ time. To change km/h into m/s, multiply by 5/18 (1 km = 1000 m and 1 hour = 3600 s, and 1000/3600 = 5/18).",
+["Speed = 360 ÷ 4 = 90 km/h.",
+"In m/s: 90 × 5/18. 90 ÷ 18 = 5, then 5 × 5 = 25.",
+"Speed = 25 m/s."],
+"25 m/s × 3600 s = 90000 m = 90 km in 1 hour. ✓"];
+S[195]=["c",
+"x% of 250 = 75.",
+"The value of x.",
+"x% means x/100. So (x/100) × 250 = 75.",
+["(x/100) × 250 = 75.",
+"250/100 = 2.5, so 2.5 × x = 75.",
+"x = 75 ÷ 2.5 = 750 ÷ 25 = 30."],
+"30% of 250 = 3 × 25 = 75. ✓"];
+S[196]=["c",
+"The numbers 12, 18 and 30.",
+"Their LCM (the smallest number all three divide exactly).",
+"Break each into prime factors. For the LCM take the highest number of times each prime appears.",
+["12 = 2 × 2 × 3.<br>18 = 2 × 3 × 3.<br>30 = 2 × 3 × 5.",
+"The prime 2 appears at most 2 times (in 12). The prime 3 appears at most 2 times (in 18). The prime 5 appears at most 1 time (in 30).",
+"LCM = 2 × 2 × 3 × 3 × 5 = 4 × 9 × 5 = 180."],
+"180 ÷ 12 = 15, 180 ÷ 18 = 10, 180 ÷ 30 = 6. All exact. ✓"];
+S[197]=["b",
+"The expression 5 + 3 × (8 − 5)² ÷ 9.",
+"Its value.",
+"BODMAS: Brackets, Orders (powers), Division and Multiplication (left to right), then Addition and Subtraction.",
+["Brackets: 8 − 5 = 3.",
+"Power: 3² = 3 × 3 = 9. The expression is now 5 + 3 × 9 ÷ 9.",
+"Multiplication and division from the left: 3 × 9 = 27, then 27 ÷ 9 = 3.",
+"Addition: 5 + 3 = 8."],
+"Done in BODMAS order. The answer is 8. ✓"];
+S[198]=["b",
+"The product of two consecutive positive integers is 132.",
+"The smaller integer.",
+"Consecutive integers are next to each other, like n and n + 1. Their product is a little more than n × n. So try numbers near the square root of 132.",
+["Let the integers be n and n + 1: n × (n + 1) = 132.",
+"11 × 11 = 121 and 12 × 12 = 144. So n is near 11.",
+"Try 11 × 12 = 132. ✓",
+"The integers are 11 and 12. The smaller is 11."],
+"11 × 12 = 110 + 22 = 132. ✓ (10 × 11 = 110 and 12 × 13 = 156 do not work.)"];
+S[199]=["c",
+"The angles of a triangle are in the ratio 2 : 3 : 5.",
+"The largest angle.",
+"The three angles of a triangle add up to 180°.",
+["Total parts = 2 + 3 + 5 = 10.",
+"One part = 180° ÷ 10 = 18°.",
+"The angles: 2 × 18° = 36°, 3 × 18° = 54°, 5 × 18° = 90°.",
+"The largest angle is 90°."],
+"36 + 54 + 90 = 180. ✓ It is a right-angled triangle."];
+S[200]=["c",
+"Two unbiased coins are tossed together.",
+"The probability of getting at least one head.",
+"“At least one head” means 1 head or 2 heads. Probability = favourable ÷ total. List all outcomes.",
+["All outcomes: HH, HT, TH, TT. Total = 4.",
+"With at least one head: HH, HT, TH. Favourable = 3. (Only TT has no head.)",
+"Probability = 3/4."],
+"Another way: P(no head) = P(TT) = 1/4. So P(at least one head) = 1 − 1/4 = 3/4. ✓"];
+
+</script>
+<script>
+/* Each entry: [number, question, options (or null), flag (0 none, 1 check, 2 blurry), answer letter] */
+var Q = [
+[1,"Find the value of 11% off 30500.",["3885","3355","3835","3850"]],
+[2,"Which one of the following statements is false?",["3 + 5 × 4 = 23","20 − 5 × 4 = 0","12 − 5 × 2 = 2","3 + 6 × 4 = 37"]],
+[3,"Simplify 2010 + (+2010) + (−2010) − (+2010) − (−2010).",["0","2010","4020","6030"]],
+[4,"The quantity of water in the overhead tank is 480 ml when it is one quarter empty. What is its capacity when it is one quarter full?",["120 ml","440 ml","160 ml","960 ml"]],
+[5,"A stick of length 92 cm is cut into 40 equal pieces. How many is each piece?",["33 mm","21 mm","23 mm","31 mm"]],
+[6,"Find the circumference of a circle whose radius is 14 cm.",["616 cm","144 cm","108 cm","88 cm"]],
+[7,"Four identical rectangles are placed edge to edge to form a square with an area of 100 sq m. Find the perimeter of one of the rectangles.",["15 cm","25 cm","30 cm","50 cm"]],
+[8,"The angles of a triangle are in the ratio 3:4:5. What is the difference of the largest and the smallest angle?",["40°","15°","30°","20°"]],
+[9,"In a party there are 20 people, each person shake hand with others. How many handshakes in total are done?",["400","250","190","140"]],
+[10,"How many different ways are there of ordering the letters of the word “SCHOOL”?",["360","720","240","480"]],
+[11,"The product and the sum of two numbers is −15 and 2 respectively. What is the largest possible number?",["6","5","7","3"]],
+[12,"A student in a class thinks a number. Half the number is added to its quarter and the result is 60. What is the number?",["80","60","100","50"]],
+[13,"One orange and one mango weigh the same as 14 grapes. Two mangoes weigh the same as 10 grapes. How much does an orange weigh compared to the grapes?",["9","10","11","12"]],
+[14,"Find the ratio of 1.5 km to 105 cm.",["100:7","1000:7","10:7","10000:7"]],
+[15,"The cardboard of a square shape with an edge 12 m is cut into 3 equal rectangular pieces. Find the total perimeter of the 3 rectangular pieces.",["96 cm","144 cm","64 cm","32 cm"]],
+[16,"In a company the cashier earns 2⅗ times of what his assistant earns. If the cashier earns Rs.9490, find the earnings of his assistant. (in rupees)",["3560","3705","3650","4360"],1],
+[17,"Which of the following shows the prime factorization?",["5 × 3 × 2 × 15","5 × 6 × 5 × 2","7 × 11 × 5 × 19","3 × 2 × 9 × 13"]],
+[18,"Which of the following is the factor of “the largest number less than 100, divisible by 15 is decreased by 5”?",["15","13","19","17"]],
+[19,"Which of the following fraction is in the standard form?",["119/257","333/999","573/1146","56/343"]],
+[20,"How many numbers from 1 to 100 contain the digit 4?",["21","20","22","24"]],
+[21,"Which of the following fractions is the closest to zero on a number line?",["−1/5","−1/9","−3/7","−5/11"]],
+[22,"Write the fraction form of 0.01%",["1/100","1/1000","1/10000","1/10"]],
+[23,"A book contains 900 pages. A boy finished 35% of the book. How many pages are left over?",["315","585","415","685"]],
+[24,"Find the unknown quantity whose 17% is Rs. 5100.",["Rs. 2500","Rs. 30000","Rs. 35000","Rs. 40000"]],
+[25,"More than two lines passing through a point are",["collinear lines","intersecting lines","parallel lines","concurrent lines"]],
+[26,"The difference between the place value of 5 in the greatest and the smallest numbers formed by using the digits 7, 5, 8, 3.",["450","550","500","400"]],
+[27,"In an election, they were only two candidates who contested. One contestant got 62% of the total votes, he was elected by a margin of 144 votes. Find the total number of votes.",["700","800","600","500"]],
+[28,"A number has two digits whose sum is 6. On adding 18 to it, its digits are interchanged. Find the number.",["15","51","42","24"]],
+[29,"A car covers a certain distance at a speed of 65 kmph and comes back at a speed of 70 kmph. What is the average speed during his journey? (in kmph)",["65.4","67.4","68.4","66.4"]],
+[30,"The income of A is 20% more than B. How much percent of income of B is less than A?",["16⅔%","18⅓%","20%","80%"]],
+[31,"There are 30 boys and 60 girls in a school meeting. If the average age of boys is 12 years and the average age of girls is 10 years. Find out average the age of all the students in the meeting.",["12⅔ years","10⅔ years","11⅗ years","10⅜ years"]],
+[32,"A boy scores 25% and fails by 60 marks, while a girl scores 50% marks and passes by 40 marks more than the minimum required marks. Find the maximum marks in the examination.",["500","600","400","450"]],
+[33,"A bag contains an equal number of Rs.1, Rs.2 and Rs.5 coins. The value of the money is Rs. 6400. Find the number of Rs. 2 coins in the bag.",["700","800","500","600"]],
+[34,"Replace the question mark in the number series 18, 24, 21, 27, ?, 30, 27.",["26","29","28","24"]],
+[35,"A student started from home, cycled 10 km towards south, then turned right and cycled 5 km, now turned right and cycled 10 km. Finally he turned left and cycled for 10 km. How many kilometers should he cycle back to reach home straight?",["10","15","20","25"]],
+[36,"Ram remembers that his brother’s birthday falls after 18th April but before 22nd April while his father remembers that his birthday falls after 20th April but before 25th April. On what date does Ram’s birthday fall?",["22nd","21st","23rd","19th"]],
+[37,"If the letters of the word IMPORTANCE are arranged from left to right in an alphabetical order, then which letter will be the fifth letter from the right end?",["M","I","N","O"],1],
+[38,"A drum of kerosene oil is ¾ full. When 15 liters of oil are drawn from it, it is 7/12 full. Find the capacity of the drum.",["60 liters","75 liters","80 liters","90 liters"]],
+[39,"Mr. Pratap spends 30% of his money for the maintenance, 25% of it on buying goods, 15% of it for savings and the remaining money he spends for education. If he has a total Rs. 75000, how much money is spent on education?",["Rs. 33000","Rs. 22,500","Rs. 35000","Rs. 24500"],1],
+[40,"A diver dives 100 meters below sea-level. He went down 20 meters more, then he came up 35 meters from there. How far below sea-level did he dive? (below sea level)",["120 meters","85 meters","135 meters","55 meters"]],
+[41,"Five girls are sitting on a bench to be photographed. Swetha is to the left of Richa and to the right of Priya. Misha is to the right of Richa. Reeta is in between Richa and Misha. Who is second from the left end in the photograph?",["Swetha","Richa","Misha","Reeta"]],
+[42,"A rectangular field has length and breadth in the ratio of 16:9. If its perimeter is 750 cm. Find its area.",["16200 cm²","21600 cm²","32400 cm²","23400 cm²"]],
+[43,"In how many parts can a piece of wood of length 49.5 m be broken into equal length of 5.5 cm?",["9","900","90","9000"]],
+[44,"If 10% of A is equal to 12% of B, then 15% of A equals to what percent of B?",["18","20","16","22"]],
+[45,"What percent of 1 kg is to 10 grams?",["10%","1%","0.1%","2%"]],
+[46,"The cost of 20 books @ Rs. 10 each, 45 pens @ Rs. 5 each and 15 pencils @ Rs. 3 each. Calculate the average price of all the goods.",["Rs. 5.5","Rs. 5.8","Rs. 5.6","Rs. 5.7"],1],
+[47,"The degree of an expression of 2a²b⁴ − 5a³b² + 3a²b⁵ is",["4","7","5","6"]],
+[48,"If x = −2 and y = −1 then the value of (xy)³ − 2x²y",["25","10","12","16"],1],
+[49,"Two numbers are in the ratio 5:6. If ‘8’ is subtracted from each number, the ratio becomes 4:5. Find the larger number.",["20","24","40","48"]],
+[50,"If 16 men can do a work in 30 days, in how many days will 20 men do the same work?",["28 days","24 days","30 days","20 days"]],
+[51,"The angle of rotation of an equilateral triangle is",["60°","120°","80°","140°"]],
+[52,"By what number should 2⅗ be multiplied to get 1 6/7?",["5/7","1/7","1 1/7","3/7"],1],
+[53,"On increasing the salary of a person by 25%, it becomes Rs. 32000. What was his original salary?",["Rs. 28000","Rs. 25600","Rs. 30000","Rs. 25000"]],
+[54,"If ⁴⁄₇ of 91 + 20% of 120 = x + 20, then value of x",["46","52","24","56"]],
+[55,"The sides of two squares are 6 cm and 8 cm respectively. The ratio of their perimeters.",["4:3","3:4","9:16","16:9"]],
+[56,"The number of diagonals for a pentagon are",["6","5","7","10"]],
+[57,"Which polygon in the following has a Rotational symmetry but no Line symmetry?",["rectangle","trapezium","kite","parallelogram"]],
+[58,"A car covers its journey at the speed of 80 kmph in 10 hours. If the same distance is to be covered in 4 hours, how much should the speed of the car be increased?",["200 kmph","180 kmph","120 kmph","160 kmph"]],
+[59,"A lent Rs. 4500 to ‘B’ for 2 years and Rs. 5000 to ‘C’ for 3 years, at a certain rate of simple interest. If ‘A’ received altogether from both Rs. 1200 as interest, find the rate of interest.",["5%","3%","6%","4%"]],
+[60,"The average of 7 numbers is 8. If one more number is added, the average is 9. Find the added number.",["12","14","11","16"]],
+[61,"The average of all non-negative integers up to 100.",["50","50.5","49","49.5"]],
+[62,"The cost price of 100 books is same as the selling price of 60 books. Find the gain % or loss %.",["33⅓%","55⅕%","63⅓%","66⅔%"]],
+[63,"Salaries of P and Q are in the ratio 3:4. Both of them spend 75% of their salaries and save the rest of the money. Find the ratio of their savings.",["3:4","4:3","1:1","5:2"]],
+[64,"The average age of a father and a son is 28 years. The ratio of their ages is 5:2. What will be the ratio of their ages after 8 years?",["7:4","2:1","3:1","5:3"]],
+[65,"If a:b = 3:4 and b:c = 6:7, find a:b:c.",["3:4:7","3:6:7","6:8:21","9:12:14"]],
+[66,"Two numbers are in the ratio 4:5 and the difference of their squares is 81. Find the smaller number.",["15","18","12","16"]],
+[67,"Simplify 8<sup>0.4</sup> × 4<sup>1.6</sup> × 2<sup>1.6</sup>",["64","52","48","76"]],
+[68,"Find the number, if it exceeds its two fifth by 75.",["112","150","125","100"]],
+[69,"Find the least number which when divided by 6, 9, 12, 15, 18 leaves the same remainder 2 in each case.",["180","182","178","176"]],
+[70,"Find the value of (24 − 16) × 8 − 64 ÷ (10 − 2) + 4.",["50","40","60","20"]],
+[71,"The angle between the hands of a clock at 8:15 p.m.",["145½°","167½°","157½°","171½°"]],
+[72,"Find the HCF of 36/51 and 3 9/17.",["12/51","15/51","14/17","9/51"],1],
+[73,"The profit % on selling a mobile at Rs. 32000 is 33⅓%. Find its cost price (in Rs.)",["24000","20000","30000","25000"]],
+[74,"In a function of 480 people, ⅗ are women, among them ⅝ are married. What is the maximum number of women who could be married?",["288","108","180","280"]],
+[75,"A boy in a room notices that there are 40 legs in total. How many people and dogs can be there in a room?",["4 people + 8 dogs","3 people + 8 dogs","4 people + 7 dogs","4 people + 9 dogs"]],
+[76,"What is the sum of the greatest negative integer and the smallest whole number?",["0","1","−1","−2"]],
+[77,"Pick out the odd one in the following series. 7, 28, 63, 124, 215, 342, 511",["28","63","215","124"]],
+[78,"If the total number of handshakes in a board meeting are 465, then find the number of people present for the meeting.",["29","31","30","28"]],
+[79,"If the second day of a month is a Friday, which of the following would be the last day of the next month that contains 31 days?",["Sunday","Monday","Tuesday","Data inadequate"]],
+[80,"Find the value, if 778 is divided by half?",["389","194","1565","1556"]],
+[81,"Concurrent lines pass through",["different points","two points","one point","more than two points"]],
+[82,"A tetrahedron is also called as",["triangular prism","square prism","square pyramid","triangular pyramid"]],
+[83,"I’m a three digit number. I am less than 500. I am greater than 200. All my digits are odd. If you take each of my three digits and add them together, they are equal to 5. Who am I?",["104","311","401","320"]],
+[84,"On dividing the successor of the greatest 4-digit number by the smallest 5-digit number the result is",["10","100","0","1"]],
+[85,"The Roman numeral for 979 is",["CMLXXXI","CMLXXIX","MCLXXIX","MCLXXXI"]],
+[86,"The whole number which does not have a predecessor is",["1","0","9","10"]],
+[87,"The LCM of two numbers which are in the ratio of 2:3 is 48. Find the sum of the numbers.",["40","50","30","70"]],
+[88,"Two integers have a difference of 6 and a sum of −18. What are the integers?",["12, 6","13, 7","−13, −5","−12, −6"]],
+[89,"A man purchased 30 litres of juice. He gave 7⅔ litres of juice to his friend. He gave 5⅖ litres to his family. Find how many litres of juice was left with him.",["16 14/15","15 13/14","16 15/16","15 14/15"]],
+[90,"Two numbers are in the ratio 1:2. If 7 is added to both, their ratio becomes 3:5. Find the greatest number.",["14","28","35","21"]],
+[91,"How long will it take for a boy to go around a regular pentagon of side 7 m, at a speed of 5 m per minute?",["5 min","6 min","7 min","8 min"]],
+[92,"We cannot find the perimeter if the given figure is",["A rectangle","a scalene triangle","a trapezium","an open 3-sided figure"]],
+[93,"The average of the first 10 prime numbers is",["13.7","12.9","17.8","12.5"]],
+[94,"The sum and the product of two numbers are 12 and 35. Find the sum of their reciprocals.",["1/35","12/35","35/12","7/32"],1],
+[95,"What is the units digit for the number 7<sup>159</sup>?",["5","9","7","3"],1],
+[96,"A student multiplied a number by ³⁄₅ instead of ⁵⁄₃. Find the error %.",["56%","50%","67%","64%"]],
+[97,"What percentage of numbers from 1 to 70 has 1 or 9 in their units digit?",["30%","25%","20%","28%"]],
+[98,"In a 200 m race, ‘P’ covers the distance in 36 seconds and ‘Q’ covers in 45 seconds. In this race, P beats Q by how much distance?",["40 m","50 m","45 m","18 m"]],
+[99,"A boy can do a piece of work in 15 days and a girl in 20 days. If they work on it together for 4 days, find the fraction of the work that is left over.",["7/15","7/10","1/4","8/15"]],
+[100,"In a factory, pipes X and Y can fill an oil tank in 5 hrs and 6 hrs respectively. While pipe Z can empty the tank in 12 hrs. If all three together are opened, find the time taken by them to empty the full tank.",["1 13/17 hrs","2 8/11 hrs","3 9/17 hrs","4½ hrs"]],
+[101,"In a cricket game the run rate in the first 10 overs was only 3.2. What should be the required run rate in the remaining 40 overs to reach the target of 282 runs?",["6.25","6.5","6.75","7"]],
+[102,"Find the reflex angle between the hands of a clock at 10:25.",["189½°","192½°","195½°","197½°"],1],
+[103,"A boat can travel with a speed of 13 kmph in still water. If the speed of the stream is 4 kmph, find the time taken by the boat to go 68 km downstream.",["2 hrs","3 hrs","4 hrs","5 hrs"]],
+[104,"A person crosses 600 m long street in 5 min. Find the speed of the person in kmph.",["4.5","7.2","8.4","9.8"]],
+[105,"The measures of two adjacent sides of a rectangle are in the ratio 13:11. If the smallest side is 5.5 cm, find the perimeter of a rectangle (in cm).",["25","24","12","48"]],
+[106,"The area of one circle is 100 times the area of another circle. Find the ratios of their diameters.",["10:1","100:1","9:1","90:1"]],
+[107,"The ages of M and N are in the rate 5:3. After 6 years, their ages will be in the ratio 7:5. Find the sum of their present ages.",["29 years","10 years","15 years","24 years"]],
+[108,"Find m, if 2(m + 2) + 3m = 20 − (2m − 5).",["2","3","5","6"]],
+[109,"Two dices are thrown simultaneously, find the probability of getting the sum 9 on the top of them.",["1/7","1/8","1/9","1/5"]],
+[110,"In an isosceles triangle, the base angles are equal. Find the angles if the vertex angle is twice of the base angles.",["90°, 45°, 45°","50°, 50°, 80°","60°, 60°, 60°","30°, 75°, 75°"]],
+[111,"Find the probability of getting a vowel in the word MATHEMATICS.",["3/11","6/11","4/11","7/11"]],
+[112,"Each side of a regular polygon is 7.5 cm. The perimeter of this polygon is 67.5 cm. How many sides does the polygon have?",["8","7","12","9"]],
+[113,"Find the smallest fraction that should be added to the sum of 1½ + 3¾ + 5⅝ to make the result a whole number.",["3/8","1/8","7/8","1/2"]],
+[114,"In a field there are some hens and cows. If the number of heads is 50 and the number of feet is 142, find the number of cows.",["21","25","27","29"]],
+[115,"The weight of a container full of water is 28 kg. When it is ¼ full, its weight is 19 kg. Find the weight, if 2/3 is full of water.",["8 kg","20 kg","24 kg","16 kg"]],
+[116,"If ΔPQR = ΔXYZ, then which of the following statements is wrong?",["∠PQR = ∠XYZ","PR = XZ","PQ = ZY","∠RPQ = ∠ZXY"]],
+[117,"Which one of the following options is not a possible set of measurements for constructing a triangle? (in cm)",["5, 6, 7","8, 11, 14","15, 14, 7","9, 5, 4"],2],
+[118,"A car makes 10000 revolutions to travel a distance of 22 km. Find the diameter of the wheel of a car.",null,2],
+[119,"Find the perimeter of a Rhombus if its area and altitude are 35 cm² and 7 cm respectively.",null,2],
+[120,"The difference between the circumference and radius of a circle is 37 cm. Find the area of a circle.",["154 cm²","148 cm²","184 cm²","259 cm²"],2],
+[121,"Find the mean of the first five multiples of 10.",["15","20","25","30"],2],
+[122,"A bag contains 12 red, 10 blue, 21 green and 7 white balls. What is the probability of taking out a blue ball?",null,2],
+[123,"The mean of 5 observations is 89. If one of the observations is wrongly taken as 64 instead of 46, find the correct mean.",["85.4","92.6","91.8","83.4"],2],
+[124,"Find the median of the data: 28, 40, 24, 32, 22, 22, 28, 25, 36, 22, 22",["28","25","25.5","26.5"],2],
+[125,"The square of a natural number subtracted from its cube is 48. The number is:",["8","6","5","4"],2],
+[126,"The least possible value of A for which 90 × A is a perfect cube is:",["200","300","500","600"],2],
+[127,"A person travels by car from city A to city B at an average speed of 63 km/h and returns at an average speed of 42 km/h. His average speed for the whole journey?",["52.5 km/h","55.4 km/h","48.5 km/h","50.4 km/h"],2],
+[128,"Three years ago the average age of a family of 5 members was 17 years. A baby having been born, the average age of the family remains the same today. The age of the baby today is:",["1 year","2 years","3 years","1.5 years"],2],
+[129,"In a business A and C invested amounts in the ratio of 2:1, whereas A and B invested amounts in the ratio of 3:2. If their annual profit be Rs.1,57,300, then B’s share in the profit is:",["Rs.24200","Rs.48000","Rs.36300","Rs.48400"]],
+[130,"A bag contains three types of coins. One rupee-coins, 50 paisa-coins and 25 paisa coins totaling 175 coins. If the total value of the coins of each kind be same, the total amount in the bag is:",["Rs.75","Rs.175","Rs.300","Rs.126"]],
+[131,"If 20% of A = 50% of B, then what per cent of A is B?",["30%","40%","25%","15%"]],
+[132,"If 125% of x is 100, then x is:",["80","150","400","125"]],
+[133,"If a shop-keeper purchases cashew nut at 250 per kg and sells it at Rs.10 per 50 grams, then he will have:",["25% loss","25% profit","20% profit","20% loss"]],
+[134,"A man sells 320 mangos at the cost price of 400 mangos. His gain per cent is:",["15%","20%","25%","10%"]],
+[135,"A sum of money at simple interest triples itself in 15 years. It will become 5 times of itself in:",["40 years","36 years","30 years","25 years"]],
+[136,"In what time will Rs. 8000 at 3% per annum produce the same interest as Rs.6000 does in 5 years at 4% simple interest?",["5 years","6 years","3 years","4 years"]],
+[137,"The product of two co-prime numbers is 117. Then their LCM is",["117","9","13","39"]],
+[138,"The time duration of 1 hour 45 minutes is what per cent of a day?",["7.218%","7.292%","8.3%","8.24%"]],
+[139,"Average runs scored by 11 players of a cricket team is 23 runs. If the first player scored 113 runs. Find the average runs of the remaining players.",["8 Runs","12 Runs","14 Runs","27 Runs"]],
+[140,"There are 100 students in 3 sections A, B and C of a class. The average marks of all the 3 sections were 84. The average of B and C was 87.5 and the average marks of A is 70. The number of students in section A was",["30","35","20","25"]],
+[141,"What must be added to each term of the ratio 2:5 so that it may equal to 5:6?",["65","78","13","12"]],
+[142,"Harsha is 40 years old and Ritu is 60 years old. How many years ago was the ratio of their ages 3:5?",["10 years","20 years","37 years","5 years"]],
+[143,"In a village 30% of the population is literate. If the total population of the village is 6600, then the number of illiterate:",["1980","4620","2200","3280"]],
+[144,"A reduction of 25% in the price of rice enables a person to buy 10 kg more rice for Rs.600. The reduced per kg price of rice is:",["Rs.30","Rs.25","Rs.20","Rs.15"]],
+[145,"Profit after selling a commodity for Rs.524 is the same as loss after selling it for Rs.452. The cost price of the commodity is:",["Rs.480","Rs.500","Rs.488","Rs.485"]],
+[146,"The price of a jewel, passing through three hands, rises on the whole by 80%. If the first and the second sellers earned 20% and 25% profit respectively, the profit earned by the third seller is:",["20%","15%","10%","5%"]],
+[147,"Rs.800 amounts to Rs.920 in 3 years at simple interest. If the interest rate is increased by 5%, it would amount to:",["Rs.1056","Rs.1112","1182","Rs.1040"]],
+[148,"John invested a sum of money at an annual simple interest rate of 10%. At the end of four years the amount invested plus interest earned was Rs.770. The amount invested was:",["Rs.650","Rs.350","Rs.550","Rs.500"]],
+[149,"If the ratio of two numbers is 2:3 and their LCM is 54, then the sum of the two numbers is",["5","15","45","270"]],
+[150,"Two numbers are in the ratio 4:5. If their HCF is 16, then the sum of these two numbers is",["144","124","160","150"]],
+[151,"Which least number should be added to 1000 so that the number obtained is exactly divisible by 37?",["1","25","36","13"]],
+[152,"The HCF and LCM of two numbers is 6 and 5040 respectively. If one of the numbers is 210, then the other number is",["630","144","256","30"]],
+[153,"The successive discounts of 20%, 10% and 15% is equivalent to a single discount of",["43.5%","42.2%","38.8%","44.5%"]],
+[154,"The value of 9¾ ÷ [2⅙ + {4⅓ − (2½ + ¾)}]",["3","15/4","4","17/4"]],
+[155,"An alloys contains 32% copper, 24% nickel and rest zinc. How much zinc is present in 12 kg of the alloy?",["672 gm","6.72 kg","5.28 kg","528 gm"]],
+[156,"The number 45789 is divisible by which of the single digit numbers",["Only by 9","Only by 3 and 9","Only by 3","Only by 3 and 7"]],
+[157,"In an examination, 54% of the candidates passed in science and 42% failed in mathematics. If 32% failed in both subjects, what percentage passed in both subjects?",["56%","48%","32%","44%"]],
+[158,"The income of A is 24% more than the income of B. By what percent is the income of B less than the income of A?",["150/7 %","600/29 %","500/31 %","600/31 %"]],
+[159,"If 15 men can do a piece of work in 14 days, how many men will be needed to do the work in 30 days?",["8","10","7","9"]],
+[160,"The ratio of the ages of A and B is 3:4. If the sum of their ages is 28 years, what is the age of B?",["12 years","14 years","16 years","18 years"]],
+[161,"If 25% of a number is 40, what is 60% of that same number?",["96","120","160","240"]],
+[162,"A train traveling at a speed of 72 km/h crosses a pole in 15 seconds. What is the length of the train?",["150 meters","200 meters","250 meters","300 meters"]],
+[163,"The average score of four students in a test is 85. If a fifth student scores 90, what is the new average score of the five students?",["86","87","88","89"]],
+[164,"A sum of money doubles itself in 8 years at simple interest. What is the annual rate of interest?",["10%","12.5%","15%","20%"]],
+[165,"A man travels 4 km North, turns left and walks 3 km. How far is he from his starting point?",["5 km","7 km","12 km","14 km"]],
+[166,"A scooter is bought for ₹50,000 and sold at a 10% loss. Find its selling price.",["₹40,000","₹45,000","₹48,000","₹49,000"]],
+[167,"If 40% of a class of 150 students are girls, find the number of boys in the class.",["70","85","90","65"]],
+[168,"Pipe A can fill a tank in 6 hours, and Pipe B can fill it in 12 hours. How long will they take working together?",["3 hours","4 hours","5 hours","9 hours"]],
+[169,"What is the smallest square number that is exactly divisible by 3, 4, and 5?",["60","900","3600","9000"]],
+[170,"A clock shows 4:30. If the minute hand points South-West, in which direction does the hour hand point?",["North-East","North-West","South","North"]],
+[171,"A bag contains 3 red balls and 5 blue balls. If one ball is drawn at random, what is the probability it is red?",["3/5","5/3","3/8","5/8"],1],
+[172,"Express the fraction 7/8 as a percentage value.",["75%","82.5%","85%","87.5%"]],
+[173,"A man drives at 40 km/h for 2 hours and then at 60 km/h for another 3 hours. Find his average travel speed.",["48 km/h","50 km/h","52 km/h","55 km/h"]],
+[174,"A painting is listed at ₹16,000 available at a successive discount of 10% and 5%. Find its final selling price.",["₹13,600","₹13,680","₹14,000","₹14,400"]],
+[175,"The area of a rhombus is 240 cm². If one of its diagonals is 16 cm, find the length of the other diagonal.",["20 cm","24 cm","30 cm","32 cm"]],
+[176,"How many diagonals does a regular hexagon have?",["6","9","12","14"]],
+[177,"Three angles of a quadrilateral are 75°, 90°, and 115°. Find the measure of the fourth angle.",["60°","70°","80°","90°"]],
+[178,"Subtract (3a − 4b + 5c) from (7a − b + 2c).",["4a + 3b − 3c","4a − 3b + 3c","10a − 5b + 7c","4a + 3b + 3c"]],
+[179,"The denominator of a fraction is 4 more than its numerator. If ‘1’ is added to both, the fraction becomes 1/2. Find the original fraction.",["3/7","5/9","2/7","5/8"]],
+[180,"If 8 identical textbooks cost ₹1,200, find the cost of 18 such textbooks.",["₹2,400","₹2,700","₹2,850","₹3,000"]],
+[181,"Divide ₹3,900 among three friends X, Y, and Z such that their shares are in the ratio 6:4:3. Find Y’s share.",["₹1,800","₹1,500","₹1,200","₹900"],0,"c"],
+[182,"A school hostel has enough food provisions for 120 students for 20 days. If 30 new students join them, how long will the provisions last?",["15 days","16 days","18 days","25 days"],0,"b"],
+[183,"Two numbers are in the ratio 3:5. If 9 is subtracted from each, their ratio becomes 12:23. Find the smaller number.",["27","33","49","55"],0,"b"],
+[184,"The population of a town increases by 10% annually. If its present population is 20,000, what will it be after 2 years?",["24,000","24,200","22,000","25,000"],0,"b"],
+[185,"In a school, 40% of students are girls, and the rest are boys. If 70% of the boys and 80% of the girls pass an exam, what is the total percentage of passing students?",["74%","76%","72%","75%"],0,"a"],
+[186,"A student multiplied a number by ³⁄₅ instead of ⁵⁄₃. What is the percentage error in the final calculation?",["36%","44%","64%","56%"],0,"c"],
+[187,"A wholesaler finds that the cost price of 15 items is exactly equal to the selling price of 12 items. What is their profit percentage?",["20%","25%","16%","30%"],0,"b"],
+[188,"A right-angled triangle has a base of 6 cm and a hypotenuse of 10 cm. Find its area.",["24 cm²","30 cm²","48 cm²","60 cm²"],0,"a"],
+[189,"A fair six-sided die is rolled once. What is the probability of getting a prime number?",["1/6","1/3","1/2","2/3"],0,"c"],
+[190,"The mean of five numbers is 20. If a sixth number is added, the new mean becomes 22. What is the sixth number?",["22","24","32","34"],0,"c"],
+[191,"A bag contains 4 red marbles, 3 blue marbles, and 5 green marbles. If one marble is drawn at random, what is the probability that it is NOT blue?",["1/4","1/3","2/3","3/4"],0,"d"],
+[192,"What is the mode of the given data set: 4, 7, 4, 8, 9, 7, 4, 10, 7, 4?",["4","7","8","9"],0,"a"],
+[193,"If A:B = 2:3 and B:C = 4:5, find the compound ratio A:C.",["2:5","8:15","6:15","10:12"],0,"b"],
+[194,"A train covers a distance of 360 km in 4 hours. What is its speed in meters per second (m/s)?",["25 m/s","30 m/s","90 m/s","100 m/s"],0,"a"],
+[195,"Find the values of x if x% of 250 = 75.",["20","25","30","35"],0,"c"],
+[196,"What is the Least Common Multiple (LCM) of 12, 18, and 30?",["6","90","180","360"],0,"c"],
+[197,"Evaluate: 5 + 3 × (8 − 5)² ÷ 9.",["6","8","12","24"],0,"b"],
+[198,"The product of two consecutive positive integers is 132. Find the smaller integer.",["10","11","12","13"],0,"b"],
+[199,"The angles of a triangle are in the ratio 2:3:5. What is the measure of the largest angle?",["54°","72°","90°","100°"],0,"c"],
+[200,"Two unbiased coins are tossed simultaneously. What is the probability of getting at least one head?",["1/4","1/2","3/4","2/5"],0,"c"]
+];
+
+var PAGES = [[1,38],[15,39],[28,40],[39,41],[51,42],[64,43],[78,44],[91,45],[104,46],[117,47],[129,48],[142,49],[153,50],[165,51],[179,52],[191,53]];
+
+var main = document.getElementById("questions");
+var rail = document.getElementById("rail");
+var jump = document.getElementById("jump");
+var searchEl = document.getElementById("search");
+var flaggedEl = document.getElementById("flagged");
+var countEl = document.getElementById("count");
+var LETTERS = ["a", "b", "c", "d"];
+
+function plain(s) { return String(s).replace(/<[^>]+>/g, ""); }
+var emptyEl = document.createElement("div");
+emptyEl.className = "empty";
+emptyEl.hidden = true;
+emptyEl.textContent = "No questions match. Clear the search or turn off “Show flagged only”.";
+main.appendChild(emptyEl);
+
+PAGES.forEach(function (p, i) {
+  var start = p[0];
+  var end = (i + 1 < PAGES.length ? PAGES[i + 1][0] - 1 : 200);
+  var pageNo = p[1];
+
+  var sec = document.createElement("section");
+  sec.className = "page";
+  sec.id = "page-" + pageNo;
+  var h = document.createElement("h2");
+  h.innerHTML = "Page " + pageNo + " <small>Questions " + start + " to " + end + "</small>";
+  sec.appendChild(h);
+
+  Q.filter(function (q) { return q[0] >= start && q[0] <= end; }).forEach(function (q) {
+    var art = document.createElement("article");
+    art.className = "q";
+    art.id = "q" + q[0];
+    art.dataset.n = q[0];
+    art.dataset.flag = q[3] || 0;
+    art.dataset.text = (q[1] + " " + (q[2] || []).join(" ")).replace(/<[^>]+>/g, "").toLowerCase();
+
+    var num = document.createElement("div");
+    num.className = "num";
+    num.textContent = q[0];
+    art.appendChild(num);
+
+    var body = document.createElement("div");
+    body.className = "body";
+    var t = document.createElement("p");
+    t.className = "text";
+    t.innerHTML = q[1];
+    body.appendChild(t);
+
+    if (q[2]) {
+      var ol = document.createElement("ol");
+      ol.className = "opts";
+      q[2].forEach(function (o, k) {
+        var li = document.createElement("li");
+        if (S[q[0]] && S[q[0]][0] === LETTERS[k]) li.className = "correct";
+        li.innerHTML = '<span class="letter">' + LETTERS[k] + ')</span><span>' + o + '</span>';
+        ol.appendChild(li);
+      });
+      body.appendChild(ol);
+    } else {
+      var no = document.createElement("p");
+      no.className = "noopts";
+      no.textContent = "The options could not be read in the photo.";
+      body.appendChild(no);
+    }
+
+    var tags = document.createElement("div");
+    tags.className = "tags";
+    var sol = S[q[0]];
+    var panel = null;
+    if (sol) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "ans";
+      btn.textContent = "Solve";
+      btn.setAttribute("aria-expanded", "false");
+      panel = document.createElement("div");
+      panel.className = "solution";
+      panel.id = "sol" + q[0];
+      panel.hidden = true;
+      btn.setAttribute("aria-controls", panel.id);
+      var ph = "<h3>How to solve it</h3>";
+      ph += "<div class=\"sec\"><h4>Given</h4><p>" + sol[1] + "</p></div>";
+      ph += "<div class=\"sec\"><h4>To find</h4><p>" + sol[2] + "</p></div>";
+      ph += "<div class=\"sec\"><h4>Idea</h4><p>" + sol[3] + "</p></div>";
+      ph += "<div class=\"sec\"><h4>Working</h4><ol class=\"steps\">";
+      sol[4].forEach(function (st) { ph += "<li>" + st + "</li>"; });
+      ph += "</ol></div>";
+      if (sol[5]) ph += "<div class=\"sec\"><h4>Check</h4><p>" + sol[5] + "</p></div>";
+      var ansText = sol[7] || (q[2] && sol[0] ? q[2]["abcd".indexOf(sol[0])] : "");
+      var ansLabel = sol[0] ? "(" + sol[0] + ") " + ansText : ansText;
+      ph += "<p class=\"final\">Answer: " + ansLabel + "</p>";
+      if (sol[6]) ph += "<p class=\"snote\">" + sol[6] + "</p>";
+      panel.innerHTML = ph;
+      btn.addEventListener("click", function () {
+        var on = art.classList.toggle("show");
+        panel.hidden = !on;
+        btn.textContent = on ? "Hide solution" : "Solve";
+        btn.setAttribute("aria-expanded", on ? "true" : "false");
+      });
+      tags.appendChild(btn);
+    }
+    if (q[3] === 1) {
+      var f1 = document.createElement("span");
+      f1.className = "flag check-flag";
+      f1.textContent = "Check: some wording or an option is hard to read in the photo.";
+      tags.appendChild(f1);
+    }
+    if (q[3] === 2) {
+      var f2 = document.createElement("span");
+      f2.className = "flag blur-flag";
+      f2.textContent = "Blurry: retake page 47 to confirm this question.";
+      tags.appendChild(f2);
+    }
+    if (tags.children.length) body.appendChild(tags);
+    if (panel) body.appendChild(panel);
+
+    art.appendChild(body);
+    sec.appendChild(art);
+  });
+  main.insertBefore(sec, emptyEl);
+
+  var li = document.createElement("li");
+  li.innerHTML = '<a href="#page-' + pageNo + '">Page ' + pageNo + ' <span>' + start + '–' + end + '</span></a>';
+  rail.appendChild(li);
+
+  var op = document.createElement("option");
+  op.value = "page-" + pageNo;
+  op.textContent = "Page " + pageNo + " (questions " + start + " to " + end + ")";
+  jump.appendChild(op);
+});
+
+jump.addEventListener("change", function () {
+  var el = document.getElementById(jump.value);
+  if (el) el.scrollIntoView();
+});
+
+function applyFilter() {
+  var term = searchEl.value.trim().toLowerCase();
+  var onlyFlag = flaggedEl.checked;
+  var shown = 0;
+  var arts = main.querySelectorAll("article.q");
+  arts.forEach(function (a) {
+    var ok = true;
+    if (onlyFlag && a.dataset.flag === "0") ok = false;
+    if (ok && term) {
+      if (/^\d+$/.test(term)) ok = (a.dataset.n === term) || a.dataset.text.indexOf(term) !== -1;
+      else ok = a.dataset.text.indexOf(term) !== -1;
+    }
+    a.hidden = !ok;
+    if (ok) shown++;
+  });
+  main.querySelectorAll("section.page").forEach(function (s) {
+    s.hidden = !s.querySelector("article.q:not([hidden])");
+  });
+  emptyEl.hidden = shown !== 0;
+  countEl.textContent = "Showing " + shown + " of " + Q.length;
+}
+searchEl.addEventListener("input", applyFilter);
+flaggedEl.addEventListener("change", applyFilter);
+applyFilter();
+
+try {
+  var m = /^#q(\d+)$/.exec(location.hash);
+  if (m) { var target = document.getElementById("q" + m[1]); if (target) target.scrollIntoView(); }
+} catch (e) {}
+</script>
+</body>
+</html>
