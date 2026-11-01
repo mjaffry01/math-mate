@@ -328,6 +328,15 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
   border-radius: 8px;
   font-weight: 700;
 }
+.solution .trick {
+  margin: 4px 0 12px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 2px dashed var(--accent);
+  border-radius: 8px;
+}
+.solution .trick h4 { margin: 0 0 4px; }
+.solution .trick p { margin: 0; max-width: 70ch; }
 .solution .snote { margin: 12px 0 0; font-size: 0.92rem; color: var(--muted); max-width: 70ch; }
 [hidden] { display: none !important; }
 
@@ -353,7 +362,8 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
 <header class="top">
   <h1>Math Mate: 200 practice questions</h1>
   <p>Questions 1 to 200 from the Math Mate workbook, pages 38 to 53. Each question has four options.</p>
-  <p>Tap <b>Solve</b> on any question to see the full working: what is given, what to find, the rule, every calculation, and a check.</p>
+  <p>Tap <b>Solve</b> on any question to see the full working: what is given, what to find, the rule, the classroom method with every calculation, and a check.</p>
+  <p>Every solution also has an <b>⚡ Exam shortcut</b>: the quick trick to get the answer fast in the exam.</p>
   <p>Questions marked “Check” need to be confirmed against the book. Questions marked “Blurry” could not be read reliably from the photo.</p>
 </header>
 
@@ -2153,6 +2163,209 @@ S[200]=["c",
 "Probability = 3/4."],
 "Another way: P(no head) = P(TT) = 1/4. So P(at least one head) = 1 − 1/4 = 3/4. ✓"];
 
+/* T[n] = exam shortcut: the fast way to get the answer in the exam hall */
+var T = {};
+T[1]="Split 11% into 10% + 1%. 10% = move the decimal one place (3050). 1% = move it two places (305). Add: 3355. No long multiplication needed.";
+T[2]="Do the × part in your head first and look at the size of the answer. In d), 6 × 4 = 24 and 3 + 24 can never reach 37. Spot it in seconds.";
+T[3]="Cancel pairs. +(−2010) and −(+2010) are both −2010; −(−2010) and +(+2010) are both +2010. One plus cancels one minus, so pair them off and only the first 2010 is left.";
+T[4]="“¼ empty” = “¾ full”. So 3 quarters = 480, 1 quarter = 480 ÷ 3 = 160. The trap is to divide by 4.";
+T[5]="Change to mm first, since the options are in mm: 92 cm = 920 mm. Then 920 ÷ 40 = 92 ÷ 4 = 23.";
+T[6]="Learn this pair: when r = 7, C = 44 and Area = 154. Here r = 14 is double 7, so C = 2 × 44 = 88.";
+T[7]="Square side = √100 = 10. Each strip is 10 by 2.5. Perimeter = 2 × 12.5 = 25. Quick rule: perimeter of one of 4 strips = 2.5 × the side.";
+T[8]="Don’t find all three angles. Difference = (5 − 3) = 2 parts. 1 part = 180 ÷ 12 = 15. So 2 × 15 = 30°.";
+T[9]="Handshakes = n × (n − 1) ÷ 2. Halve the even number first: 20 ÷ 2 = 10, then 10 × 19 = 190.";
+T[10]="Learn factorials: 1, 2, 6, 24, 120, 720. 6 letters → 720. One letter repeated twice → halve it → 360.";
+T[11]="Use the options. Try 5: the other number = 2 − 5 = −3, and 5 × (−3) = −15 ✓. Done.";
+T[12]="Half + quarter = three quarters. So ¾ of the number = 60 → number = 60 ÷ 3 × 4 = 80. Or test options: half of 80 + quarter of 80 = 40 + 20 = 60 ✓.";
+T[13]="2 mangoes = 10 grapes, so 1 mango = 5. Orange = 14 − 5 = 9. Two lines of mental maths.";
+T[14]="1 km = 1,00,000 cm (five zeros). 1.5 km = 1,50,000 cm. 105 = 15 × 7, and 1,50,000 ÷ 15 = 10,000. So 10000 : 7.";
+T[15]="One strip = 12 by 4 → perimeter 32. Three strips = 96. Or: square perimeter 48 + each of the 2 cuts adds 2 × 12 = 24 twice → 48 + 48 = 96.";
+T[16]="Divide by the top of the fraction, multiply by the bottom: 9490 ÷ 13 = 730 (13 × 73 = 949), then × 5 = 3650.";
+T[17]="Hunt for a non-prime: 15, 6 and 9 jump out at once. The only list without one is c).";
+T[18]="Largest multiple of 15 under 100 is 90. 90 − 5 = 85 = 5 × 17. Pick the option 17.";
+T[19]="Eliminate the easy ones: 333/999 (both ÷ 333), 573/1146 (bottom is double the top), 56/343 (both ÷ 7). What is left must be the answer. No need to test it.";
+T[20]="Count 4 in the units place (10 times) and 4 in the tens place (10 times): 10 + 10 = 20.";
+T[21]="When the top is 1, the bigger the bottom, the smaller the fraction: 1/9 is smallest. 3/7 and 5/11 are almost ½, far from 0.";
+T[22]="Each % sign means ÷ 100. 0.01 = 1/100, ÷ 100 again → 1/10000. Count the zeros: 2 + 2 = 4.";
+T[23]="Find what is LEFT directly: 100 − 35 = 65%. 65% of 900 = 65 × 9 = 585. One step instead of two.";
+T[24]="Notice 51 = 3 × 17, so 5100 ÷ 17 = 300. That is 1%, so the whole = 30000.";
+T[25]="Concurrent = “running together” to one point. 3 or more lines through one point = concurrent.";
+T[26]="In the greatest number the 5 is in the tens place (50). In the smallest it is in the hundreds place (500). 500 − 50 = 450.";
+T[27]="Winning margin % = 62 − 38 = 24%. 24% = 144 → 1% = 6 → total = 600. Quick: margin % = 2 × 62 − 100.";
+T[28]="Number and its reverse always differ by 9 × (difference of digits). 18 ÷ 9 = 2, so the digits differ by 2 and add to 6 → 4 and 2. It goes up, so the small digit is first: 24.";
+T[29]="Same distance there and back → average is a little LESS than the plain middle (67.5). Pick the option just under it: 67.4. Formula: 2ab ÷ (a + b).";
+T[30]="Formula: if A is r% more than B, B is r ÷ (100 + r) × 100 % less. 20 ÷ 120 = 1/6 = 16⅔%.";
+T[31]="Twice as many girls as boys, so the average sits ⅓ of the way from 10 (girls) to 12 (boys): 10 + ⅔ = 10⅔.";
+T[32]="The gap 25% → 50% is 25% of the marks, and it equals 60 + 40 = 100. So 25% = 100 → full marks = 400.";
+T[33]="One coin of each = Rs 8. 6400 ÷ 8 = 800 sets, so 800 of every coin.";
+T[34]="Zig-zag series → look at every second number: 18, 21, ?, 27 goes up by 3 → 24.";
+T[35]="Up and down cancel (10 south, 10 north). Add only the sideways moves: 5 + 10 = 15 km.";
+T[36]="Brother: 19, 20, 21. Father: 21, 22, 23, 24. The common date is 21.";
+T[37]="Only sort the END of the alphabet: T, R, P, O, N. The 5th from the right is N.";
+T[38]="Part drawn = ¾ − 7/12 = 9/12 − 7/12 = 2/12 = 1/6. So 1/6 = 15 litres → whole = 90.";
+T[39]="Find the leftover percent first: 100 − (30 + 25 + 15) = 30%. 10% of 75000 = 7500, so 30% = 22500.";
+T[40]="Down is +, up is −: 100 + 20 − 35 = 85 m below.";
+T[41]="Write initials in a row: P S R Re M. Second from left = Swetha.";
+T[42]="16 + 9 = 25 parts = half perimeter 375 → 1 part = 15. Area = 16 × 9 × 15 × 15 = 144 × 225. Trick: 225 = 900 ÷ 4, so 144 × 225 = 36 × 900 = 32400.";
+T[43]="Ignore units first: 49.5 ÷ 5.5 = 9 (since 5.5 × 9 = 49.5). Metres to cm is × 100 → 900.";
+T[44]="15% is 1.5 times 10%. So 15% of A = 1.5 × (12% of B) = 18% of B.";
+T[45]="1 kg = 1000 g. 10 out of 1000 = 1 out of 100 = 1%.";
+T[46]="Total cost ÷ total items = 470 ÷ 80 ≈ 5.9. The nearest option is 5.8.";
+T[47]="Add the powers in each term, ignore the numbers in front. Biggest total wins: a²b⁵ → 2 + 5 = 7.";
+T[48]="Fix the signs first. xy = (+2), so (xy)³ = +8. x² is +4 and y is −1, so 2x²y = −8. 8 − (−8) = 16.";
+T[49]="Use the options. The larger number must be a multiple of 6: 24 or 48. Try 48 → smaller is 40. 32 : 40 = 4 : 5 ✓.";
+T[50]="Men × days stays the same: 16 × 30 = 480. 480 ÷ 20 = 24.";
+T[51]="Regular polygon: angle of rotation = 360 ÷ number of sides = 360 ÷ 3 = 120°.";
+T[52]="Both mixed numbers become 13/5 and 13/7. Same top (13) cancels, so the answer is just 5/7.";
+T[53]="Dividing by 1.25 is the same as multiplying by 0.8. 32000 × 0.8 = 25600.";
+T[54]="91 ÷ 7 = 13 → × 4 = 52. 20% = ⅕, so 120 ÷ 5 = 24. 52 + 24 = 76, and 76 − 20 = 56.";
+T[55]="Perimeters are in the same ratio as the sides: 6 : 8 = 3 : 4. (Areas would be squared: 9 : 16.)";
+T[56]="Diagonals = n(n − 3) ÷ 2. Learn: 4 sides → 2, 5 → 5, 6 → 9, 8 → 20.";
+T[57]="Remember: the parallelogram is the famous shape with half-turn symmetry but no mirror line.";
+T[58]="Time shrinks from 10 to 4 hours, so speed grows by 10/4: 80 × 2.5 = 200. The question asks for the INCREASE: 200 − 80 = 120.";
+T[59]="Add up “money × years”: 4500 × 2 + 5000 × 3 = 24000. 1% of that is 240. 1200 ÷ 240 = 5%.";
+T[60]="New number = new average + (old count × rise in average) = 9 + 7 × 1 = 16.";
+T[61]="Evenly spaced numbers: average = (first + last) ÷ 2 = (0 + 100) ÷ 2 = 50.";
+T[62]="Gain % = (difference ÷ number SOLD) × 100 = (100 − 60) ÷ 60 × 100 = 66⅔%.";
+T[63]="Both save the same %, so savings are in the same ratio as salaries: 3 : 4. No calculation.";
+T[64]="Sum = 56, 7 parts → 1 part = 8. Ages 40 and 16. Add 8: 48 and 24 → 2 : 1.";
+T[65]="Cross-multiply trick: a : b : c = (3 × 6) : (4 × 6) : (4 × 7) = 18 : 24 : 28 = 9 : 12 : 14.";
+T[66]="Square the ratio parts: 25 − 16 = 9 parts = 81, so 1 part = 9 = x². x = 3, smaller = 4 × 3 = 12.";
+T[67]="Make everything base 2 and just add the powers: 3 × 0.4 + 2 × 1.6 + 1.6 = 1.2 + 3.2 + 1.6 = 6 → 2⁶ = 64.";
+T[68]="Number minus ⅖ of it = ⅗ of it = 75 → ⅕ = 25 → number = 125.";
+T[69]="Same remainder each time → answer = LCM + remainder. LCM = 180, so 182. Only one option is 180 + 2.";
+T[70]="Brackets both become 8: 8 × 8 − 64 ÷ 8 + 4 = 64 − 8 + 4 = 60.";
+T[71]="Clock formula: angle = |30 × H − 5.5 × M| = |240 − 82.5| = 157.5°. Works for every clock question.";
+T[72]="Rule: HCF of fractions = HCF of tops ÷ LCM of bottoms = 12/51.";
+T[73]="33⅓% = ⅓. Profit of ⅓ means SP = 4/3 of CP, so CP = ¾ of SP = ¾ × 32000 = 24000.";
+T[74]="Multiply both fractions at once; the 5s cancel: 480 × ⅗ × ⅝ = 480 × ⅜ = 180.";
+T[75]="Legs = 2 × people + 4 × dogs. Option a): 8 + 32 = 40 ✓. Check the options only.";
+T[76]="Greatest negative integer = −1. Smallest whole number = 0. −1 + 0 = −1.";
+T[77]="Spot cubes minus 1: 8−1, 27−1, 64−1 … 28 should have been 26.";
+T[78]="Double the handshakes: 930. Find two next-door numbers that multiply to it: 30 × 31. Answer is the bigger one, 31.";
+T[79]="The answer changes with the month (30 or 31 days), and the month is not given → Data inadequate.";
+T[80]="Dividing by ½ = doubling. 778 × 2 = 1556. (389 is the trap: that is dividing by 2.)";
+T[81]="Concurrent = all through one common point.";
+T[82]="Tetra = 4. Four triangle faces = triangular pyramid.";
+T[83]="Check options: only 311 has all odd digits and digit sum 3 + 1 + 1 = 5.";
+T[84]="Successor of 9999 is 10000, the same as the smallest 5-digit number. Anything ÷ itself = 1.";
+T[85]="Break it 900 + 70 + 9 → CM + LXX + IX = CMLXXIX.";
+T[86]="Whole numbers start at 0, so 0 has nothing before it.";
+T[87]="Numbers 2x and 3x have LCM 6x = 48 → x = 8. Sum = 5x = 40.";
+T[88]="Bigger = (sum + difference) ÷ 2 = (−18 + 6) ÷ 2 = −6. Smaller = (sum − difference) ÷ 2 = −12.";
+T[89]="Wholes: 30 − 7 − 5 = 18. Fractions: ⅔ + ⅖ = 16/15 = 1 1/15. 18 − 1 1/15 = 16 14/15. Bottom must be 15 → only option a) fits.";
+T[90]="Use the options. The greater must be even (it is 2x): try 28 → 14. 21 : 35 = 3 : 5 ✓.";
+T[91]="Perimeter 5 × 7 = 35. 35 ÷ 5 = 7 min.";
+T[92]="Perimeter needs a closed shape. The open figure is the odd one.";
+T[93]="Learn it: first 10 primes add up to 129. Average = 12.9.";
+T[94]="1/x + 1/y = (x + y) ÷ (xy) = sum ÷ product = 12/35. No need to find the numbers.";
+T[95]="Last digits of powers of 7 repeat 7, 9, 3, 1. Divide the power by 4: 159 → remainder 3 → third in the list → 3.";
+T[96]="Wrong-fraction trick: error % = 1 − (small/big)² = 1 − (3/5)² = 1 − 9/25 = 16/25 = 64%.";
+T[97]="In every 10 numbers, 2 end in 1 or 9. 2 out of 10 = 20%.";
+T[98]="When P finishes, Q still has 45 − 36 = 9 seconds to run. Q’s speed is 200/45, so 9 × 200 ÷ 45 = 40 m.";
+T[99]="LCM trick: call the work 60 units. Boy does 4 a day, girl 3 a day → 7 a day. 4 days = 28 units, 32 left → 32/60 = 8/15.";
+T[100]="LCM trick: tank = 60 units. X +12, Y +10, Z −5 → net 17 per hour → 60 ÷ 17 = 3 9/17 hrs.";
+T[101]="Runs needed = 282 − 32 = 250 in 40 overs. 250 ÷ 40 = 6.25.";
+T[102]="Clock formula |30H − 5.5M| = |300 − 137.5| = 162.5°. Reflex = 360 − 162.5 = 197.5°.";
+T[103]="Downstream = add speeds: 17. 68 ÷ 17 = 4 hrs.";
+T[104]="600 m in 300 s = 2 m/s. m/s to km/h: × 3.6 → 7.2.";
+T[105]="11 parts = 5.5, so 1 part = 0.5. Perimeter = 2 × (13 + 11) parts = 48 × 0.5 = 24.";
+T[106]="Area ratio is length ratio squared. So diameter ratio = √100 = 10 : 1.";
+T[107]="Sum must be a multiple of 5 + 3 = 8: only 24. Check: 15, 9 → 21, 15 = 7 : 5 ✓.";
+T[108]="Put the options in. m = 3: left 10 + 9 = 19, right 20 − 1 = 19 ✓.";
+T[109]="Ways to make sums with two dice: 2→1, 3→2, 4→3, 5→4, 6→5, 7→6, 8→5, 9→4 … So 9 → 4/36 = 1/9.";
+T[110]="Only option a) has one angle exactly twice the other two: 90, 45, 45.";
+T[111]="Count vowels only: A, E, A, I = 4 out of 11 letters.";
+T[112]="67.5 ÷ 7.5: double both → 135 ÷ 15 = 9.";
+T[113]="Ignore the whole numbers! Only the fractions matter: 4/8 + 6/8 + 5/8 = 15/8. You need 1/8 more to reach 16/8.";
+T[114]="Cows = (feet − 2 × heads) ÷ 2 = (142 − 100) ÷ 2 = 21.";
+T[115]="Full − quarter = ¾ water = 9 kg, so ¼ water = 3 kg. Empty can = 19 − 3 = 16. ⅔ water = 8 kg → 24.";
+T[116]="Read the letter order: P↔X, Q↔Y, R↔Z. PQ must match XY, so “PQ = ZY” is wrong.";
+T[117]="Triangle test: the two small sides must add to MORE than the big side. 5 + 4 = 9, not more than 9 → no triangle.";
+T[118]="One turn = 22 km ÷ 10000 = 2.2 m = 220 cm = circumference. 220 = 22/7 × d → d = 70 cm.";
+T[119]="Side = area ÷ height = 35 ÷ 7 = 5. Perimeter = 4 × 5 = 20 cm.";
+T[120]="2πr − r = r × (44/7 − 1) = 37r/7 = 37 → r = 7. Remember r = 7 → area 154.";
+T[121]="10, 20, 30, 40, 50 are evenly spaced → mean = middle number = 30.";
+T[122]="Blue ÷ total = 10/50 = 1/5.";
+T[123]="Correction trick: the mean drops by (64 − 46) ÷ 5 = 3.6. 89 − 3.6 = 85.4.";
+T[124]="11 values → median is the 6th after sorting. Count four 22s, then 24, then 25.";
+T[125]="n³ − n² = n² × (n − 1). Try 4: 16 × 3 = 48 ✓.";
+T[126]="90 = 2 × 3 × 3 × 5. Make each prime appear 3 times: need 2 × 2, one 3, 5 × 5 → 4 × 3 × 25 = 300.";
+T[127]="2ab ÷ (a + b). 63 and 42 share 21: 2 × 3 × 2 ÷ 5 × 21 = 12 × 21 ÷ 5 = 50.4.";
+T[128]="Average stays the same, so the baby’s age = average − (old members × years passed) = 17 − 5 × 3 = 2.";
+T[129]="Join ratios: A : B : C = 6 : 4 : 3 (13 parts). 157300 ÷ 13 = 12100, × 4 = 48400.";
+T[130]="Equal value means coin counts are 1 : 2 : 4. 175 ÷ 7 = 25 → Rs 25 of each kind → Rs 75.";
+T[131]="B ÷ A = 20 ÷ 50 = 40%. Flip the percentages into a fraction.";
+T[132]="125% = 5/4. Undo it: 100 × 4/5 = 80.";
+T[133]="Rs 10 per 50 g = Rs 200 per kg. Bought at 250 → loss 50 on 250 = 20%.";
+T[134]="Gain % = (difference ÷ number SOLD) × 100 = 80 ÷ 320 = 25%.";
+T[135]="Use “times − 1”: triple → 2 lots of interest in 15 years. 5 times → 4 lots → 30 years.";
+T[136]="P × R × T must match: 6000 × 4 × 5 = 8000 × 3 × T → T = 5.";
+T[137]="Co-prime → HCF is 1 → LCM = product = 117.";
+T[138]="1 hour ≈ 4.17% of a day. 1¾ hours ≈ 1.75 × 4.17 ≈ 7.29%. Pick 7.292%.";
+T[139]="The first player is 90 above the average (113 − 23). Spread 90 over the other 10 → each is 9 below: 23 − 9 = 14.";
+T[140]="Alligation: A is 14 below 84, B+C is 3.5 above. Ratio A : (B+C) = 3.5 : 14 = 1 : 4. A = ⅕ of 100 = 20.";
+T[141]="Test options: 13 → 15/18 = 5/6 ✓.";
+T[142]="Test options: 10 years ago → 30 and 50 = 3 : 5 ✓.";
+T[143]="Illiterate = 70%. 70% of 6600 = 7 × 660 = 4620.";
+T[144]="The 25% saved (25% of 600 = 150) buys the extra 10 kg. New price = 150 ÷ 10 = Rs 15.";
+T[145]="Equal profit and loss → CP is exactly in the middle: (524 + 452) ÷ 2 = 488.";
+T[146]="Multiply growth factors: 1.2 × 1.25 = 1.5. Need 1.8 total → 1.8 ÷ 1.5 = 1.2 → 20%.";
+T[147]="Interest at 5% for 3 years = 120. Adding 5% more gives another 120. 920 + 120 = 1040.";
+T[148]="10% for 4 years = 40% interest, so amount = 1.4 × sum. 770 ÷ 1.4 = 550. Or check: 550 + 220 = 770 ✓.";
+T[149]="2x and 3x have LCM 6x = 54 → x = 9. Sum = 5x = 45.";
+T[150]="Sum = (4 + 5) × HCF = 9 × 16 = 144.";
+T[151]="Remember 37 × 27 = 999. So 1000 is 1 more than a multiple → add 37 − 1 = 36.";
+T[152]="Other = HCF × LCM ÷ given. Divide first: 5040 ÷ 210 = 24, then × 6 = 144.";
+T[153]="Two discounts a and b equal one of a + b − ab/100. 20 & 10 → 28. 28 & 15 → 43 − 4.2 = 38.8%.";
+T[154]="Everything turns into thirteens: the big bracket comes to 13/4 and 9¾ = 39/4. 39 ÷ 13 = 3.";
+T[155]="Zinc = 100 − 56 = 44%. 44% of 12 = 5.28 kg (watch the unit: kg, not gm).";
+T[156]="Digit sum 33: divisible by 3 (yes), by 9 (no). Odd number and doesn’t end in 0/5. Only 3.";
+T[157]="Passed both = passed Science + passed Maths − passed at least one = 54 + 58 − 68 = 44%.";
+T[158]="Same rule as Q30: r ÷ (100 + r) = 24/124 = 6/31 → 600/31 %.";
+T[159]="Men × days stays the same: 15 × 14 ÷ 30 = 7.";
+T[160]="B = 4/7 of 28 = 16.";
+T[161]="60% is 2.4 times 25%. 40 × 2.4 = 96. (Or: 25% = 40 → 5% = 8 → 60% = 96.)";
+T[162]="Learn: 36 km/h = 10 m/s, 72 = 20, 54 = 15, 90 = 25. 20 m/s × 15 s = 300 m.";
+T[163]="New student is 5 above the average. Share 5 among 5 → average rises by 1 → 86.";
+T[164]="Doubling = 100% interest. 100 ÷ 8 years = 12.5% per year.";
+T[165]="3-4-5 triangle! Always 5 km.";
+T[166]="10% loss → 90% of 50000 = 45000.";
+T[167]="Boys = 60% of 150 = 90.";
+T[168]="Two pipes together: (a × b) ÷ (a + b) = 72 ÷ 18 = 4 hours.";
+T[169]="LCM = 60 = 2² × 3 × 5. Make all powers even: × 3 × 5 → 900 = 30².";
+T[170]="Minute hand should point S but points SW: the clock is turned 45° clockwise. Hour hand normally SE → turn 45° → S.";
+T[171]="Red ÷ total = 3 ÷ 8.";
+T[172]="Learn eighths: ⅛ = 12.5%. ⅞ = 100 − 12.5 = 87.5%.";
+T[173]="Never average the speeds! Total distance ÷ total time = 260 ÷ 5 = 52.";
+T[174]="Single discount = 10 + 5 − 0.5 = 14.5%. 16000 × 0.855 = 13680. (Or: 14400 then − 720.)";
+T[175]="Other diagonal = 2 × area ÷ diagonal = 480 ÷ 16 = 30.";
+T[176]="n(n − 3) ÷ 2 = 6 × 3 ÷ 2 = 9.";
+T[177]="Quadrilateral angles total 360: 360 − 280 = 80°.";
+T[178]="Work on the numbers only: a: 7 − 3 = 4, b: −1 + 4 = +3, c: 2 − 5 = −3. Remember that subtracting flips every sign in the bracket.";
+T[179]="Test options with “bottom − top = 4”: 3/7 → add 1 → 4/8 = ½ ✓.";
+T[180]="One book = 1200 ÷ 8 = 150. 18 × 150 = 2700.";
+T[181]="13 parts. 3900 ÷ 13 = 300. Y = 4 × 300 = 1200.";
+T[182]="Students × days stays the same: 120 × 20 ÷ 150 = 16.";
+T[183]="Smaller must be a multiple of 3: 27 or 33. 33 → 55. Subtract 9: 24 : 46 = 12 : 23 ✓.";
+T[184]="10% twice = 21% (10 + 10 + 1). 20000 × 1.21 = 24200.";
+T[185]="Start at the boys’ 70% and add the girls’ extra 10% × their 40% share: 70 + 4 = 74%.";
+T[186]="Same as Q96: 1 − (3/5)² = 16/25 = 64%.";
+T[187]="Gain % = (15 − 12) ÷ 12 = 25%.";
+T[188]="6-8-10 is just 3-4-5 doubled. Height 8. Area = ½ × 6 × 8 = 24.";
+T[189]="Primes on a die: 2, 3, 5 → 3 out of 6 = ½. (1 is NOT prime.)";
+T[190]="New number = new mean + old count × rise = 22 + 5 × 2 = 32.";
+T[191]="Use “1 minus”: P(blue) = 3/12 = ¼, so NOT blue = ¾.";
+T[192]="Mode = the one that appears most. Count the 4s: four times.";
+T[193]="Multiply straight across: A : C = (2 × 4) : (3 × 5) = 8 : 15.";
+T[194]="90 km/h → × 5/18 → 25 m/s (90 ÷ 18 = 5, × 5).";
+T[195]="x = 75 ÷ 250 × 100 = 30. Or: 10% of 250 is 25, and 75 is three of those.";
+T[196]="Take the biggest number (30) and test its multiples: 60 ✗, 90 ✗, 120 ✗, 150 ✗, 180 ✓.";
+T[197]="(8 − 5)² = 9, and × 9 ÷ 9 cancels. 5 + 3 = 8.";
+T[198]="√132 is between 11 and 12. Try 11 × 12 = 132 ✓.";
+T[199]="Largest = its share × 180: 5/10 × 180 = 90°.";
+T[200]="Use “1 minus”: only TT has no head. 1 − ¼ = ¾.";
+
 </script>
 <script>
 /* Each entry: [number, question, options (or null), flag (0 none, 1 check, 2 blurry), answer letter] */
@@ -2444,10 +2657,11 @@ PAGES.forEach(function (p, i) {
       ph += "<div class=\"sec\"><h4>Given</h4><p>" + sol[1] + "</p></div>";
       ph += "<div class=\"sec\"><h4>To find</h4><p>" + sol[2] + "</p></div>";
       ph += "<div class=\"sec\"><h4>Idea</h4><p>" + sol[3] + "</p></div>";
-      ph += "<div class=\"sec\"><h4>Working</h4><ol class=\"steps\">";
+      ph += "<div class=\"sec\"><h4>Classroom method (step by step)</h4><ol class=\"steps\">";
       sol[4].forEach(function (st) { ph += "<li>" + st + "</li>"; });
       ph += "</ol></div>";
       if (sol[5]) ph += "<div class=\"sec\"><h4>Check</h4><p>" + sol[5] + "</p></div>";
+      if (T[q[0]]) ph += "<div class=\"trick\"><h4>⚡ Exam shortcut</h4><p>" + T[q[0]] + "</p></div>";
       var ansText = sol[7] || (q[2] && sol[0] ? q[2]["abcd".indexOf(sol[0])] : "");
       var ansLabel = sol[0] ? "(" + sol[0] + ") " + ansText : ansText;
       ph += "<p class=\"final\">Answer: " + ansLabel + "</p>";
