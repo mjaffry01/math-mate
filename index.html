@@ -26,6 +26,7 @@
   --bar: #f9fbfd;
   --panel: #eef3ff;
   --soft: #d3dfff;
+  --ok: #17803d;
   color-scheme: light;
   --display: "Bricolage Grotesque", "Trebuchet MS", "Segoe UI", sans-serif;
   --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -52,6 +53,7 @@
     --bar: #121c31;
   --panel: #1b2947;
     --soft: #2b3f6e;
+    --ok: #6fdc95;
     color-scheme: dark;
   }
 }
@@ -73,6 +75,7 @@
   --bar: #121c31;
   --panel: #1b2947;
   --soft: #2b3f6e;
+  --ok: #6fdc95;
   color-scheme: dark;
 }
 html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 84px); }
@@ -236,26 +239,70 @@ ol.opts {
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 8px;
 }
-ol.opts li {
+ol.opts li { display: block; }
+button.opt {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: baseline;
   gap: 10px;
-  padding: 7px 10px;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
+  padding: 9px 12px;
+  min-height: 44px;
+  cursor: pointer;
 }
+button.opt:hover:not(:disabled) { border-color: var(--accent); background: var(--panel); }
+button.opt:disabled { cursor: default; }
 ol.opts .letter {
   font-weight: 700;
   color: var(--muted);
   min-width: 1.2em;
 }
-article.q.show ol.opts li.correct {
+ol.opts li.wrong button.opt {
+  background: var(--blur-bg);
+  color: var(--blur-ink);
+  border-color: transparent;
+  text-decoration: line-through;
+}
+ol.opts li.right button.opt,
+article.q.show ol.opts li.correct button.opt {
   background: var(--mark);
   color: var(--mark-ink);
   border-color: transparent;
   font-weight: 700;
+  text-decoration: none;
 }
-article.q.show ol.opts li.correct .letter { color: var(--mark-ink); }
+ol.opts li.wrong .letter,
+ol.opts li.right .letter,
+article.q.show ol.opts li.correct .letter { color: inherit; }
+.fb { margin: 12px 0 0; font-weight: 700; }
+.fb.ok { color: var(--ok); }
+.fb.no { color: var(--blur-ink); }
+.hint {
+  margin-top: 12px;
+  background: var(--warn-bg);
+  color: var(--warn-ink);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.hint h4 { font-family: var(--display); font-size: 0.98rem; margin: 0 0 4px; }
+.hint p { margin: 0; max-width: 70ch; }
+article.q .num .badge { display: block; font-size: 1.2rem; margin-top: 8px; letter-spacing: 0; }
+.progress-row { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; width: 100%; font-size: 0.9rem; color: var(--muted); }
+button.linkbtn {
+  font: inherit;
+  color: var(--accent);
+  background: none;
+  border: none;
+  padding: 4px 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
 .noopts {
   margin: 0;
   padding: 8px 12px;
@@ -386,7 +433,9 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
 <header class="top">
   <h1>Math Mate: 200 practice questions</h1>
   <p>Questions 1 to 200 from the Math Mate workbook, pages 38 to 53. Each question has four options.</p>
-  <p>Tap <b>Solve</b> on any question to see the full working: what is given, what to find, the rule, the classroom method with every calculation, and a check.</p>
+  <p><b>Try it yourself first.</b> Tap the option you think is right. If it is wrong, a <b>💡 Hint</b> appears, so have another go. Wrong again? The full solution opens and you can learn how to do it.</p>
+  <p>Stuck before you answer? Tap <b>💡 Hint</b>. After the hint you can also open the full solution: what is given, what to find, the rule, the classroom method with every calculation, and a check.</p>
+  <p>Your results are saved on this device: ⭐ right on the first try, 💡 right after a hint, 📖 needed the solution.</p>
   <p>Many solutions include a <b>Picture it</b> diagram (bar models, clocks, maps, shapes) so you can see the idea before the numbers.</p>
   <p>Every solution also has an <b>⚡ Exam shortcut</b>: the quick trick to get the answer fast in the exam.</p>
   <p>Questions marked “Check” need to be confirmed against the book. Questions marked “Blurry” could not be read reliably from the photo.</p>
@@ -404,6 +453,10 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
     </div>
     <label class="check"><input id="flagged" type="checkbox"> Show flagged only</label>
     <div class="count" id="count" aria-live="polite"></div>
+    <div class="progress-row">
+      <span id="progress"></span>
+      <button type="button" id="reset" class="linkbtn">Reset progress</button>
+    </div>
   </div>
 </div>
 
@@ -2992,6 +3045,36 @@ var flaggedEl = document.getElementById("flagged");
 var countEl = document.getElementById("count");
 var LETTERS = ["a", "b", "c", "d"];
 
+/* Hints for questions whose "Idea" would give the answer away */
+var H = {
+  25: "Think of the spokes of a bicycle wheel, all meeting at the middle. Which word means lines “running together” to one point?",
+  81: "Think of the spokes of a bicycle wheel. How many points do all the spokes share?"
+};
+
+/* Progress per question: "first" (right first try), "hint" (right after a hint or wrong try), "solution" (needed the solution) */
+var PKEY = "mathmate-progress-v1";
+var PROG = {};
+var BADGE = { first: "⭐", hint: "💡", solution: "📖" };
+var BADGE_TIP = { first: "Right on the first try", hint: "Right after a hint", solution: "Needed the solution" };
+try { PROG = JSON.parse(localStorage.getItem(PKEY) || "{}") || {}; } catch (e) { PROG = {}; }
+function badge(n) {
+  var el = document.querySelector("#q" + n + " .badge");
+  if (!el) return;
+  el.textContent = BADGE[PROG[n]] || "";
+  el.title = BADGE_TIP[PROG[n]] || "";
+}
+function showProgress() {
+  var c = { first: 0, hint: 0, solution: 0 };
+  Object.keys(PROG).forEach(function (k) { if (c[PROG[k]] !== undefined) c[PROG[k]]++; });
+  document.getElementById("progress").textContent = "⭐ " + c.first + " first try · 💡 " + c.hint + " with a hint · 📖 " + c.solution + " needed the solution";
+}
+function record(n, r) {
+  PROG[n] = r;
+  try { localStorage.setItem(PKEY, JSON.stringify(PROG)); } catch (e) {}
+  badge(n);
+  showProgress();
+}
+
 function plain(s) { return String(s).replace(/<[^>]+>/g, ""); }
 var emptyEl = document.createElement("div");
 emptyEl.className = "empty";
@@ -3022,6 +3105,9 @@ PAGES.forEach(function (p, i) {
     var num = document.createElement("div");
     num.className = "num";
     num.textContent = q[0];
+    var bdg = document.createElement("span");
+    bdg.className = "badge";
+    num.appendChild(bdg);
     art.appendChild(num);
 
     var body = document.createElement("div");
@@ -3031,32 +3117,100 @@ PAGES.forEach(function (p, i) {
     t.innerHTML = q[1];
     body.appendChild(t);
 
+    var n = q[0];
+    var sol = S[n];
+    var panel = null, hintBox = null, hintBtn = null, solBtn = null;
+    var tries = 0, hinted = false, done = false, optBtns = [];
+    var fb = document.createElement("p");
+    fb.className = "fb";
+    fb.setAttribute("aria-live", "polite");
+    fb.hidden = true;
+
+    function say(msg, cls) { fb.hidden = false; fb.className = "fb " + cls; fb.textContent = msg; }
+    function lock() { done = true; optBtns.forEach(function (b) { b.disabled = true; }); }
+    function showHint() {
+      hinted = true;
+      hintBox.hidden = false;
+      hintBtn.hidden = true;
+      solBtn.hidden = false;
+    }
+    function setSol(on) {
+      if (on && !done) { lock(); record(n, "solution"); }
+      art.classList.toggle("show", on);
+      panel.hidden = !on;
+      solBtn.textContent = on ? "Hide solution" : "See the full solution";
+      solBtn.setAttribute("aria-expanded", on ? "true" : "false");
+    }
+    function pick(li, b, right) {
+      if (done) return;
+      if (right) {
+        var first = tries === 0 && !hinted;
+        li.classList.add("right");
+        lock();
+        record(n, first ? "first" : "hint");
+        say(first ? "⭐ Correct on the first try!" : "✓ Correct! Well done.", "ok");
+        hintBtn.hidden = true;
+        solBtn.hidden = false;
+        solBtn.textContent = "See the full solution";
+        return;
+      }
+      tries++;
+      li.classList.add("wrong");
+      b.disabled = true;
+      if (tries === 1) {
+        showHint();
+        say("Not quite. Read the hint below and try again.", "no");
+      } else {
+        say("Not this time. Let’s go through it together.", "no");
+        setSol(true);
+      }
+    }
+
     if (q[2]) {
       var ol = document.createElement("ol");
       ol.className = "opts";
       q[2].forEach(function (o, k) {
         var li = document.createElement("li");
-        if (S[q[0]] && S[q[0]][0] === LETTERS[k]) li.className = "correct";
-        li.innerHTML = '<span class="letter">' + LETTERS[k] + ')</span><span>' + o + '</span>';
+        var right = !!sol && sol[0] === LETTERS[k];
+        if (right) li.className = "correct";
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "opt";
+        b.innerHTML = '<span class="letter">' + LETTERS[k] + ')</span><span>' + o + '</span>';
+        b.addEventListener("click", function () { pick(li, b, right); });
+        optBtns.push(b);
+        li.appendChild(b);
         ol.appendChild(li);
       });
       body.appendChild(ol);
     } else {
       var no = document.createElement("p");
       no.className = "noopts";
-      no.textContent = "The options could not be read in the photo.";
+      no.textContent = "The options could not be read in the photo. Work out the answer, then use the hint and the solution to check it.";
       body.appendChild(no);
     }
+    body.appendChild(fb);
 
     var tags = document.createElement("div");
     tags.className = "tags";
-    var sol = S[q[0]];
-    var panel = null;
     if (sol) {
+      hintBtn = document.createElement("button");
+      hintBtn.type = "button";
+      hintBtn.className = "ans";
+      hintBtn.textContent = "💡 Hint";
+      hintBtn.addEventListener("click", showHint);
+      tags.appendChild(hintBtn);
+      hintBox = document.createElement("div");
+      hintBox.className = "hint";
+      hintBox.hidden = true;
+      hintBox.innerHTML = "<h4>💡 Hint</h4><p>" + (H[n] || sol[3]) + "</p>";
+
       var btn = document.createElement("button");
+      solBtn = btn;
       btn.type = "button";
       btn.className = "ans";
-      btn.textContent = "Solve";
+      btn.textContent = "See the full solution";
+      btn.hidden = true;
       btn.setAttribute("aria-expanded", "false");
       panel = document.createElement("div");
       panel.className = "solution";
@@ -3078,12 +3232,7 @@ PAGES.forEach(function (p, i) {
       ph += "<p class=\"final\">Answer: " + ansLabel + "</p>";
       if (sol[6]) ph += "<p class=\"snote\">" + sol[6] + "</p>";
       panel.innerHTML = ph;
-      btn.addEventListener("click", function () {
-        var on = art.classList.toggle("show");
-        panel.hidden = !on;
-        btn.textContent = on ? "Hide solution" : "Solve";
-        btn.setAttribute("aria-expanded", on ? "true" : "false");
-      });
+      btn.addEventListener("click", function () { setSol(panel.hidden); });
       tags.appendChild(btn);
     }
     if (q[3] === 1) {
@@ -3099,6 +3248,7 @@ PAGES.forEach(function (p, i) {
       tags.appendChild(f2);
     }
     if (tags.children.length) body.appendChild(tags);
+    if (hintBox) body.appendChild(hintBox);
     if (panel) body.appendChild(panel);
 
     art.appendChild(body);
@@ -3145,6 +3295,15 @@ function applyFilter() {
 searchEl.addEventListener("input", applyFilter);
 flaggedEl.addEventListener("change", applyFilter);
 applyFilter();
+
+Object.keys(PROG).forEach(badge);
+showProgress();
+document.getElementById("reset").addEventListener("click", function () {
+  if (!confirm("Clear all saved progress on this device?")) return;
+  PROG = {};
+  try { localStorage.removeItem(PKEY); } catch (e) {}
+  location.reload();
+});
 
 try {
   var m = /^#q(\d+)$/.exec(location.hash);
