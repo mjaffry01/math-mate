@@ -2427,7 +2427,7 @@ var INK = { 2: "mk", 3: "inv" };
 
 /* Bar model: rows = [label, [[size, text, colour 0-4], ...]] */
 function bar(rows, c) {
-  var LW = 0, max = 0;
+  var LW = 50, max = 0;
   rows.forEach(function (r) {
     var t = 0;
     LW = Math.max(LW, r[0].length * 7.5 + 12);
@@ -2554,7 +2554,8 @@ function poly(n, all, lines) {
   for (var i = 0; i < n; i++) { var a = i * 2 * Math.PI / n; P.push([110 + 85 * Math.sin(a), 100 - 85 * Math.cos(a)]); }
   for (i = 0; i < n; i++) for (var j = i + 1; j < n; j++) {
     var edge = j === i + 1 || (i === 0 && j === n - 1);
-    out += line(P[i][0], P[i][1], P[j][0], P[j][1], all || !edge ? "ac" : "ln");
+    if (all === "sides" && !edge) continue;
+    out += line(P[i][0], P[i][1], P[j][0], P[j][1], all === true || !edge ? "ac" : "ln");
   }
   P.forEach(function (p) { out += '<circle cx="' + f(p[0]) + '" cy="' + f(p[1]) + '" r="6" class="dotk"/>'; });
   return svg(W, 200, out + side(lines, 230, 50), lines.join(" "));
@@ -2685,6 +2686,94 @@ V[191] = boxes(["R", "R", "R", "R", "B", "B", "B", "G", "G", "G", "G", "G"], [0,
 V[192] = boxes(["4", "4", "4", "4", "7", "7", "7", "8", "9", "10"], [0, 1, 2, 3], "Sorted: 4 appears 4 times, more than any other value. Mode = 4.");
 V[199] = tri("2 parts = 36°", "3 parts = 54°", "5 parts = 90°", "10 parts = 180°, so 1 part = 18°. Largest = 5 × 18 = 90°.");
 V[200] = boxes(["HH", "HT", "TH", "TT"], [0, 1, 2], "3 of the 4 outcomes have at least one head → 3/4.");
+
+/* 10 × 10 percent grid: n squares shaded */
+function pct(n, lines) {
+  var out = "", c = 18;
+  for (var i = 0; i < 100; i++) {
+    out += '<rect x="' + (10 + (i % 10) * c) + '" y="' + (10 + Math.floor(i / 10) * c) + '" width="' + (c - 2) + '" height="' + (c - 2) + '" rx="2" class="s' + (i < n ? 2 : 0) + '"/>';
+  }
+  return svg(W, 200, out + side(lines, 215, 50), lines.join(" "));
+}
+function rectBox(wl, hl, w, h, lines) {
+  var out = '<rect x="70" y="30" width="' + w + '" height="' + h + '" class="s1 edge"/>' + tx(70 + w / 2, 22, wl, "b") + tx(62, 30 + h / 2 + 5, hl, "b", "end");
+  return svg(W, Math.max(h + 50, 140), out + side(lines, 70 + w + 24, 50), lines.join(" "));
+}
+function rep(n, seg) { var a = []; for (var i = 0; i < n; i++) a.push(seg); return a; }
+function pts(P) { return P.map(function (p) { return f(p[0]) + "," + f(p[1]); }).join(" "); }
+
+V[1] = pct(11, ["30500 cut into 100 equal squares", "1 square = 1% = 305", "10 squares = 3050", "11 squares = 3050 + 305 = 3355"]);
+V[3] = boxes(["+2010", "+2010", "−2010", "−2010", "+2010"], [0], "Without brackets: 2010 + 2010 − 2010 − 2010 + 2010. Each white plus cancels a white minus. Only the yellow 2010 is left.", 5);
+V[5] = bar([["920 mm stick", rep(40, [1, "", 1])]], "92 cm = 920 mm, cut into 40 equal pieces. One piece = 920 ÷ 40 = 23 mm.");
+V[10] = boxes(["S", "C", "H", "O", "O", "L"], [3, 4], "6 letters can be ordered in 720 ways. Swapping the two yellow O’s gives the same word, so 720 ÷ 2 = 360.", 6);
+V[16] = bar([["Assistant", rep(5, [1, "730", 1])], ["Cashier", rep(13, [1, "730", 2])]], "2⅗ = 13/5. The cashier has 13 blocks, the assistant 5. 9490 ÷ 13 = 730 per block, so the assistant gets 5 × 730 = 3650.");
+V[18] = boxes(["15", "30", "45", "60", "75", "90", "105"], [5], "Counting in 15s, 90 is the last one below 100. 90 − 5 = 85 = 5 × 17.", 7);
+V[24] = pct(17, ["17 squares = Rs 5100", "1 square = 5100 ÷ 17 = 300", "100 squares = Rs 30000"]);
+V[28] = boxes(["15", "24", "33", "42", "51", "60"], [1], "All two-digit numbers with digit sum 6. Only 24 + 18 = 42 turns the digits around.", 6);
+V[31] = nline(10, 12, [[10, "girls: 10 yrs"], [10.667, "average 10⅔"], [12, "boys: 12 yrs"]], [1], "There are twice as many girls, so the average sits twice as close to the girls’ age: one third of the way from 10 to 12.");
+V[42] = rectBox("240 cm", "135 cm", 160, 90, ["Half perimeter: 25 parts = 375", "1 part = 15", "16 × 15 = 240, 9 × 15 = 135", "Area = 240 × 135 = 32400 cm²"]);
+V[45] = pct(1, ["1 kg = 1000 g = 100 squares", "1 square = 10 g", "10 g = 1 square = 1%"]);
+V[49] = bar([["Smaller 40", rep(4, [1, "8", 1]).concat([[1, "−8", 4]])], ["Larger 48", rep(5, [1, "8", 1]).concat([[1, "−8", 4]])]], "1 part = 8. Taking 8 away removes one block from each: 4 blocks : 5 blocks = 4 : 5.");
+V[51] = (function () {
+  var P = [], out = "";
+  for (var i = 0; i < 3; i++) { var a = i * 2 * Math.PI / 3; P.push([110 + 85 * Math.sin(a), 110 - 85 * Math.cos(a)]); }
+  out += '<polygon points="' + pts(P) + '" class="s1 edge"/>';
+  P.forEach(function (p) { out += line(110, 110, p[0], p[1], "dash"); });
+  [60, 180, 300].forEach(function (a) { var r = a * Math.PI / 180; out += tx(110 + 36 * Math.sin(r), 115 - 36 * Math.cos(r), "120°", "b"); });
+  return svg(W, 200, out + side(["3 corners look exactly alike", "Full turn 360° ÷ 3 = 120°", "Turn 120° → same triangle"], 240, 70), "equilateral triangle rotation");
+})();
+V[55] = svg(W, 190, rect(20, 70, 108, 108, 1) + tx(74, 62, "6 cm", "b") + rect(160, 34, 144, 144, 1) + tx(232, 26, "8 cm", "b") + side(["P = 4 × 6 = 24", "P = 4 × 8 = 32", "24 : 32 = 3 : 4"], 340, 80), "two squares");
+V[57] = svg(W, 190, '<polygon points="30,150 190,150 230,50 70,50" class="s1 edge"/><circle cx="130" cy="100" r="5" class="dotk"/>' + side(["Half turn (180°) about the dot: same ✓", "Fold along any line: no match ✗", "Rotation yes, mirror line no"], 255, 70), "parallelogram symmetry");
+V[58] = bar([["80 km/h", rep(10, [1, "80", 1])], ["200 km/h", rep(4, [2.5, "200", 2])]], "Each block is one hour of driving. Both rows are 800 km. To fit 800 km into 4 blocks, each must be 200 km. Increase = 200 − 80 = 120.");
+V[65] = bar([["a : b", [[9, "a = 9", 1], [12, "b = 12", 2]]], ["b : c", [[12, "b = 12", 2], [14, "c = 14", 1]]]], "Make b the same in both (12): 3 : 4 = 9 : 12 and 6 : 7 = 12 : 14. So a : b : c = 9 : 12 : 14.");
+V[75] = bar([["4 people", [[8, "8 legs", 1]]], ["8 dogs", [[32, "32 legs", 2]]]], "2 × 4 + 4 × 8 = 8 + 32 = 40 legs.");
+V[80] = bar([["1 whole", [[1, "½", 1], [1, "½", 1]]]], "Every whole has 2 halves. So 778 wholes have 778 × 2 = 1556 halves.");
+V[82] = svg(W, 210, '<polygon points="30,165 120,195 230,165 130,25" class="s1"/>' + line(30, 165, 230, 165, "dash") + line(130, 25, 30, 165, "ln") + line(130, 25, 120, 195, "ln") + line(130, 25, 230, 165, "ln") + line(30, 165, 120, 195, "ln") + line(120, 195, 230, 165, "ln") + side(["4 faces, every face a triangle", "The base is a triangle too", "= triangular pyramid"], 270, 80), "tetrahedron");
+V[85] = boxes(["CM", "LXX", "IX"], [], "CM = 1000 − 100 = 900. LXX = 50 + 10 + 10 = 70. IX = 10 − 1 = 9. Together: CMLXXIX.", 3);
+V[86] = nline(0, 5, [[0, "0"], [1, "1"], [2, "2"], [3, "3"], [4, "4"], [5, "5"]], [0], "Whole numbers start at 0. The number before 0 would be −1, which is not a whole number.");
+V[87] = bar([["First = 16", rep(2, [1, "8", 1])], ["Second = 24", rep(3, [1, "8", 2])]], "LCM of 2 blocks and 3 blocks is 6 blocks = 48, so 1 block = 8. Sum = 5 blocks = 40.");
+V[89] = bar([["30 litres", [[7.667, "friend 7⅔", 0], [5.4, "family 5⅖", 0], [16.933, "left 16 14/15", 2]]]], "Given away: 7⅔ + 5⅖ = 13 1/15. Left: 30 − 13 1/15 = 16 14/15 litres.");
+V[90] = bar([["Smaller 14", [[1, "7", 1], [1, "7", 1], [1, "+7", 2]]], ["Larger 28", rep(4, [1, "7", 1]).concat([[1, "+7", 2]])]], "1 block = 7. Adding 7 adds one block to each: 3 blocks : 5 blocks = 3 : 5.");
+V[91] = poly(5, "sides", ["Regular pentagon, side 7 m", "Once around = 5 × 7 = 35 m", "35 ÷ 5 m per minute = 7 min"]);
+V[92] = svg(W, 196, '<polygon points="10,110 110,110 110,40 10,40" class="s1 edge"/><polygon points="140,110 250,110 175,40" class="s1 edge"/><polygon points="280,110 390,110 365,40 305,40" class="s1 edge"/><polyline points="420,110 420,40 510,40 510,110" class="ac"/>' + tx(60, 134, "closed ✓") + tx(195, 134, "closed ✓") + tx(335, 134, "closed ✓") + tx(465, 134, "open ✗", "b") + cap("Perimeter means all the way round. The open figure has a gap, so it has no “all the way round”.", 162).svg, "closed and open figures");
+V[96] = bar([["Correct ×5/3", [[25, "25", 1]]], ["Wrong ×3/5", [[9, "9", 2], [16, "error 16", 4]]]], "Try the number 15: correct = 25, wrong = 9. The error is 16 out of 25 = 64%.");
+V[101] = bar([["282 runs", [[32, "32", 0], [250, "still needed: 250 in 40 overs", 2]]]], "10 overs × 3.2 = 32 runs scored. 250 ÷ 40 = 6.25 runs per over.");
+V[103] = bar([["Still water", [[13, "boat 13", 1]]], ["Downstream", [[13, "boat 13", 1], [4, "+4", 2]]]], "The stream pushes the boat: 13 + 4 = 17 km/h. 68 ÷ 17 = 4 hours.");
+V[105] = rectBox("6.5 cm", "5.5 cm", 143, 121, ["11 parts = 5.5 → 1 part = 0.5", "13 parts = 6.5", "P = 2 × (6.5 + 5.5) = 24 cm"]);
+V[107] = bar([["M now", [[5, "15", 1]]], ["N now", [[3, "9", 1]]], ["M in 6 yrs", [[5, "15", 1], [2, "+6", 2]]], ["N in 6 yrs", [[3, "9", 1], [2, "+6", 2]]]], "1 part = 3 years, so 6 years = 2 parts. 5 + 2 : 3 + 2 = 7 : 5 ✓. Sum now = 15 + 9 = 24.");
+V[112] = poly(9, "sides", ["Each side 7.5 cm", "Sides = 67.5 ÷ 7.5", "= 9 sides"]);
+V[116] = svg(W, 254, '<polygon points="30,170 190,170 110,40" class="s1 edge"/><polygon points="300,170 460,170 380,40" class="s1 edge"/>' + line(30, 170, 190, 170, "ac") + line(300, 170, 460, 170, "ac") + tx(22, 190, "P", "b") + tx(198, 190, "Q", "b") + tx(110, 30, "R", "b") + tx(292, 190, "X", "b") + tx(468, 190, "Y", "b") + tx(380, 30, "Z", "b") + cap("Match the letters in order: P↔X, Q↔Y, R↔Z. The blue sides PQ and XY match. ZY matches QR, so “PQ = ZY” is wrong.", 218).svg, "matching triangles");
+V[119] = svg(W, 200, '<polygon points="40,170 200,170 260,60 100,60" class="s1 edge"/>' + line(100, 60, 100, 170, "dash") + '<polyline points="100,156 114,156 114,170" class="ln"/>' + tx(108, 120, "h = 7", "b", "start") + tx(120, 190, "side = 5", "b") + side(["Area = side × height", "35 = side × 7 → side = 5", "Perimeter = 4 × 5 = 20 cm"], 285, 80), "rhombus with height");
+V[121] = nline(10, 50, [[10, "10"], [20, "20"], [30, "30"], [40, "40"], [50, "50"]], [2], "Evenly spaced numbers balance around the middle, so the mean is 30.");
+V[122] = bar([["50 balls", [[12, "red 12", 0], [10, "blue 10", 2], [21, "green 21", 0], [7, "white 7", 0]]]], "Blue is 10 of the 50 balls → 10/50 = 1/5.");
+V[126] = boxes(["2", "2", "2", "3", "3", "3", "5", "5", "5"], [1, 2, 5, 7, 8], "White: 90 = 2 × 3 × 3 × 5. Yellow: what A must add so every prime comes in threes. A = 2 × 2 × 3 × 5 × 5 = 300.", 9);
+V[131] = bar([["A = 100", rep(5, [1, "20", 1])], ["B = 40", rep(2, [1, "20", 2])]], "20% of A is one block of 20. That is 50% (half) of B, so B is 2 blocks = 40, which is 40% of A.");
+V[132] = bar([["x", rep(4, [1, "20", 1])], ["125% of x", rep(4, [1, "20", 1]).concat([[1, "20", 2]])]], "125% is 5 quarters = 100, so 1 quarter = 20 and x = 4 quarters = 80.");
+V[133] = bar([["Cost of 1 kg", [[250, "Rs 250", 0]]], ["Sale of 1 kg", [[200, "20 × Rs 10 = 200", 1], [50, "loss 50", 4]]]], "1 kg = 20 lots of 50 g = Rs 200. Loss 50 on 250 = 20%.");
+V[134] = bar([["Cost of 320", [[320, "Rs 320", 1]]], ["Sale of 320", [[320, "Rs 320", 1], [80, "gain 80", 2]]]], "320 mangoes sell for what 400 cost. Gain 80 on 320 = 25%.");
+V[135] = bar([["Start", [[1, "sum", 0]]], ["15 years", [[1, "sum", 0], [1, "int", 2], [1, "int", 2]]], ["30 years", [[1, "sum", 0]].concat(rep(4, [1, "int", 2]))]], "Tripled = sum + 2 lots of interest in 15 years. 5 times needs 4 lots → 30 years.");
+V[140] = nline(70, 87.5, [[70, "A: 70"], [84, "all: 84"], [87.5, "B + C: 87.5"]], [1], "84 is 14 above A and 3.5 below B + C. The students split the other way round: A : (B + C) = 3.5 : 14 = 1 : 4, so A = 20.");
+V[142] = bar([["Harsha 40", [[30, "30", 1], [10, "−10", 4]]], ["Ritu 60", [[50, "50", 1], [10, "−10", 4]]]], "10 years ago they were 30 and 50. 30 : 50 = 3 : 5 ✓.");
+V[144] = bar([["Before", [[30, "30 kg at Rs 20", 1]]], ["After", [[30, "30 kg", 1], [10, "+10 kg", 2]]]], "Rs 600 bought 30 kg, now 40 kg. New price = 600 ÷ 40 = Rs 15 per kg.");
+V[146] = bar([["Start", [[100, "100", 0]]], ["Seller 1", [[100, "100", 0], [20, "+20", 1]]], ["Seller 2", [[120, "120", 0], [30, "+30", 1]]], ["Seller 3", [[150, "150", 0], [30, "+30", 2]]]], "Start at 100. +20% → 120, +25% → 150. It must reach 180, so seller 3 adds 30 on 150 = 20%.");
+V[147] = bar([["At 5%", [[800, "800", 0], [120, "+120", 1]]], ["At 10%", [[800, "800", 0], [120, "+120", 1], [120, "+120", 2]]]], "5% for 3 years earns 120. Double the rate, double the interest: 240. Amount = 1040.");
+V[148] = bar([["Rs 770", [[550, "sum 550", 1], [220, "interest 220", 2]]]], "10% for 4 years = 40% interest. 550 + 40% of 550 (220) = 770.");
+V[149] = bar([["2x = 18", rep(2, [1, "9", 1])], ["3x = 27", rep(3, [1, "9", 2])]], "LCM = 6 blocks = 54, so 1 block = 9. Sum = 5 blocks = 45.");
+V[150] = bar([["4x = 64", rep(4, [1, "16", 1])], ["5x = 80", rep(5, [1, "16", 2])]], "The common block is the HCF, 16. Sum = 9 blocks = 144.");
+V[151] = nline(995, 1040, [[999, "999 = 37 × 27"], [1000, "1000"], [1036, "1036 = 37 × 28"]], [2], "1000 is just past 999. The next multiple of 37 is 1036, so add 36.");
+V[158] = bar([["B", [[100, "B = 100", 0]]], ["A", [[100, "100", 0], [24, "+24", 2]]]], "The yellow 24 compared with A’s 124 = 24/124 = 600/31 %.");
+V[161] = bar([["25%", [[25, "40", 1], [75, "", 4]]], ["60%", [[60, "96", 2], [40, "", 4]]]], "25% = 40, so 5% = 8 and 60% = 12 × 8 = 96. The whole number is 160.");
+V[164] = bar([["After 8 yrs", [[100, "sum 100", 0]].concat(rep(8, [12.5, "", 2]))]], "Doubling means 100 of interest in 8 years: 8 yellow pieces of 12.5. Rate = 12.5% a year.");
+V[166] = bar([["Cost 50000", [[90, "sold for 45000", 1], [10, "loss", 4]]]], "10% loss = 5000. Selling price = 50000 − 5000 = 45000.");
+V[169] = boxes(["2", "2", "3", "3", "5", "5"], [3, 5], "White: 60 = 2 × 2 × 3 × 5. Give every prime a partner (yellow 3 and 5): 2 × 2 × 3 × 3 × 5 × 5 = 900 = 30 × 30.", 6);
+V[173] = bar([["Distance", [[80, "2 h: 80 km", 1], [180, "3 h: 180 km", 2]]]], "260 km in 5 hours → 52 km/h. Not 50: he spends longer at the faster speed.");
+V[174] = bar([["List", [[16000, "16000", 0]]], ["−10%", [[14400, "14400", 1], [1600, "", 4]]], ["−5%", [[13680, "13680", 2], [720, "", 4]]]], "The second discount is on the new price: 10% off 16000 = 14400, then 5% off 14400 = 13680.");
+V[184] = bar([["Now", [[20000, "20000", 0]]], ["Year 1", [[20000, "20000", 0], [2000, "+10%", 1]]], ["Year 2", [[22000, "22000", 0], [2200, "+10%", 2]]]], "The 10% of year 2 is taken on 22000, so it grows by 2200: 24200.");
+V[185] = bar([["100 students", [[60, "boys 60", 1], [40, "girls 40", 1]]], ["Passed", [[42, "42", 2], [18, "", 4], [32, "32", 2], [8, "", 4]]]], "70% of 60 boys = 42, 80% of 40 girls = 32. 42 + 32 = 74 out of 100 = 74%.");
+V[186] = V[96];
+V[187] = bar([["Cost of 12", [[12, "Rs 12", 1]]], ["Sale of 12", [[12, "Rs 12", 1], [3, "gain 3", 2]]]], "12 items sell for what 15 cost. Gain 3 on 12 = 25%.");
+V[193] = bar([["A : B", [[8, "A = 8", 1], [12, "B = 12", 2]]], ["B : C", [[12, "B = 12", 2], [15, "C = 15", 1]]]], "Make B = 12 in both: 2 : 3 = 8 : 12 and 4 : 5 = 12 : 15. So A : C = 8 : 15.");
+V[195] = pct(30, ["250 cut into 100 squares", "1 square = 2.5", "75 ÷ 2.5 = 30 squares = 30%"]);
 })();
 
 </script>
