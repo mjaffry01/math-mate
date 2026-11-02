@@ -292,6 +292,25 @@ article.q.show ol.opts li.correct .letter { color: inherit; }
 }
 .hint h4 { font-family: var(--display); font-size: 0.98rem; margin: 0 0 4px; }
 .hint p { margin: 0; max-width: 70ch; }
+article.q .num .pg {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+section.page > h2 .tnum {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.6em;
+  height: 1.6em;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 0.95rem;
+}
 article.q .num .badge { display: block; font-size: 1.2rem; margin-top: 8px; letter-spacing: 0; }
 .progress-row { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; width: 100%; font-size: 0.9rem; color: var(--muted); }
 button.linkbtn {
@@ -432,7 +451,7 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
 
 <header class="top">
   <h1>Math Mate: 200 practice questions</h1>
-  <p>Questions 1 to 200 from the Math Mate workbook, pages 38 to 53. Each question has four options.</p>
+  <p>Questions 1 to 200 from the Math Mate workbook (pages 38 to 53), grouped into 16 topics so you can practise one kind of question at a time. Each question keeps its book number, and the small “p.” under it is the book page.</p>
   <p><b>Try it yourself first.</b> Tap the option you think is right. If it is wrong, a <b>💡 Hint</b> appears, so have another go. Wrong again? The full solution opens and you can learn how to do it.</p>
   <p>Stuck before you answer? Tap <b>💡 Hint</b>. After the hint you can also open the full solution: what is given, what to find, the rule, the classroom method with every calculation, and a check.</p>
   <p>Your results are saved on this device: ⭐ right on the first try, 💡 right after a hint, 📖 needed the solution.</p>
@@ -448,7 +467,7 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
       <input id="search" type="search" placeholder="Word or question number" autocomplete="off">
     </div>
     <div class="field mobile-only">
-      <label for="jump">Go to page</label>
+      <label for="jump">Go to topic</label>
       <select id="jump"></select>
     </div>
     <label class="check"><input id="flagged" type="checkbox"> Show flagged only</label>
@@ -461,8 +480,8 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
 </div>
 
 <div class="shell">
-  <nav class="rail" aria-label="Book pages">
-    <h2>Book pages</h2>
+  <nav class="rail" aria-label="Topics">
+    <h2>Topics</h2>
     <ul id="rail"></ul>
   </nav>
   <main id="questions"></main>
@@ -3082,29 +3101,57 @@ emptyEl.hidden = true;
 emptyEl.textContent = "No questions match. Clear the search or turn off “Show flagged only”.";
 main.appendChild(emptyEl);
 
-PAGES.forEach(function (p, i) {
-  var start = p[0];
-  var end = (i + 1 < PAGES.length ? PAGES[i + 1][0] - 1 : 200);
-  var pageNo = p[1];
+/* Topics: [name, id, question numbers] */
+var TOPICS = [
+  ["Number System & Arithmetic", "number", [2, 3, 5, 17, 18, 26, 40, 43, 67, 70, 76, 84, 85, 86, 95, 126, 151, 156, 197]],
+  ["Fractions", "fractions", [4, 16, 19, 21, 38, 52, 54, 68, 74, 80, 89, 113, 115, 154]],
+  ["Percentages", "percentages", [1, 22, 23, 24, 27, 30, 32, 39, 44, 45, 53, 96, 97, 131, 132, 138, 143, 144, 155, 157, 158, 161, 167, 172, 184, 185, 186, 195]],
+  ["Ratio, Proportion & Ages", "ratio", [14, 49, 63, 64, 65, 66, 90, 107, 129, 130, 141, 142, 160, 180, 181, 182, 183, 193]],
+  ["Profit, Loss & Discount", "profit", [62, 73, 133, 134, 145, 146, 153, 166, 174, 187]],
+  ["Simple Interest", "interest", [59, 135, 136, 147, 148, 164]],
+  ["Averages & Statistics", "averages", [31, 46, 60, 61, 93, 101, 121, 123, 124, 128, 139, 140, 163, 190, 192]],
+  ["HCF & LCM", "hcf-lcm", [69, 72, 87, 137, 149, 150, 152, 169, 196]],
+  ["Speed, Time & Distance", "speed", [29, 58, 91, 98, 103, 104, 127, 162, 173, 194]],
+  ["Time & Work", "work", [50, 99, 100, 159, 168]],
+  ["Algebra & Number Puzzles", "algebra", [11, 12, 13, 28, 33, 47, 48, 75, 83, 88, 94, 108, 114, 125, 178, 179, 198]],
+  ["Geometry: Lines, Angles & Shapes", "geometry", [8, 25, 51, 56, 57, 81, 82, 110, 116, 117, 176, 177, 199]],
+  ["Perimeter, Area & Circles", "area", [6, 7, 15, 42, 55, 92, 105, 106, 112, 118, 119, 120, 175, 188]],
+  ["Probability & Counting", "probability", [9, 10, 20, 78, 109, 111, 122, 171, 189, 191, 200]],
+  ["Clocks, Calendar & Directions", "clocks", [35, 71, 79, 102, 165, 170]],
+  ["Reasoning & Series", "reasoning", [34, 36, 37, 41, 77]]
+];
+var QBYN = {};
+Q.forEach(function (q) { QBYN[q[0]] = q; });
+function pageOf(n) {
+  var pg = PAGES[0][1];
+  PAGES.forEach(function (p) { if (n >= p[0]) pg = p[1]; });
+  return pg;
+}
 
+TOPICS.forEach(function (tp, ti) {
   var sec = document.createElement("section");
   sec.className = "page";
-  sec.id = "page-" + pageNo;
+  sec.id = "topic-" + tp[1];
   var h = document.createElement("h2");
-  h.innerHTML = "Page " + pageNo + " <small>Questions " + start + " to " + end + "</small>";
+  h.innerHTML = '<span class="tnum">' + (ti + 1) + "</span> " + tp[0] + " <small>" + tp[2].length + " questions</small>";
   sec.appendChild(h);
 
-  Q.filter(function (q) { return q[0] >= start && q[0] <= end; }).forEach(function (q) {
+  tp[2].map(function (k) { return QBYN[k]; }).forEach(function (q) {
     var art = document.createElement("article");
     art.className = "q";
     art.id = "q" + q[0];
     art.dataset.n = q[0];
     art.dataset.flag = q[3] || 0;
-    art.dataset.text = (q[1] + " " + (q[2] || []).join(" ")).replace(/<[^>]+>/g, "").toLowerCase();
+    art.dataset.text = (q[1] + " " + (q[2] || []).join(" ") + " " + tp[0]).replace(/<[^>]+>/g, "").toLowerCase();
 
     var num = document.createElement("div");
     num.className = "num";
     num.textContent = q[0];
+    var pg = document.createElement("span");
+    pg.className = "pg";
+    pg.textContent = "p. " + pageOf(q[0]);
+    pg.title = "Book page " + pageOf(q[0]);
+    num.appendChild(pg);
     var bdg = document.createElement("span");
     bdg.className = "badge";
     num.appendChild(bdg);
@@ -3257,12 +3304,12 @@ PAGES.forEach(function (p, i) {
   main.insertBefore(sec, emptyEl);
 
   var li = document.createElement("li");
-  li.innerHTML = '<a href="#page-' + pageNo + '">Page ' + pageNo + ' <span>' + start + '–' + end + '</span></a>';
+  li.innerHTML = '<a href="#' + sec.id + '">' + tp[0] + ' <span>' + tp[2].length + '</span></a>';
   rail.appendChild(li);
 
   var op = document.createElement("option");
-  op.value = "page-" + pageNo;
-  op.textContent = "Page " + pageNo + " (questions " + start + " to " + end + ")";
+  op.value = sec.id;
+  op.textContent = (ti + 1) + ". " + tp[0] + " (" + tp[2].length + ")";
   jump.appendChild(op);
 });
 
