@@ -312,6 +312,25 @@ section.page > h2 .tnum {
   font-size: 0.95rem;
 }
 article.q .num .badge { display: block; font-size: 1.2rem; margin-top: 8px; letter-spacing: 0; }
+.seg {
+  display: inline-flex;
+  border: 1.5px solid var(--accent);
+  border-radius: 9px;
+  overflow: hidden;
+}
+.seg button {
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--accent);
+  background: var(--surface);
+  border: none;
+  padding: 8px 14px;
+  min-height: 42px;
+  cursor: pointer;
+}
+.seg button + button { border-left: 1.5px solid var(--accent); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
 .progress-row { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; width: 100%; font-size: 0.9rem; color: var(--muted); }
 button.linkbtn {
   font: inherit;
@@ -451,7 +470,7 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
 
 <header class="top">
   <h1>Math Mate: 200 practice questions</h1>
-  <p>Questions 1 to 200 from the Math Mate workbook (pages 38 to 53), grouped into 16 topics so you can practise one kind of question at a time. Each question keeps its book number, and the small “p.” under it is the book page.</p>
+  <p>Questions 1 to 200 from the Math Mate workbook (pages 38 to 53). Choose <b>1, 2, 3 …</b> to go through them in book order, or <b>By topic</b> to practise one kind of question at a time (16 topics). Each question keeps its book number, and the small “p.” under it is the book page.</p>
   <p><b>Try it yourself first.</b> Tap the option you think is right. If it is wrong, a <b>💡 Hint</b> appears, so have another go. Wrong again? The full solution opens and you can learn how to do it.</p>
   <p>Stuck before you answer? Tap <b>💡 Hint</b>. After the hint you can also open the full solution: what is given, what to find, the rule, the classroom method with every calculation, and a check.</p>
   <p>Your results are saved on this device: ⭐ right on the first try, 💡 right after a hint, 📖 needed the solution.</p>
@@ -462,12 +481,16 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
 
 <div class="toolbar">
   <div class="toolbar-inner">
+    <div class="seg" id="order" role="group" aria-label="Order of questions">
+      <button type="button" data-mode="number" aria-pressed="true">1, 2, 3 …</button>
+      <button type="button" data-mode="topic" aria-pressed="false">By topic</button>
+    </div>
     <div class="field">
       <label for="search">Search</label>
       <input id="search" type="search" placeholder="Word or question number" autocomplete="off">
     </div>
     <div class="field mobile-only">
-      <label for="jump">Go to topic</label>
+      <label for="jump" id="jumpLabel">Go to page</label>
       <select id="jump"></select>
     </div>
     <label class="check"><input id="flagged" type="checkbox"> Show flagged only</label>
@@ -480,8 +503,8 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
 </div>
 
 <div class="shell">
-  <nav class="rail" aria-label="Topics">
-    <h2>Topics</h2>
+  <nav class="rail" aria-label="Sections">
+    <h2 id="railTitle">Book pages</h2>
     <ul id="rail"></ul>
   </nav>
   <main id="questions"></main>
@@ -3120,29 +3143,23 @@ var TOPICS = [
   ["Clocks, Calendar & Directions", "clocks", [35, 71, 79, 102, 165, 170]],
   ["Reasoning & Series", "reasoning", [34, 36, 37, 41, 77]]
 ];
-var QBYN = {};
-Q.forEach(function (q) { QBYN[q[0]] = q; });
+var TOPIC_OF = {};
+TOPICS.forEach(function (tp) { tp[2].forEach(function (k) { TOPIC_OF[k] = tp[0]; }); });
 function pageOf(n) {
   var pg = PAGES[0][1];
   PAGES.forEach(function (p) { if (n >= p[0]) pg = p[1]; });
   return pg;
 }
 
-TOPICS.forEach(function (tp, ti) {
-  var sec = document.createElement("section");
-  sec.className = "page";
-  sec.id = "topic-" + tp[1];
-  var h = document.createElement("h2");
-  h.innerHTML = '<span class="tnum">' + (ti + 1) + "</span> " + tp[0] + " <small>" + tp[2].length + " questions</small>";
-  sec.appendChild(h);
-
-  tp[2].map(function (k) { return QBYN[k]; }).forEach(function (q) {
+/* Build every question card once; layout() then places them in number order or by topic */
+var ART = {};
+Q.forEach(function (q) {
     var art = document.createElement("article");
     art.className = "q";
     art.id = "q" + q[0];
     art.dataset.n = q[0];
     art.dataset.flag = q[3] || 0;
-    art.dataset.text = (q[1] + " " + (q[2] || []).join(" ") + " " + tp[0]).replace(/<[^>]+>/g, "").toLowerCase();
+    art.dataset.text = (q[1] + " " + (q[2] || []).join(" ") + " " + TOPIC_OF[q[0]]).replace(/<[^>]+>/g, "").toLowerCase();
 
     var num = document.createElement("div");
     num.className = "num";
@@ -3299,19 +3316,81 @@ TOPICS.forEach(function (tp, ti) {
     if (panel) body.appendChild(panel);
 
     art.appendChild(body);
-    sec.appendChild(art);
-  });
-  main.insertBefore(sec, emptyEl);
-
-  var li = document.createElement("li");
-  li.innerHTML = '<a href="#' + sec.id + '">' + tp[0] + ' <span>' + tp[2].length + '</span></a>';
-  rail.appendChild(li);
-
-  var op = document.createElement("option");
-  op.value = sec.id;
-  op.textContent = (ti + 1) + ". " + tp[0] + " (" + tp[2].length + ")";
-  jump.appendChild(op);
+    ART[q[0]] = art;
 });
+
+var MKEY = "mathmate-order-v1";
+var modeBtns = document.querySelectorAll("#order button");
+
+function groupsFor(mode) {
+  if (mode === "topic") {
+    return TOPICS.map(function (tp, ti) {
+      return {
+        id: "topic-" + tp[1],
+        title: '<span class="tnum">' + (ti + 1) + "</span> " + tp[0],
+        small: tp[2].length + " questions",
+        nav: tp[0],
+        navNum: tp[2].length,
+        opt: (ti + 1) + ". " + tp[0] + " (" + tp[2].length + ")",
+        qs: tp[2]
+      };
+    });
+  }
+  return PAGES.map(function (p, i) {
+    var start = p[0], end = (i + 1 < PAGES.length ? PAGES[i + 1][0] - 1 : 200), qs = [];
+    for (var k = start; k <= end; k++) qs.push(k);
+    return {
+      id: "page-" + p[1],
+      title: "Page " + p[1],
+      small: "Questions " + start + " to " + end,
+      nav: "Page " + p[1],
+      navNum: start + "–" + end,
+      opt: "Page " + p[1] + " (questions " + start + " to " + end + ")",
+      qs: qs
+    };
+  });
+}
+
+function layout(mode) {
+  main.querySelectorAll("section.page").forEach(function (s) { s.remove(); });
+  rail.innerHTML = "";
+  jump.innerHTML = "";
+  groupsFor(mode).forEach(function (g) {
+    var sec = document.createElement("section");
+    sec.className = "page";
+    sec.id = g.id;
+    var h = document.createElement("h2");
+    h.innerHTML = g.title + " <small>" + g.small + "</small>";
+    sec.appendChild(h);
+    g.qs.forEach(function (k) { sec.appendChild(ART[k]); });
+    main.insertBefore(sec, emptyEl);
+
+    var li = document.createElement("li");
+    li.innerHTML = '<a href="#' + g.id + '">' + g.nav + ' <span>' + g.navNum + '</span></a>';
+    rail.appendChild(li);
+
+    var op = document.createElement("option");
+    op.value = g.id;
+    op.textContent = g.opt;
+    jump.appendChild(op);
+  });
+  document.getElementById("railTitle").textContent = mode === "topic" ? "Topics" : "Book pages";
+  document.getElementById("jumpLabel").textContent = mode === "topic" ? "Go to topic" : "Go to page";
+  modeBtns.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.mode === mode ? "true" : "false"); });
+  try { localStorage.setItem(MKEY, mode); } catch (e) {}
+  applyFilter();
+}
+
+modeBtns.forEach(function (b) {
+  b.addEventListener("click", function () {
+    if (b.getAttribute("aria-pressed") === "true") return;
+    layout(b.dataset.mode);
+    main.scrollIntoView();
+  });
+});
+var startMode = "number";
+try { if (localStorage.getItem(MKEY) === "topic") startMode = "topic"; } catch (e) {}
+layout(startMode);
 
 jump.addEventListener("change", function () {
   var el = document.getElementById(jump.value);
