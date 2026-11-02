@@ -25,6 +25,7 @@
   --blur-ink: #7a1d12;
   --bar: #f9fbfd;
   --panel: #eef3ff;
+  --soft: #d3dfff;
   color-scheme: light;
   --display: "Bricolage Grotesque", "Trebuchet MS", "Segoe UI", sans-serif;
   --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -50,6 +51,7 @@
     --blur-ink: #ffb4aa;
     --bar: #121c31;
   --panel: #1b2947;
+    --soft: #2b3f6e;
     color-scheme: dark;
   }
 }
@@ -70,6 +72,7 @@
   --blur-ink: #ffb4aa;
   --bar: #121c31;
   --panel: #1b2947;
+  --soft: #2b3f6e;
   color-scheme: dark;
 }
 html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 84px); }
@@ -328,6 +331,27 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
   border-radius: 8px;
   font-weight: 700;
 }
+.viz { display: block; width: 100%; height: auto; margin: 6px 0 2px; }
+.viz text { fill: var(--ink); font-family: var(--body); font-size: 13px; }
+.viz .m { fill: var(--muted); }
+.viz .b { font-weight: 700; }
+.viz .mk { fill: var(--mark-ink); }
+.viz .inv { fill: var(--accent-ink); }
+.viz .s0 { fill: var(--surface); stroke: var(--muted); stroke-width: 1; }
+.viz .s1 { fill: var(--soft); }
+.viz .s2 { fill: var(--mark); }
+.viz .s3 { fill: var(--accent); }
+.viz .s4 { fill: none; stroke: var(--muted); stroke-dasharray: 4 3; }
+.viz .edge { stroke: var(--ink); stroke-width: 2; }
+.viz .vc { fill: var(--soft); fill-opacity: 0.7; stroke: var(--accent); stroke-width: 2; }
+.viz .ln { stroke: var(--ink); stroke-width: 2; fill: none; }
+.viz .ac { stroke: var(--accent); stroke-width: 2.5; fill: none; }
+.viz .dash { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 6 4; fill: none; }
+.viz .hand { stroke: var(--ink); stroke-width: 6; stroke-linecap: round; }
+.viz .hand2 { stroke: var(--accent); stroke-width: 3.5; stroke-linecap: round; }
+.viz .dot { fill: var(--accent); }
+.viz .dotk { fill: var(--ink); }
+.viz .dotm { fill: var(--mark); stroke: var(--ink); stroke-width: 1.5; }
 .solution .trick {
   margin: 4px 0 12px;
   padding: 12px 16px;
@@ -363,6 +387,7 @@ button.ans:hover { background: var(--accent); color: var(--accent-ink); }
   <h1>Math Mate: 200 practice questions</h1>
   <p>Questions 1 to 200 from the Math Mate workbook, pages 38 to 53. Each question has four options.</p>
   <p>Tap <b>Solve</b> on any question to see the full working: what is given, what to find, the rule, the classroom method with every calculation, and a check.</p>
+  <p>Many solutions include a <b>Picture it</b> diagram (bar models, clocks, maps, shapes) so you can see the idea before the numbers.</p>
   <p>Every solution also has an <b>⚡ Exam shortcut</b>: the quick trick to get the answer fast in the exam.</p>
   <p>Questions marked “Check” need to be confirmed against the book. Questions marked “Blurry” could not be read reliably from the photo.</p>
 </header>
@@ -2366,6 +2391,302 @@ T[198]="√132 is between 11 and 12. Try 11 × 12 = 132 ✓.";
 T[199]="Largest = its share × 180: 5/10 × 180 = 90°.";
 T[200]="Use “1 minus”: only TT has no head. 1 − ¼ = ¾.";
 
+/* V[n] = picture for the solution, drawn as inline SVG */
+var V = {};
+(function () {
+var W = 520;
+function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+function f(n) { return Math.round(n * 10) / 10; }
+function tx(x, y, s, cls, anchor) {
+  return '<text x="' + f(x) + '" y="' + f(y) + '"' + (cls ? ' class="' + cls + '"' : "") + ' text-anchor="' + (anchor || "middle") + '">' + esc(s) + "</text>";
+}
+function wrap(s, max) {
+  var lines = [], cur = "";
+  String(s).split(" ").forEach(function (w) {
+    if (cur && (cur + " " + w).length > max) { lines.push(cur); cur = w; } else cur = cur ? cur + " " + w : w;
+  });
+  if (cur) lines.push(cur);
+  return lines;
+}
+function cap(s, y) {
+  var out = "", L = wrap(s, 70);
+  L.forEach(function (l, i) { out += tx(4, y + i * 18, l, "m", "start"); });
+  return { svg: out, h: L.length * 18 };
+}
+function svg(w, h, inner, label) {
+  return '<svg class="viz" viewBox="0 0 ' + w + " " + f(h) + '" style="max-width:' + w + 'px" role="img" aria-label="' + esc(label) + '">' + inner + "</svg>";
+}
+function rect(x, y, w, h, c) { return '<rect x="' + f(x) + '" y="' + f(y) + '" width="' + f(Math.max(w, 1)) + '" height="' + f(h) + '" rx="5" class="s' + c + '"/>'; }
+function line(x1, y1, x2, y2, cls) { return '<line x1="' + f(x1) + '" y1="' + f(y1) + '" x2="' + f(x2) + '" y2="' + f(y2) + '" class="' + cls + '"/>'; }
+function side(lines, x, y0) {
+  var out = "";
+  lines.forEach(function (l, i) { out += tx(x, y0 + i * 24, l, i === lines.length - 1 ? "b" : "", "start"); });
+  return out;
+}
+var INK = { 2: "mk", 3: "inv" };
+
+/* Bar model: rows = [label, [[size, text, colour 0-4], ...]] */
+function bar(rows, c) {
+  var LW = 0, max = 0;
+  rows.forEach(function (r) {
+    var t = 0;
+    LW = Math.max(LW, r[0].length * 7.5 + 12);
+    r[1].forEach(function (s) { t += s[0]; });
+    max = Math.max(max, t);
+  });
+  var k = (W - LW - 4) / max, h = 34, y = 4, out = "";
+  rows.forEach(function (r) {
+    out += tx(LW - 8, y + h / 2 + 5, r[0], "b", "end");
+    var x = LW;
+    r[1].forEach(function (s) {
+      var w = s[0] * k, cc = s[2] || 0;
+      out += rect(x + 1, y, w - 2, h, cc);
+      if (s[1]) out += tx(x + w / 2, y + h / 2 + 5, s[1], INK[cc]);
+      x += w;
+    });
+    y += h + 10;
+  });
+  if (c) { var cp = cap(c, y + 10); out += cp.svg; y += cp.h + 4; }
+  return svg(W, y + 4, out, c || "bar model");
+}
+
+/* Row(s) of boxes, highlighted ones in yellow */
+function boxes(items, hi, c, cols, bh) {
+  cols = cols || Math.min(items.length, 10);
+  bh = bh || 36;
+  var bw = Math.min(64, Math.floor((W - 4) / cols)), out = "", rowsN = Math.ceil(items.length / cols);
+  items.forEach(function (it, i) {
+    var x = 2 + (i % cols) * bw, y = 2 + Math.floor(i / cols) * (bh + 6), on = hi.indexOf(i) >= 0;
+    out += rect(x, y, bw - 6, bh, on ? 2 : 0) + tx(x + (bw - 6) / 2, y + bh / 2 + 5, it, on ? "mk b" : "");
+  });
+  var y = 2 + rowsN * (bh + 6);
+  if (c) { var cp = cap(c, y + 14); out += cp.svg; y += cp.h + 10; }
+  return svg(W, y + 4, out, c || "boxes");
+}
+function grid(max, test, c) {
+  var items = [], hi = [];
+  for (var i = 1; i <= max; i++) { items.push(i); if (test(i)) hi.push(i - 1); }
+  return boxes(items, hi, c, 10, 26);
+}
+
+/* Number line: pts = [[value, label], ...], hi = indexes to highlight */
+function nline(min, max, pts, hi, c) {
+  var x0 = 40, x1 = W - 40, k = (x1 - x0) / (max - min), y = 50, out = line(x0 - 20, y, x1 + 20, y, "ln");
+  pts.forEach(function (p, i) {
+    var x = x0 + (p[0] - min) * k, on = hi.indexOf(i) >= 0;
+    out += '<circle cx="' + f(x) + '" cy="' + y + '" r="' + (on ? 7 : 5) + '" class="' + (on ? "dotm" : "dot") + '"/>';
+    out += tx(x, i % 2 ? y + 28 : y - 16, p[1], on ? "b" : "");
+  });
+  var yy = y + 44;
+  if (c) { var cp = cap(c, yy + 10); out += cp.svg; yy += cp.h + 6; }
+  return svg(W, yy + 4, out, c || "number line");
+}
+
+/* Clock face with the angle between the hands shaded */
+function clock(h, m, reflex) {
+  var cx = 100, cy = 100, out = '<circle cx="100" cy="100" r="88" class="s0"/>';
+  function pt(a, r) { a = a * Math.PI / 180; return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; }
+  for (var i = 1; i <= 12; i++) { var p = pt(i * 30, 72); out += tx(p[0], p[1] + 5, i, "m"); }
+  var ha = (h % 12) * 30 + m * 0.5, ma = m * 6, lo = Math.min(ha, ma), d = Math.max(ha, ma) - lo;
+  var small = d <= 180 ? d : 360 - d, from, span;
+  if ((d <= 180) !== !!reflex) { from = lo; span = d; } else { from = lo + d; span = 360 - d; }
+  var a = pt(from, 38), b = pt(from + span, 38);
+  out += '<path d="M100 100 L' + f(a[0]) + " " + f(a[1]) + " A38 38 0 " + (span > 180 ? 1 : 0) + " 1 " + f(b[0]) + " " + f(b[1]) + ' Z" class="s2"/>';
+  var hp = pt(ha, 46), mp = pt(ma, 68);
+  out += line(100, 100, hp[0], hp[1], "hand") + line(100, 100, mp[0], mp[1], "hand2") + '<circle cx="100" cy="100" r="4" class="dotk"/>';
+  var L = [h + ":" + (m < 10 ? "0" : "") + m,
+    "Minute hand: " + m + " × 6° = " + ma + "°",
+    "Hour hand: " + h + " × 30° + " + m + " × ½° = " + ha + "°",
+    "Angle between: " + small + "°"];
+  if (reflex) L.push("Reflex: 360° − " + small + "° = " + (360 - small) + "°");
+  out += side(L, 210, 36) + tx(210, 36 + L.length * 24 + 4, "Thick = hour hand, blue = minute hand", "m", "start");
+  return svg(W, 200, out, "clock at " + L[0]);
+}
+
+/* Walking map: moves = [["N"|"S"|"E"|"W", km], ...] */
+function walk(moves, back) {
+  var D = { N: [0, 1], S: [0, -1], E: [1, 0], W: [-1, 0] }, pts = [[0, 0]];
+  moves.forEach(function (mv) { var l = pts[pts.length - 1], d = D[mv[0]]; pts.push([l[0] + d[0] * mv[1], l[1] + d[1] * mv[1]]); });
+  var minx = 0, maxx = 0, miny = 0, maxy = 0;
+  pts.forEach(function (p) { minx = Math.min(minx, p[0]); maxx = Math.max(maxx, p[0]); miny = Math.min(miny, p[1]); maxy = Math.max(maxy, p[1]); });
+  var k = Math.min(300 / Math.max(maxx - minx, 1), 160 / Math.max(maxy - miny, 1));
+  function P(p) { return [90 + (p[0] - minx) * k, 40 + (maxy - p[1]) * k]; }
+  var s = P(pts[0]), e = P(pts[pts.length - 1]), flat = s[1] === e[1], out = "", gx = 0, gy = 0;
+  pts.forEach(function (p) { var q = P(p); gx += q[0] / pts.length; gy += q[1] / pts.length; });
+  if (flat) {
+    out += line(e[0], e[1] + 12, s[0], s[1] + 12, "dash") + tx(e[0] + 4, e[1] + 32, "straight back: " + back, "b", "start");
+  } else {
+    out += line(e[0], e[1], s[0], s[1], "dash") + tx((s[0] + e[0]) / 2 - 14, (s[1] + e[1]) / 2 + 10, "straight back: " + back, "b", "end");
+  }
+  for (var i = 0; i < moves.length; i++) {
+    var a = P(pts[i]), b = P(pts[i + 1]), len = Math.sqrt((b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1]));
+    var ux = (b[0] - a[0]) / len, uy = (b[1] - a[1]) / len, nx = -uy, ny = ux;
+    /* put the label on the side away from the middle of the drawing */
+    if (((a[0] + b[0]) / 2 - gx) * nx + ((a[1] + b[1]) / 2 - gy) * ny < 0) { nx = -nx; ny = -ny; }
+    out += line(a[0], a[1], b[0], b[1], "ac");
+    out += '<polygon points="' + f(b[0]) + "," + f(b[1]) + " " + f(b[0] - 11 * ux + 5 * nx) + "," + f(b[1] - 11 * uy + 5 * ny) + " " + f(b[0] - 11 * ux - 5 * nx) + "," + f(b[1] - 11 * uy - 5 * ny) + '" class="dot"/>';
+    out += tx((a[0] + b[0]) / 2 + nx * 18, (a[1] + b[1]) / 2 + ny * 18 + 5, moves[i][1] + " km " + moves[i][0], "", nx > 0.5 ? "start" : nx < -0.5 ? "end" : "middle");
+  }
+  out += '<circle cx="' + f(s[0]) + '" cy="' + f(s[1]) + '" r="6" class="dotk"/>' + tx(s[0] + 10, s[1] - 8, "Start", "b", "start");
+  out += '<circle cx="' + f(e[0]) + '" cy="' + f(e[1]) + '" r="6" class="dotm"/>' + tx(e[0] - 10, e[1] - 8, "End", "b", "end");
+  out += line(480, 70, 480, 32, "ln") + '<polygon points="480,26 475,36 485,36" class="dotk"/>' + tx(480, 18, "N", "b");
+  return svg(W, 40 + (maxy - miny) * k + 50, out, "walking map");
+}
+
+/* 6 × 6 grid of two dice, sums equal to `sum` highlighted */
+function dice(sum) {
+  var c = 30, out = "", n = 0;
+  for (var i = 0; i <= 6; i++) for (var j = 0; j <= 6; j++) {
+    var x = 10 + j * c, y = 4 + i * c;
+    if (i === 0 && j === 0) continue;
+    if (i === 0 || j === 0) { out += tx(x + c / 2, y + c / 2 + 5, i === 0 ? j : i, "b"); continue; }
+    var on = i + j === sum;
+    if (on) n++;
+    out += rect(x + 1, y + 1, c - 2, c - 2, on ? 2 : 0) + tx(x + c / 2, y + c / 2 + 5, i + j, on ? "mk b" : "m");
+  }
+  out += side(["Rows: first die. Columns: second die.", "Each box shows the sum.", "36 boxes in all.", "Sum " + sum + " in " + n + " boxes", "P = " + n + "/36 = 1/" + (36 / n)], 240, 50);
+  return svg(W, 222, out, "two dice grid");
+}
+
+/* Polygon: all = every pair joined (handshakes), otherwise diagonals in blue */
+function poly(n, all, lines) {
+  var P = [], out = "";
+  for (var i = 0; i < n; i++) { var a = i * 2 * Math.PI / n; P.push([110 + 85 * Math.sin(a), 100 - 85 * Math.cos(a)]); }
+  for (i = 0; i < n; i++) for (var j = i + 1; j < n; j++) {
+    var edge = j === i + 1 || (i === 0 && j === n - 1);
+    out += line(P[i][0], P[i][1], P[j][0], P[j][1], all || !edge ? "ac" : "ln");
+  }
+  P.forEach(function (p) { out += '<circle cx="' + f(p[0]) + '" cy="' + f(p[1]) + '" r="6" class="dotk"/>'; });
+  return svg(W, 200, out + side(lines, 230, 50), lines.join(" "));
+}
+
+function tri(a, b, c3, c) {
+  var out = '<polygon points="40,180 330,180 230,40" class="s1 edge"/>' + tx(56, 170, a, "b", "start") + tx(316, 170, b, "b", "end") + tx(230, 28, c3, "b");
+  var cp = cap(c, 212);
+  return svg(W, 212 + cp.h, out + cp.svg, c);
+}
+function rightTri(b, h, hy, c) {
+  var out = '<polygon points="60,30 60,170 300,170" class="s1 edge"/><polyline points="60,154 76,154 76,170" class="ln"/>' + tx(50, 104, h, "b", "end") + tx(180, 192, b, "b") + tx(190, 92, hy, "b", "start");
+  var cp = cap(c, 222);
+  return svg(W, 222 + cp.h, out + cp.svg, c);
+}
+function strips(n, sideLbl, piece, lines) {
+  var s = 180, x0 = 20, y0 = 26, w = s / n, out = "";
+  for (var i = 0; i < n; i++) out += rect(x0 + i * w + 1, y0, w - 2, s, i === 0 ? 2 : 1);
+  out += tx(x0 + s / 2, 18, sideLbl, "b") + tx(x0 + w / 2, y0 + s + 20, piece, "b");
+  return svg(W, 236, out + side(lines, 235, 60), lines.join(" "));
+}
+function circ(lbl, lines, dia) {
+  var out = '<circle cx="110" cy="105" r="85" class="s1 edge"/>' + line(dia ? 25 : 110, 105, 195, 105, "ac") + '<circle cx="110" cy="105" r="3" class="dotk"/>' + tx(dia ? 110 : 152, 96, lbl, "b");
+  return svg(W, 200, out + side(lines, 215, 60), lines.join(" "));
+}
+function rhombus(d1, d2, c) {
+  var out = '<polygon points="160,20 300,110 160,200 20,110" class="s1 edge"/>' + line(20, 110, 300, 110, "dash") + line(160, 20, 160, 200, "dash") + tx(90, 102, d1, "b") + tx(168, 64, d2, "b", "start");
+  wrap(c, 26).forEach(function (l, i) { out += tx(318, 90 + i * 22, l, "", "start"); });
+  return svg(W, 212, out, c);
+}
+function quad(L, c) {
+  var out = '<polygon points="40,180 340,180 300,40 90,60" class="s1 edge"/>' + tx(58, 170, L[0], "b", "start") + tx(322, 170, L[1], "b", "end") + tx(292, 66, L[2], "b", "end") + tx(102, 84, L[3], "b", "start");
+  var cp = cap(c, 212);
+  return svg(W, 212 + cp.h, out + cp.svg, c);
+}
+function venn(a, ab, b, none, la, lb) {
+  var out = '<circle cx="190" cy="120" r="90" class="vc"/><circle cx="310" cy="120" r="90" class="vc"/>';
+  out += tx(150, 18, la, "b") + tx(350, 18, lb, "b") + tx(140, 125, a) + tx(250, 125, ab, "b") + tx(360, 125, b);
+  var cp = cap(none, 236);
+  return svg(W, 236 + cp.h, out + cp.svg, la + " and " + lb);
+}
+function conc() {
+  var out = "";
+  [0, 40, 90, 135].forEach(function (a) {
+    var r = a * Math.PI / 180, dx = 95 * Math.cos(r), dy = 95 * Math.sin(r);
+    out += line(120 - dx, 100 - dy, 120 + dx, 100 + dy, "ac");
+  });
+  out += '<circle cx="120" cy="100" r="7" class="dotm"/>' + side(["4 lines, 1 common point", "Like spokes of a wheel", "= concurrent lines"], 250, 76);
+  return svg(W, 200, out, "concurrent lines through one point");
+}
+
+V[4] = bar([["Tank", [[1, "¼ empty", 4], [3, "¾ full = 480 ml", 1]]], ["¼ full", [[1, "160 ml", 2], [3, "", 4]]]], "3 equal parts hold 480 ml, so 1 part = 480 ÷ 3 = 160 ml.");
+V[6] = circ("r = 14 cm", ["C = 2 × π × r", "= 2 × 22/7 × 14", "= 2 × 22 × 2", "= 88 cm"]);
+V[7] = strips(4, "10 m", "2.5 m", ["Square area 100 → side 10 m", "4 strips → each 2.5 m wide", "One strip: 10 m × 2.5 m", "Perimeter = 2 × (10 + 2.5) = 25"]);
+V[8] = tri("3 parts = 45°", "5 parts = 75°", "4 parts = 60°", "3 + 4 + 5 = 12 parts = 180°, so 1 part = 15°. Largest − smallest = 2 parts = 30°.");
+V[9] = poly(5, true, ["Small example: 5 people", "Each person joins 4 others", "5 × 4 ÷ 2 = 10 handshakes", "20 people: 20 × 19 ÷ 2 = 190"]);
+V[12] = bar([["Number", [[1, "¼", 1], [1, "¼", 1], [1, "¼", 1], [1, "¼", 0]]], ["½ + ¼", [[3, "3 quarters = 60", 2], [1, "", 4]]]], "3 quarters = 60, so 1 quarter = 20 and the whole number = 4 × 20 = 80.");
+V[13] = bar([["2 mangoes", [[5, "mango 5", 2], [5, "mango 5", 2]]], ["14 grapes", [[14, "14 grapes", 0]]], ["orange + mango", [[9, "orange = 9", 1], [5, "mango 5", 2]]]], "2 mangoes = 10 grapes, so 1 mango = 5 grapes. The orange fills the rest: 14 − 5 = 9.");
+V[15] = strips(3, "12 m", "4 m", ["Each piece: 12 × 4", "Perimeter of one = 2 × 16 = 32", "Three pieces: 3 × 32 = 96"]);
+V[20] = grid(100, function (i) { return String(i).indexOf("4") >= 0; }, "Yellow numbers contain a 4: a full column (4, 14 … 94) and a full row (40 … 49). 44 is in both, and it has two 4s, so 20 fours are written.");
+V[21] = nline(-0.5, 0, [[-0.4545, "−5/11"], [-0.4286, "−3/7"], [-0.2, "−1/5"], [-0.111, "−1/9"], [0, "0"]], [3], "−1/9 sits closest to 0. −3/7 and −5/11 are both near −½.");
+V[23] = bar([["900 pages", [[35, "read 35% = 315", 1], [65, "left 65% = 585", 2]]]], "Work out the left-over part directly: 65% of 900 = 585.");
+V[25] = conc();
+V[26] = boxes(["8", "7", "5", "3", "3", "5", "7", "8"], [2, 5], "Top row: greatest number 8753, the 5 is in the tens place = 50. Bottom row: smallest number 3578, the 5 is in the hundreds place = 500. 500 − 50 = 450.", 4);
+V[27] = bar([["All votes", [[62, "winner 62%", 1], [38, "loser 38%", 0]]], ["Gap", [[24, "24% = 144", 2], [38, "same as loser", 4]]]], "The winner’s extra 24% is the 144-vote margin. 1% = 6 votes, so 100% = 600.");
+V[30] = bar([["B", [[100, "B = 100", 0]]], ["A", [[100, "100", 0], [20, "+20", 2]]]], "The yellow 20 compared with A’s 120 is 20/120 = 1/6 = 16⅔%.");
+V[32] = bar([["Boy", [[25, "boy 25%", 1], [75, "", 4]]], ["Girl", [[50, "girl 50%", 1], [50, "", 4]]], ["Gap", [[25, "", 4], [25, "60 + 40 = 100", 2], [50, "", 4]]]], "From 25% to 50% is 25% of the paper, and that equals 60 + 40 = 100 marks. So 100% = 400.");
+V[33] = bar([["1 set", [[1, "Rs 1", 1], [2, "Rs 2", 2], [5, "Rs 5", 1]]]], "One coin of each kind = Rs 8. 6400 ÷ 8 = 800 sets, so there are 800 Rs 2 coins.");
+V[34] = boxes(["18", "24", "21", "27", "?", "30", "27"], [0, 2, 4, 6], "Yellow: 18, 21, ?, 27 go up by 3, so ? = 24. White: 24, 27, 30 also go up by 3.");
+V[35] = walk([["S", 10], ["W", 5], ["N", 10], ["W", 10]], "15 km");
+V[36] = boxes(["18", "19", "20", "21", "22", "23", "24", "25"], [3], "Brother: after 18, before 22 → 19, 20, 21. Father: after 20, before 25 → 21, 22, 23, 24. Only 21 is in both.");
+V[37] = boxes(["A", "C", "E", "I", "M", "N", "O", "P", "R", "T"], [5], "Letters in A–Z order. Count from the right: T 1, R 2, P 3, O 4, N 5.");
+V[38] = bar([["Drum", [[7, "7/12 left", 1], [2, "15 L", 2], [3, "empty", 4]]]], "¾ = 9/12. The yellow 2/12 = 1/6 is the 15 litres drawn out, so the drum = 6 × 15 = 90 litres.");
+V[39] = bar([["Rs 75000", [[30, "Maint. 30%", 0], [25, "Goods 25%", 0], [15, "Save 15%", 0], [30, "Educ. 30%", 2]]]], "The yellow part is what is left: 100 − 70 = 30%. 30% of 75000 = 22500.");
+V[40] = nline(-130, 0, [[-120, "−120 deepest"], [-100, "−100 start"], [-85, "−85 end"], [0, "sea level"]], [2], "Down 100, down 20 more, then up 35. He ends 85 m below sea level.");
+V[41] = boxes(["Priya", "Swetha", "Richa", "Reeta", "Misha"], [1], "Left end → right end. Priya, Swetha, Richa come first; Reeta sits between Richa and Misha.");
+V[53] = bar([["Old salary", [[100, "100% = 25600", 1]]], ["New salary", [[100, "100%", 1], [25, "+25%", 2]]]], "The new salary is 125% = 32000. 1% = 256, so 100% = 25600.");
+V[56] = poly(5, false, ["Pentagon: 5 corners", "Blue lines are diagonals", "Each corner: 5 − 3 = 2", "5 × 2 ÷ 2 = 5 diagonals"]);
+V[62] = bar([["Cost of 60", [[60, "Rs 60", 1]]], ["Sale of 60", [[60, "Rs 60", 1], [40, "gain Rs 40", 2]]]], "60 books are sold for the cost of 100 (Rs 100). Gain 40 on a cost of 60 = 66⅔%.");
+V[64] = bar([["Sum 56", [[5, "Father 40", 1], [2, "Son 16", 2]]]], "7 parts = 56, so 1 part = 8 years. In 8 years: 48 and 24 → 2 : 1.");
+V[68] = bar([["Number", [[1, "⅕", 4], [1, "⅕", 4], [1, "25", 2], [1, "25", 2], [1, "25", 2]]]], "Taking away ⅖ leaves ⅗ = 75. So ⅕ = 25 and the whole number = 125.");
+V[71] = clock(8, 15);
+V[73] = bar([["SP 32000", [[3, "CP = 3 parts = 24000", 1], [1, "profit 8000", 2]]]], "Profit is ⅓ of CP, so SP = 4 parts. 1 part = 8000, CP = 3 parts = 24000.");
+V[74] = bar([["480 people", [[3, "women 288", 1], [2, "men 192", 0]]], ["288 women", [[5, "married 180", 2], [3, "108", 0]]]], "⅗ of 480 are women (288). ⅝ of those are married: 288 ÷ 8 × 5 = 180.");
+V[76] = nline(-3, 3, [[-3, "−3"], [-2, "−2"], [-1, "−1"], [0, "0"], [1, "1"], [2, "2"], [3, "3"]], [2, 3], "Greatest negative integer = −1 (closest to 0). Smallest whole number = 0. Sum = −1.");
+V[77] = boxes(["7", "28", "63", "124", "215", "342", "511"], [1], "Cube minus 1: 8−1, 27−1, 64−1, 125−1, 216−1, 343−1, 512−1. The second should be 26, not 28.");
+V[78] = poly(6, true, ["6 people → 15 lines", "n people → n(n − 1) ÷ 2", "n(n − 1) = 930 = 31 × 30", "n = 31"]);
+V[81] = conc();
+V[88] = nline(-14, 0, [[-12, "−12"], [-6, "−6"], [0, "0"]], [0, 1], "The two integers are 6 apart, and −12 + (−6) = −18.");
+V[93] = boxes(["2", "3", "5", "7", "11", "13", "17", "19", "23", "29"], [], "Sum = 129. Average = 129 ÷ 10 = 12.9. (1 is not a prime.)");
+V[95] = boxes(["7¹ → 7", "7² → 9", "7³ → 3", "7⁴ → 1"], [2], "The last digit repeats every 4 powers. 159 = 4 × 39 + 3, so 7¹⁵⁹ ends like 7³ → 3.", 4);
+V[97] = grid(70, function (i) { return i % 10 === 1 || i % 10 === 9; }, "Two yellow boxes in every row of 10. 14 out of 70 = 20%.");
+V[98] = bar([["P", [[200, "P finishes 200 m", 1]]], ["Q", [[160, "Q has run 160 m", 2], [40, "40 m", 4]]]], "In P’s 36 seconds Q runs 36/45 = 4/5 of 200 = 160 m. P wins by 40 m.");
+V[99] = bar([["Work = 60 units", [[28, "4 days: 28", 2], [32, "left: 32", 4]]]], "Boy 4 + girl 3 = 7 units a day. 4 days = 28. Left = 32/60 = 8/15.");
+V[100] = bar([["Fill / hour", [[12, "X: 12", 1], [10, "Y: 10", 1]]], ["Empty / hour", [[5, "Z: 5", 2]]], ["Net / hour", [[17, "17 units", 3]]]], "Tank = 60 units. 22 in, 5 out → 17 per hour. 60 ÷ 17 = 3 9/17 hours.");
+V[102] = clock(10, 25, true);
+V[106] = svg(W, 200, '<circle cx="40" cy="100" r="8" class="vc"/>' + tx(40, 130, "d", "b") + '<circle cx="190" cy="100" r="80" class="vc"/>' + line(110, 100, 270, 100, "ac") + tx(190, 92, "10 × d", "b") + side(["Diameter 10 times bigger", "→ area 10 × 10 = 100 times", "So diameters are 10 : 1"], 290, 76), "small and big circle");
+V[109] = dice(9);
+V[110] = tri("x = 45°", "x = 45°", "2x = 90°", "x + x + 2x = 4x = 180°, so x = 45°. The angles are 45°, 45°, 90°.");
+V[111] = boxes(["M", "A", "T", "H", "E", "M", "A", "T", "I", "C", "S"], [1, 4, 6, 8], "4 vowels (yellow) out of 11 letters → 4/11.", 11);
+V[113] = bar([["Fractions", [[4, "½ = 4/8", 1], [6, "¾ = 6/8", 1], [5, "⅝ = 5/8", 1], [1, "⅛", 2]]]], "4/8 + 6/8 + 5/8 = 15/8. The yellow ⅛ makes 16/8 = 2 whole ones.");
+V[114] = bar([["All hens", [[100, "50 × 2 = 100 feet", 0]]], ["Actual", [[100, "100", 0], [42, "42 extra", 2]]]], "Each cow adds 2 extra feet. 42 ÷ 2 = 21 cows.");
+V[115] = bar([["Full: 28 kg", [[16, "can 16", 0], [12, "water 12", 1]]], ["¼ full: 19 kg", [[16, "can 16", 0], [3, "3", 1]]], ["⅔ full: 24 kg", [[16, "can 16", 0], [8, "8", 2]]]], "Full − ¼ full = ¾ of the water = 9 kg, so all the water = 12 kg and the can = 16 kg.");
+V[117] = bar([["5 + 4", [[5, "5", 1], [4, "4", 1]]], ["9", [[9, "9", 2]]]], "The two short sticks together are exactly as long as the long one. They lie flat, so no triangle can form.");
+V[118] = circ("d = 70 cm", ["One turn = circumference", "22 km = 22,00,000 cm", "÷ 10000 turns = 220 cm", "d = 220 × 7 ÷ 22 = 70 cm"], true);
+V[120] = circ("r = 7 cm", ["C − r = 37", "44/7 r − r = 37/7 r = 37", "So r = 7", "Area = 22/7 × 7 × 7 = 154 cm²"]);
+V[124] = boxes(["22", "22", "22", "22", "24", "25", "28", "28", "32", "36", "40"], [5], "11 values in order. The middle (6th) value is the median: 25.", 11);
+V[129] = bar([["Profit", [[6, "A: 6 parts", 0], [4, "B = 48400", 2], [3, "C: 3", 0]]]], "A : B : C = 6 : 4 : 3 = 13 parts. 157300 ÷ 13 = 12100 per part. B = 4 parts.");
+V[130] = bar([["175 coins", [[1, "25", 1], [2, "50 coins", 1], [4, "100 coins", 1]]]], "Re 1 : 50p : 25p coins are 1 : 2 : 4. 175 ÷ 7 = 25. Each kind is worth Rs 25 → Rs 75 in all.");
+V[143] = bar([["6600", [[30, "literate 30%", 0], [70, "illiterate 70% = 4620", 2]]]], "Go straight to the part you need: 70% of 6600 = 4620.");
+V[145] = nline(440, 540, [[452, "452 (loss)"], [488, "CP 488"], [524, "524 (profit)"]], [1], "Equal profit and loss → CP is exactly in the middle: 36 below 524 and 36 above 452.");
+V[153] = bar([["Rs 100", [[61.2, "you pay 61.2", 1], [38.8, "discount 38.8", 2]]]], "100 → 80 (−20%) → 72 (−10%) → 61.2 (−15%). Total discount = 38.8%.");
+V[155] = bar([["12 kg", [[32, "Cu 32%", 0], [24, "Ni 24%", 0], [44, "Zinc 44% = 5.28 kg", 2]]]], "Zinc is the rest: 100 − 32 − 24 = 44%. 44% of 12 kg = 5.28 kg.");
+V[157] = venn("10%", "44% both", "14%", "Failed both: 32%, so 68% passed at least one. Both = 54 + 58 − 68 = 44%.", "Passed Science 54%", "Passed Maths 58%");
+V[160] = bar([["28 years", [[3, "A = 12", 1], [4, "B = 16", 2]]]], "7 parts = 28, so 1 part = 4. B = 4 parts = 16 years.");
+V[165] = walk([["N", 4], ["W", 3]], "5 km");
+V[167] = bar([["150 students", [[40, "girls 60", 0], [60, "boys 90", 2]]]], "Boys are 100 − 40 = 60%. 60% of 150 = 90.");
+V[168] = bar([["One tank", [[2, "A", 1], [1, "B", 2], [2, "A", 1], [1, "B", 2], [2, "A", 1], [1, "B", 2], [2, "A", 1], [1, "B", 2]]]], "Tank = 12 units. Each hour A fills 2 and B fills 1 → 3 per hour. 12 ÷ 3 = 4 hours.");
+V[171] = boxes(["R", "R", "R", "B", "B", "B", "B", "B"], [0, 1, 2], "3 red balls out of 8 → 3/8.");
+V[172] = bar([["1 whole", [[1, "12.5%", 2], [1, "12.5%", 2], [1, "12.5%", 2], [1, "12.5%", 2], [1, "12.5%", 2], [1, "12.5%", 2], [1, "12.5%", 2], [1, "", 0]]]], "Each eighth is 12.5%. 7 eighths = 7 × 12.5 = 87.5%.");
+V[175] = rhombus("16 cm", "30 cm", "Area = ½ × 16 × 30 = 240 cm²");
+V[176] = poly(6, false, ["Hexagon: 6 corners", "Blue lines are diagonals", "Each corner: 6 − 3 = 3", "6 × 3 ÷ 2 = 9 diagonals"]);
+V[177] = quad(["75°", "90°", "115°", "? = 80°"], "All four angles add to 360°: 360 − (75 + 90 + 115) = 80°. (Not drawn to scale.)");
+V[181] = bar([["Rs 3900", [[6, "X 1800", 0], [4, "Y 1200", 2], [3, "Z 900", 0]]]], "6 + 4 + 3 = 13 parts. 3900 ÷ 13 = 300 per part. Y = 4 parts = 1200.");
+V[188] = rightTri("6 cm", "8 cm", "10 cm", "6-8-10 is the 3-4-5 triangle doubled. Area = ½ × 6 × 8 = 24 cm².");
+V[189] = boxes(["1", "2", "3", "4", "5", "6"], [1, 2, 4], "Primes on a die: 2, 3, 5 → 3 out of 6 = 1/2. (1 is not prime.)");
+V[191] = boxes(["R", "R", "R", "R", "B", "B", "B", "G", "G", "G", "G", "G"], [0, 1, 2, 3, 7, 8, 9, 10, 11], "9 of the 12 marbles are not blue → 9/12 = 3/4.", 12);
+V[192] = boxes(["4", "4", "4", "4", "7", "7", "7", "8", "9", "10"], [0, 1, 2, 3], "Sorted: 4 appears 4 times, more than any other value. Mode = 4.");
+V[199] = tri("2 parts = 36°", "3 parts = 54°", "5 parts = 90°", "10 parts = 180°, so 1 part = 18°. Largest = 5 × 18 = 90°.");
+V[200] = boxes(["HH", "HT", "TH", "TT"], [0, 1, 2], "3 of the 4 outcomes have at least one head → 3/4.");
+})();
+
 </script>
 <script>
 /* Each entry: [number, question, options (or null), flag (0 none, 1 check, 2 blurry), answer letter] */
@@ -2657,6 +2978,7 @@ PAGES.forEach(function (p, i) {
       ph += "<div class=\"sec\"><h4>Given</h4><p>" + sol[1] + "</p></div>";
       ph += "<div class=\"sec\"><h4>To find</h4><p>" + sol[2] + "</p></div>";
       ph += "<div class=\"sec\"><h4>Idea</h4><p>" + sol[3] + "</p></div>";
+      if (V[q[0]]) ph += "<div class=\"sec\"><h4>Picture it</h4>" + V[q[0]] + "</div>";
       ph += "<div class=\"sec\"><h4>Classroom method (step by step)</h4><ol class=\"steps\">";
       sol[4].forEach(function (st) { ph += "<li>" + st + "</li>"; });
       ph += "</ol></div>";
